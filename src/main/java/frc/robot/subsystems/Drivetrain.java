@@ -60,6 +60,8 @@ public class Drivetrain extends SubsystemBase {
     double right = throttle - turn;
 
     //Ternary operators that ensure the values supplied to the SparkMaxes are within the acceptable range.
+    //Math.max returns the greater of the two values
+    //Math.min returns the lower of the two values
     double leftOutput = left < 0 ? Math.max(left, -1) : Math.min(left, 1);
     double rightOutput = right < 0 ? Math.max(right, -1) : Math.min(right, 1);
 
@@ -72,6 +74,8 @@ public class Drivetrain extends SubsystemBase {
     double right = deadband(Constants.driverController.getRawAxis(Axis.AxisID.RIGHT_Y.getID()));
 
     //Ternary operators that ensure the values supplied to the SparkMaxes are within the acceptable range.
+    //Math.max returns the greater of the two values
+    //Math.min returns the lower of the two values
     double leftOutput = left < 0 ? Math.max(left, -1) : Math.min(left, 1);
     double rightOutput = right < 0 ? Math.max(right, -1) : Math.min(right, 1);
 
