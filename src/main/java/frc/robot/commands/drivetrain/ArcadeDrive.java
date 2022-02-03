@@ -23,18 +23,8 @@ public class ArcadeDrive extends CommandBase {
   }
 
   @Override
-  public void initialize() {
-
-  }
-
-  @Override
   public void execute() {
     mDrivetrain.arcadeDrive();
-  }
-
-  @Override
-  public void end(boolean interrupted) {
-
   }
 
   @Override

@@ -6,22 +6,34 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.drivetrain.ArcadeDrive;
+import frc.robot.commands.drivetrain.HighGear;
+import frc.robot.commands.drivetrain.LowGear;
+import frc.robot.io.Axis;
+import frc.robot.io.Button;
 import frc.robot.subsystems.Drivetrain;
 
 public class RobotContainer {
 
   private final Drivetrain mDrivetrain = new Drivetrain();
 
-
+//  private final ConditionalCommand shift;
+//  private final LowGear mLowGear = new LowGear(mDrivetrain);
+//  private final HighGear mHighGear = new HighGear(mDrivetrain);
 //  private final ArcadeDrive mArcadeDrive = new ArcadeDrive(mDrivetrain);
+//  private final TankDrive mTankDrive = new TankDrive(mDrivetrain);
 //  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
   public RobotContainer() {
 
     configureButtonBindings();
 
-    mDrivetrain.setDefaultCommand(new ArcadeDrive(mDrivetrain));
+    mDrivetrain.setDefaultCommand(new RunCommand(mDrivetrain::arcadeDrive, mDrivetrain));
+
   }
 
   /**
@@ -31,7 +43,18 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    /*
+    new JoystickButton(Constants.driverController, Button.ButtonID.RIGHT_BUMPER.getID())
+            .toggleWhenPressed(new ConditionalCommand(
+                    new RunCommand(mDrivetrain::lowGear), new RunCommand(mDrivetrain::highGear),
+                    new JoystickButton(Constants.driverController, Button.ButtonID.RIGHT_BUMPER.getID())));
+     */
 
+    new JoystickButton(Constants.driverController, Button.ButtonID.LEFT_BUMPER.getID())
+            .toggleWhenPressed(new InstantCommand(mDrivetrain::lowGear)).negate();
+
+    new JoystickButton(Constants.driverController, Button.ButtonID.LEFT_BUMPER.getID())
+            .toggleWhenPressed(new InstantCommand(mDrivetrain::highGear));
   }
 
   /**

@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.io.Axis;
 import frc.robot.utility.MotorControllerFactory;
@@ -16,6 +18,7 @@ public class Drivetrain extends SubsystemBase {
   private CANSparkMax leftLeader, leftFollowerA, leftFollowerB,
           rightLeader, rightFollowerA, rightFollowerB;
   private RelativeEncoder leftEncoder, rightEncoder;
+  private DoubleSolenoid shifter;
 
 
   public Drivetrain() {
@@ -25,6 +28,8 @@ public class Drivetrain extends SubsystemBase {
     rightLeader = MotorControllerFactory.makeSparkMax(Constants.DriveTrain.rightLeaderPort);
     rightFollowerA = MotorControllerFactory.makeSparkMax(Constants.DriveTrain.rightFollowerAPort);
     rightFollowerB = MotorControllerFactory.makeSparkMax(Constants.DriveTrain.rightFollowerBPort);
+
+    shifter = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.DriveTrain.shifterA, Constants.DriveTrain.shifterB);
 
     leftLeader.setInverted(true);
     leftFollowerA.setInverted(true);
@@ -83,9 +88,12 @@ public class Drivetrain extends SubsystemBase {
     rightLeader.set(rightOutput);
   }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
+  public void lowGear(){
+    shifter.set(DoubleSolenoid.Value.kReverse);
+  }
+
+  public void highGear(){
+    shifter.set(DoubleSolenoid.Value.kForward);
   }
 
 }

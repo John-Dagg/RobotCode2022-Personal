@@ -5,9 +5,6 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.io.Axis;
-import frc.robot.io.Controller;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -22,7 +19,7 @@ public final class Constants {
     public static final Joystick driverController = new Joystick(0);
     public static final Joystick operatorController = new Joystick(1);
 
-    public static final class DriveTrain{
+    public static final class DriveTrain {
 
         public static final int leftLeaderPort = 1;
         public static final int leftFollowerAPort = 2;
@@ -36,7 +33,5 @@ public final class Constants {
 
         public static final double deadband = 0.02;
 
-//        public static final Axis throttleAxis = new Axis(driverController, Axis.AxisID.LEFT_Y);
-//        public static final Axis turnAxis = new Axis(operatorController, Axis.AxisID.RIGHT_X);
     }
 }
