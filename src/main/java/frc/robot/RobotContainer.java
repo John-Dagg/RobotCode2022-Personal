@@ -10,22 +10,15 @@ import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.drivetrain.ArcadeDrive;
-import frc.robot.commands.drivetrain.HighGear;
-import frc.robot.commands.drivetrain.LowGear;
-import frc.robot.io.Axis;
 import frc.robot.io.Button;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Intake;
 
 public class RobotContainer {
 
   private final Drivetrain mDrivetrain = new Drivetrain();
+  private final Intake mIntake = new Intake();
 
-//  private final ConditionalCommand shift;
-//  private final LowGear mLowGear = new LowGear(mDrivetrain);
-//  private final HighGear mHighGear = new HighGear(mDrivetrain);
-//  private final ArcadeDrive mArcadeDrive = new ArcadeDrive(mDrivetrain);
-//  private final TankDrive mTankDrive = new TankDrive(mDrivetrain);
 //  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
   public RobotContainer() {
@@ -49,13 +42,34 @@ public class RobotContainer {
                     new RunCommand(mDrivetrain::lowGear), new RunCommand(mDrivetrain::highGear),
                     new JoystickButton(Constants.driverController, Button.ButtonID.RIGHT_BUMPER.getID())));
      */
-
+    /*
     new JoystickButton(Constants.driverController, Button.ButtonID.LEFT_BUMPER.getID())
             .toggleWhenPressed(new InstantCommand(mDrivetrain::lowGear)).negate();
 
     new JoystickButton(Constants.driverController, Button.ButtonID.LEFT_BUMPER.getID())
             .toggleWhenPressed(new InstantCommand(mDrivetrain::highGear));
+     */
+
+    new JoystickButton(Constants.driverController, Button.ButtonID.LEFT_BUMPER.getID())
+            .whenPressed(new ConditionalCommand(
+                    new InstantCommand(mDrivetrain::highGear),
+                    new InstantCommand(mDrivetrain::lowGear),
+                    mDrivetrain::getLowGear));
+
+    new JoystickButton(Constants.driverController, Button.ButtonID.RIGHT_BUMPER.getID())
+            .whenPressed(new ConditionalCommand(
+                    new InstantCommand(mIntake::retractIntake),
+                    new InstantCommand(mIntake::extendIntake),
+                    mIntake::getFourBarState));
+
+    new JoystickButton(Constants.driverController, Button.ButtonID.A.getID())
+            .whenHeld(new InstantCommand(mIntake::rollerIntake));
+
+    new JoystickButton(Constants.driverController, Button.ButtonID.B.getID())
+            .whenHeld(new InstantCommand(mIntake::rollerOuttake));
+
   }
+
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

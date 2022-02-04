@@ -34,4 +34,12 @@ public final class Constants {
         public static final double deadband = 0.02;
 
     }
+
+    public static final class Intake {
+
+        public static final int intakeMotorPort = 7;
+
+        public static final int fourBarPortA = 2;
+        public static final int fourBarPortB = 3;
+    }
 }

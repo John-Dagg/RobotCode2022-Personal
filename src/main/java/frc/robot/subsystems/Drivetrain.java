@@ -96,4 +96,14 @@ public class Drivetrain extends SubsystemBase {
     shifter.set(DoubleSolenoid.Value.kForward);
   }
 
+  public boolean getLowGear(){
+    boolean gear = true;
+    if(shifter.get() == DoubleSolenoid.Value.kReverse){
+      gear = true; //Low
+    } else if(shifter.get() == DoubleSolenoid.Value.kForward){
+      gear = false; //High
+    }
+    return gear;
+  }
+
 }
