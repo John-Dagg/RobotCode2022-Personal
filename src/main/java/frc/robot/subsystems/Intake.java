@@ -27,6 +27,10 @@ public class Intake extends SubsystemBase {
         rollerBar.set(-0.5);
     }
 
+    public void rollerStop(){
+        rollerBar.set(0);
+    }
+
     public void extendIntake(){
         fourBar.set(DoubleSolenoid.Value.kForward);
     }

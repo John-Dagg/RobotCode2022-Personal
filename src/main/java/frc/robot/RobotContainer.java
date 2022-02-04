@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.io.Button;
 import frc.robot.subsystems.Drivetrain;
@@ -63,10 +64,10 @@ public class RobotContainer {
                     mIntake::getFourBarState));
 
     new JoystickButton(Constants.driverController, Button.ButtonID.A.getID())
-            .whenHeld(new InstantCommand(mIntake::rollerIntake));
+            .whenHeld(new StartEndCommand(mIntake::rollerIntake, mIntake::rollerStop));
 
     new JoystickButton(Constants.driverController, Button.ButtonID.B.getID())
-            .whenHeld(new InstantCommand(mIntake::rollerOuttake));
+            .whenHeld(new StartEndCommand(mIntake::rollerOuttake, mIntake::rollerStop));
 
   }
 
