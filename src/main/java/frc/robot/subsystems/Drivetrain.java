@@ -29,7 +29,7 @@ public class Drivetrain extends SubsystemBase {
     rightFollowerA = MotorControllerFactory.makeSparkMax(Constants.DriveTrain.rightFollowerAPort);
     rightFollowerB = MotorControllerFactory.makeSparkMax(Constants.DriveTrain.rightFollowerBPort);
 
-    shifter = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.DriveTrain.shifterA, Constants.DriveTrain.shifterB);
+    shifter = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.DriveTrain.shifterPorts[0], Constants.DriveTrain.shifterPorts[1]);
 
     leftLeader.setInverted(true);
     leftFollowerA.setInverted(true);

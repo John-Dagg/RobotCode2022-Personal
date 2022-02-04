@@ -28,8 +28,7 @@ public final class Constants {
         public static final int rightFollowerAPort = 5;
         public static final int rightFollowerBPort = 6;
 
-        public static final int shifterA = 0;
-        public static final int shifterB = 1;
+        public static final int[] shifterPorts = {0, 1};
 
         public static final double deadband = 0.02;
 
@@ -38,8 +37,18 @@ public final class Constants {
     public static final class Intake {
 
         public static final int intakeMotorPort = 7;
+        public static final int intakeStaticMotorPort = 8;
 
-        public static final int fourBarPortA = 2;
-        public static final int fourBarPortB = 3;
+        public static final int[] fourBarPorts = {2, 3};
+    }
+
+    public static final class Shooter {
+
+        public static final int shooterAPort = 9;
+        public static final int shooterBPort = 10;
+        public static final int indexerPort = 11;
+
+        public static final int[] anglerPorts = {4, 5};
+
     }
 }

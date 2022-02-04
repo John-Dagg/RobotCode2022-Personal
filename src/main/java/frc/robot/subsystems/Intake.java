@@ -9,26 +9,31 @@ import frc.robot.utility.MotorControllerFactory;
 
 public class Intake extends SubsystemBase {
 
-    private CANSparkMax rollerBar;
+    private CANSparkMax rollerBar, staticRoller;
     private DoubleSolenoid fourBar;
 
     public Intake(){
 
         rollerBar = MotorControllerFactory.makeSparkMax(Constants.Intake.intakeMotorPort);
-        fourBar = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.Intake.fourBarPortA, Constants.Intake.fourBarPortB);
+        staticRoller = MotorControllerFactory.makeSparkMax(Constants.Intake.intakeStaticMotorPort);
+        fourBar = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.Intake.fourBarPorts[0], Constants.Intake.fourBarPorts[1]);
 
     }
 
     public void rollerIntake(){
         rollerBar.set(0.5);
+        staticRoller.set(0.5);
     }
 
     public void rollerOuttake(){
         rollerBar.set(-0.5);
+        staticRoller.set(-0.5);
+
     }
 
     public void rollerStop(){
         rollerBar.set(0);
+        staticRoller.set(0);
     }
 
     public void extendIntake(){

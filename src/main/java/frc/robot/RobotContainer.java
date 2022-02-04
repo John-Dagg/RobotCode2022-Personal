@@ -11,15 +11,23 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.ShootClose;
+import frc.robot.commands.ShootFar;
 import frc.robot.io.Button;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 
 public class RobotContainer {
 
   private final Drivetrain mDrivetrain = new Drivetrain();
   private final Intake mIntake = new Intake();
+  private final Shooter mShooter = new Shooter();
+  private final Indexer mIndexer = new Indexer();
 
+  private final ShootFar mShootFar = new ShootFar(mShooter, mIndexer);
+  private final ShootClose mShootClose = new ShootClose(mShooter, mIndexer);
 //  private final ExampleCommand m_autoCommand = new ExampleCommand(m_exampleSubsystem);
 
   public RobotContainer() {
@@ -68,6 +76,25 @@ public class RobotContainer {
 
     new JoystickButton(Constants.driverController, Button.ButtonID.B.getID())
             .whenHeld(new StartEndCommand(mIntake::rollerOuttake, mIntake::rollerStop));
+
+    new JoystickButton(Constants.driverController, Button.ButtonID.X.getID())
+            .whenHeld(mShootFar);
+
+    new JoystickButton(Constants.driverController, Button.ButtonID.X.getID())
+            .whenInactive(mShooter::setShooterIdle);
+
+    new JoystickButton(Constants.driverController, Button.ButtonID.X.getID())
+            .whenInactive(mIndexer::setIndexerIdle);
+
+    new JoystickButton(Constants.driverController, Button.ButtonID.Y.getID())
+            .whenHeld(mShootClose);
+
+    new JoystickButton(Constants.driverController, Button.ButtonID.Y.getID())
+            .whenInactive(mShooter::setShooterIdle);
+
+    new JoystickButton(Constants.driverController, Button.ButtonID.Y.getID())
+            .whenInactive(mIndexer::setIndexerIdle);
+
 
   }
 
