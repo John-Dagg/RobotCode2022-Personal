@@ -42,13 +42,22 @@ public final class Constants {
         public static final int[] fourBarPorts = {2, 3};
     }
 
+    public static final class Indexer {
+
+        public static final int indexerPort = 11;
+    }
+
     public static final class Shooter {
 
         public static final int shooterAPort = 9;
         public static final int shooterBPort = 10;
-        public static final int indexerPort = 11;
 
         public static final int[] anglerPorts = {4, 5};
-
     }
+    public static final class Climber{
+
+        public static final int climberPort = 11;
+        public static final int[] solenoidPorts = {6, 7};
+    }
+
 }

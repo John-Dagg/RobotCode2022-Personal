@@ -41,8 +41,8 @@ public class Drivetrain extends SubsystemBase {
     rightFollowerB.follow(rightLeader);
 
 //  Creates two encoder objects for their respective motors
-    leftEncoder = leftLeader.getAlternateEncoder(2048);
-    rightEncoder = rightLeader.getAlternateEncoder(2048);
+    leftEncoder = leftLeader.getAlternateEncoder(4096);
+    rightEncoder = rightLeader.getAlternateEncoder(4096);
     resetEncoders();
     leftEncoder.setInverted(true);
 

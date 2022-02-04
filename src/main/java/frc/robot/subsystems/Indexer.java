@@ -20,7 +20,7 @@ public class Indexer extends SubsystemBase {
 
     public Indexer(){
 
-        indexerMotor = MotorControllerFactory.makeSparkMax(Constants.Shooter.indexerPort);
+        indexerMotor = MotorControllerFactory.makeSparkMax(Constants.Indexer.indexerPort);
 
 
         mPort = I2C.Port.kOnboard;
