@@ -21,11 +21,11 @@ public class Indexer extends SubsystemBase {
 
     public Indexer(){
 
-        indexerMotor = MotorControllerFactory.makeSparkMax(Constants.Indexer.indexerPort);
+//        indexerMotor = MotorControllerFactory.makeSparkMax(Constants.Indexer.indexerPort);
 
 
         mPort = I2C.Port.kOnboard;
-        colorSensor = new ColorSensorV3(mPort);
+//        colorSensor = new ColorSensorV3(mPort);
         colorMatch = new ColorMatch();
 
         mCargoRed = new Color(0.45, 0.35, 0.15);

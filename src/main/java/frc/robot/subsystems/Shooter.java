@@ -28,14 +28,14 @@ public class Shooter extends SubsystemBase {
 
     public Shooter(){
 
-        shooterMotorLeader = MotorControllerFactory.makeTalonFX(Constants.Shooter.shooterAPort);
-        shooterMotorFollower = MotorControllerFactory.makeTalonFX(Constants.Shooter.shooterBPort);
+//        shooterMotorLeader = MotorControllerFactory.makeTalonFX(Constants.Shooter.shooterAPort);
+//        shooterMotorFollower = MotorControllerFactory.makeTalonFX(Constants.Shooter.shooterBPort);
 
-        angler = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.Shooter.anglerPorts[0], Constants.Shooter.anglerPorts[1]);
+//        angler = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.Shooter.anglerPorts[0], Constants.Shooter.anglerPorts[1]);
 
-        shooterMotorFollower.setInverted(true);
-        shooterMotorFollower.follow(shooterMotorLeader);
-        shooterMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+//        shooterMotorFollower.setInverted(true);
+//        shooterMotorFollower.follow(shooterMotorLeader);
+//        shooterMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
 
     }
 

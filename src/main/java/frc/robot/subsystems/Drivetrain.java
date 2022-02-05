@@ -29,11 +29,11 @@ public class Drivetrain extends SubsystemBase {
     rightFollowerA = MotorControllerFactory.makeSparkMax(Constants.DriveTrain.rightFollowerAPort);
     rightFollowerB = MotorControllerFactory.makeSparkMax(Constants.DriveTrain.rightFollowerBPort);
 
-    shifter = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.DriveTrain.shifterPorts[0], Constants.DriveTrain.shifterPorts[1]);
+//    shifter = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.DriveTrain.shifterPorts[0], Constants.DriveTrain.shifterPorts[1]);
 
-    leftLeader.setInverted(true);
-    leftFollowerA.setInverted(true);
-    leftFollowerB.setInverted(true);
+    rightLeader.setInverted(true);
+    rightFollowerA.setInverted(true);
+    rightFollowerB.setInverted(true);
 
     leftFollowerA.follow(leftLeader);
     leftFollowerB.follow(leftLeader);
@@ -61,8 +61,8 @@ public class Drivetrain extends SubsystemBase {
     double throttle = deadband(Constants.driverController.getRawAxis(Axis.AxisID.LEFT_Y.getID()));
     double turn = deadband(Constants.driverController.getRawAxis(Axis.AxisID.RIGHT_X.getID()));
 
-    double left = throttle + turn;
-    double right = throttle - turn;
+    double left = throttle - turn;
+    double right = throttle + turn;
 
     //Ternary operators that ensure the values supplied to the SparkMaxes are within the acceptable range.
     //Math.max returns the greater of the two values
@@ -109,6 +109,10 @@ public class Drivetrain extends SubsystemBase {
       gear = false; //High
     }
     return gear;
+  }
+
+  public void correctDistance(){
+
   }
 
 }
