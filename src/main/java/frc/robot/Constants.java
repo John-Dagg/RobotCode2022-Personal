@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Joystick;
 
 /**
@@ -58,6 +59,18 @@ public final class Constants {
 
         public static final int climberPort = 11;
         public static final int[] solenoidPorts = {6, 7};
+    }
+
+    public static final class Vision{
+
+        public static final double cameraHeight = Units.inchesToMeters(25);
+        public static final double cameraPitch = Units.degreesToRadians(0);
+        public static final double targetHeightA = Units.inchesToMeters(40);
+
+        public static final double turnLowerLimit = 2.5;
+        public static final double turnUpperLimit = 90;
+        public static final double turnRange = turnUpperLimit - turnLowerLimit;
+        public static final double turnSpeed = 0.25;
     }
 
 }

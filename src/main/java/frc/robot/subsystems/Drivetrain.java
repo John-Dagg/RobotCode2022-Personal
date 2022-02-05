@@ -93,6 +93,11 @@ public class Drivetrain extends SubsystemBase {
     rightLeader.set(0);
   }
 
+  public void vpDrive(double turnSpeed){
+    leftLeader.set(turnSpeed);
+    rightLeader.set(-turnSpeed);
+  }
+
   public void lowGear(){
     shifter.set(DoubleSolenoid.Value.kReverse);
   }
@@ -109,10 +114,6 @@ public class Drivetrain extends SubsystemBase {
       gear = false; //High
     }
     return gear;
-  }
-
-  public void correctDistance(){
-
   }
 
 }

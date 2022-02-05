@@ -8,14 +8,12 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.AlignTarget;
 import frc.robot.commands.ShootClose;
 import frc.robot.commands.ShootFar;
 import frc.robot.commands.StopAuton;
 import frc.robot.io.Button;
-import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Indexer;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.*;
 
 public class RobotContainer {
 
@@ -23,10 +21,12 @@ public class RobotContainer {
   private final Intake mIntake = new Intake();
   private final Shooter mShooter = new Shooter();
   private final Indexer mIndexer = new Indexer();
+  private final VisionProcessing mVision = new VisionProcessing();
 
   private final ShootFar mShootFar = new ShootFar(mShooter, mIndexer);
   private final ShootClose mShootClose = new ShootClose(mShooter, mIndexer);
   private final StopAuton m_autoCommand = new StopAuton(mDrivetrain);
+  private final AlignTarget mAlignTarget = new AlignTarget(mVision, mDrivetrain, mShooter);
 
   public RobotContainer() {
 
@@ -68,13 +68,13 @@ public class RobotContainer {
                     new InstantCommand(mIntake::retractIntake),
                     new InstantCommand(mIntake::extendIntake),
                     mIntake::getFourBarState));
-
+/*
     new JoystickButton(Constants.driverController, Button.ButtonID.A.getID())
             .whenHeld(new StartEndCommand(mIntake::rollerIntake, mIntake::rollerStop));
 
     new JoystickButton(Constants.driverController, Button.ButtonID.B.getID())
             .whenHeld(new StartEndCommand(mIntake::rollerOuttake, mIntake::rollerStop));
-
+*/
     new JoystickButton(Constants.driverController, Button.ButtonID.X.getID())
             .whenHeld(mShootFar);
 
@@ -93,6 +93,8 @@ public class RobotContainer {
     new JoystickButton(Constants.driverController, Button.ButtonID.Y.getID())
             .whenInactive(mIndexer::setIndexerIdle);
 
+    new JoystickButton(Constants.driverController, Button.ButtonID.A.getID())
+            .whenHeld(mAlignTarget);
 
   }
 
