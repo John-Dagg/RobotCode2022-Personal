@@ -29,7 +29,15 @@ public class Drivetrain extends SubsystemBase {
     rightFollowerA = MotorControllerFactory.makeSparkMax(Constants.DriveTrain.rightFollowerAPort);
     rightFollowerB = MotorControllerFactory.makeSparkMax(Constants.DriveTrain.rightFollowerBPort);
 
-//    shifter = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.DriveTrain.shifterPorts[0], Constants.DriveTrain.shifterPorts[1]);
+    rightLeader.setIdleMode(CANSparkMax.IdleMode.kBrake);
+    rightFollowerA.setIdleMode(CANSparkMax.IdleMode.kBrake);
+    rightFollowerB.setIdleMode(CANSparkMax.IdleMode.kBrake);
+    leftLeader.setIdleMode(CANSparkMax.IdleMode.kBrake);
+    leftFollowerA.setIdleMode(CANSparkMax.IdleMode.kBrake);
+    leftFollowerB.setIdleMode(CANSparkMax.IdleMode.kBrake);
+
+
+    shifter = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.DriveTrain.shifterPorts[0], Constants.DriveTrain.shifterPorts[1]);
 
     rightLeader.setInverted(true);
     rightFollowerA.setInverted(true);
@@ -70,8 +78,8 @@ public class Drivetrain extends SubsystemBase {
     double leftOutput = left < 0 ? Math.max(left, -1) : Math.min(left, 1);
     double rightOutput = right < 0 ? Math.max(right, -1) : Math.min(right, 1);
 
-    leftLeader.set(leftOutput);
-    rightLeader.set(rightOutput);
+    leftLeader.set(leftOutput * 0.5);
+    rightLeader.set(rightOutput * 0.5);
   }
 
   public void tankDrive(){
@@ -84,8 +92,8 @@ public class Drivetrain extends SubsystemBase {
     double leftOutput = left < 0 ? Math.max(left, -1) : Math.min(left, 1);
     double rightOutput = right < 0 ? Math.max(right, -1) : Math.min(right, 1);
 
-    leftLeader.set(leftOutput);
-    rightLeader.set(rightOutput);
+    leftLeader.set(leftOutput * 0.5);
+    rightLeader.set(rightOutput * 0.5);
   }
 
   public void stopDrive(){
@@ -100,10 +108,12 @@ public class Drivetrain extends SubsystemBase {
 
   public void lowGear(){
     shifter.set(DoubleSolenoid.Value.kReverse);
+    System.out.println("Low Gear");
   }
 
   public void highGear(){
     shifter.set(DoubleSolenoid.Value.kForward);
+    System.out.println("High Gear");
   }
 
   public boolean getLowGear(){

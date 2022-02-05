@@ -92,10 +92,10 @@ public class RobotContainer {
 
     new JoystickButton(Constants.driverController, Button.ButtonID.Y.getID())
             .whenInactive(mIndexer::setIndexerIdle);
-
+/*
     new JoystickButton(Constants.driverController, Button.ButtonID.A.getID())
             .whenHeld(mAlignTarget);
-
+*/
   }
 
 
