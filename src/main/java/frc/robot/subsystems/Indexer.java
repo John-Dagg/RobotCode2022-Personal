@@ -16,7 +16,8 @@ public class Indexer extends SubsystemBase {
     private ColorSensorV3 colorSensor;
     private ColorMatch colorMatch;
     private I2C.Port mPort;
-    private Color mRed, mBlue;
+    private Color mCargoRed, mCargoBlue;
+    private Color detectedColor;
 
     public Indexer(){
 
@@ -27,22 +28,26 @@ public class Indexer extends SubsystemBase {
         colorSensor = new ColorSensorV3(mPort);
         colorMatch = new ColorMatch();
 
-        mRed = new Color(255, 0 , 0);
-        mBlue = new Color(0, 0, 255);
+        mCargoRed = new Color(0.45, 0.35, 0.15);
+        mCargoBlue = new Color(0.15, 0.35, 0.45);
 
-        colorMatch.addColorMatch(mRed);
-        colorMatch.addColorMatch(mBlue);
+        colorMatch.addColorMatch(mCargoBlue);
+        colorMatch.addColorMatch(mCargoRed);
+        colorMatch.setConfidenceThreshold(0.92);
 
     }
 
     public Color getCurrentColor(){
-        return colorMatch.matchClosestColor(colorSensor.getColor()).color;
+        return detectedColor = colorMatch.matchColor(colorSensor.getColor()).color;
+
     }
 
     public boolean getMatch(){
         boolean matched = false;
-        if (getCurrentColor().equals(mBlue) || getCurrentColor().equals(mRed)){
-            matched = true;
+        if(detectedColor != null) {
+            if (getCurrentColor().equals(mCargoBlue) || getCurrentColor().equals(mCargoBlue)) {
+                matched = true;
+            }
         }
         return matched;
     }

@@ -88,6 +88,11 @@ public class Drivetrain extends SubsystemBase {
     rightLeader.set(rightOutput);
   }
 
+  public void stopDrive(){
+    leftLeader.set(0);
+    rightLeader.set(0);
+  }
+
   public void lowGear(){
     shifter.set(DoubleSolenoid.Value.kReverse);
   }
