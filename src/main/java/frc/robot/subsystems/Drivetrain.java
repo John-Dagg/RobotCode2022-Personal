@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.sensors.Pigeon2;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -19,7 +20,9 @@ public class Drivetrain extends SubsystemBase {
           rightLeader, rightFollowerA, rightFollowerB;
   private RelativeEncoder leftEncoder, rightEncoder;
   private DoubleSolenoid shifter;
+  private Pigeon2 mPigeon;
 
+  private double yaw;
 
   public Drivetrain() {
     leftLeader = MotorControllerFactory.makeSparkMax(Constants.DriveTrain.leftLeaderPort);
@@ -36,6 +39,7 @@ public class Drivetrain extends SubsystemBase {
     leftFollowerA.setIdleMode(CANSparkMax.IdleMode.kBrake);
     leftFollowerB.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
+    mPigeon = new Pigeon2(0);
 
     shifter = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.DriveTrain.shifterPorts[0], Constants.DriveTrain.shifterPorts[1]);
 
@@ -48,15 +52,35 @@ public class Drivetrain extends SubsystemBase {
     rightFollowerA.follow(rightLeader);
     rightFollowerB.follow(rightLeader);
 
+    leftLeader.set(0);
+    rightLeader.set(0);
+
 //  Creates two encoder objects for their respective motors
     leftEncoder = leftLeader.getAlternateEncoder(4096);
     rightEncoder = rightLeader.getAlternateEncoder(4096);
-    resetEncoders();
     leftEncoder.setInverted(true);
+    resetEncoders();
+    resetYaw();
 
   }
 
-  private void resetEncoders(){
+  public CANSparkMax getLeftLeader(){
+    return leftLeader;
+  }
+
+  public CANSparkMax getRightLeader(){
+    return rightLeader;
+  }
+
+  public RelativeEncoder getLeftEncoder(){
+    return leftEncoder;
+  }
+
+  public RelativeEncoder getRightEncoder(){
+    return rightEncoder;
+  }
+
+  public void resetEncoders(){
     leftEncoder.setPosition(0);
     rightEncoder.setPosition(0);
   }
@@ -80,6 +104,9 @@ public class Drivetrain extends SubsystemBase {
 
     leftLeader.set(leftOutput * 0.5);
     rightLeader.set(rightOutput * 0.5);
+
+//    System.out.println("Left velocity: " + leftEncoder.getVelocity() + " | Right velocity: " + rightEncoder.getVelocity());
+    getYaw();
   }
 
   public void tankDrive(){
@@ -105,6 +132,20 @@ public class Drivetrain extends SubsystemBase {
     leftLeader.set(turnSpeed);
     rightLeader.set(-turnSpeed);
   }
+
+  public double getYaw(){
+    yaw = mPigeon.getYaw();
+    if(Math.abs(yaw) > 360){
+      resetYaw();
+    }
+//    System.out.println("Yaw: " + yaw);
+    return yaw;
+  }
+
+  public void resetYaw(){
+    mPigeon.setYaw(0);
+  }
+
 
   public void lowGear(){
     shifter.set(DoubleSolenoid.Value.kReverse);

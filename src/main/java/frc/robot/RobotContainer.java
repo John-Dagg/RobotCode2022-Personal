@@ -8,10 +8,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.AlignTarget;
-import frc.robot.commands.ShootClose;
-import frc.robot.commands.ShootFar;
-import frc.robot.commands.StopAuton;
+import frc.robot.commands.*;
 import frc.robot.io.Button;
 import frc.robot.subsystems.*;
 
@@ -25,7 +22,8 @@ public class RobotContainer {
 
   private final ShootFar mShootFar = new ShootFar(mShooter, mIndexer);
   private final ShootClose mShootClose = new ShootClose(mShooter, mIndexer);
-  private final StopAuton m_autoCommand = new StopAuton(mDrivetrain);
+//  private final StopAuton m_autoCommand = new StopAuton(mDrivetrain);
+  private final AutonTest m_autoCommand = new AutonTest(mDrivetrain);
   private final AlignTarget mAlignTarget = new AlignTarget(mVision, mDrivetrain, mShooter);
 
   public RobotContainer() {
@@ -33,6 +31,7 @@ public class RobotContainer {
     configureButtonBindings();
 
     mDrivetrain.setDefaultCommand(new RunCommand(mDrivetrain::arcadeDrive, mDrivetrain));
+//    mDrivetrain.setDefaultCommand(new RunCommand(mDrivetrain::getYaw, mDrivetrain));
 
   }
 
