@@ -47,7 +47,7 @@ public class AlignTargetLimeLight extends CommandBase {
             aimTarget();
         } else {
             mVision.flashArray();
-            findTarget();
+//            findTarget();
         }
     }
 

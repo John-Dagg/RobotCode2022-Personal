@@ -22,6 +22,7 @@ public class RobotContainer {
   private final VPLimelight mLimelightVision = new VPLimelight();
 
   private final AlignTargetLimeLight mAlignTarget = new AlignTargetLimeLight(mDrivetrain, mLimelightVision);
+  private final CorrectDistanceLimelight mDistanceTarget = new CorrectDistanceLimelight(mDrivetrain, mLimelightVision);
 
   private final ShootFar mShootFar = new ShootFar(mShooter, mIndexer);
   private final ShootClose mShootClose = new ShootClose(mShooter, mIndexer);
@@ -34,6 +35,7 @@ public class RobotContainer {
     configureButtonBindings();
 
     mDrivetrain.setDefaultCommand(new RunCommand(mDrivetrain::arcadeDrive, mDrivetrain));
+    mLimelightVision.setDefaultCommand(new RunCommand(mLimelightVision::printNetworkTables));
 //    mDrivetrain.setDefaultCommand(new RunCommand(mDrivetrain::getYaw, mDrivetrain));
 
   }
@@ -49,6 +51,8 @@ public class RobotContainer {
     new JoystickButton(Constants.operatorController, Button.ButtonID.A.getID())
             .whenHeld(mAlignTarget);
 
+    new JoystickButton(Constants.operatorController, Button.ButtonID.B.getID())
+            .whenHeld(mDistanceTarget);
 
 
 
