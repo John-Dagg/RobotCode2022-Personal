@@ -7,7 +7,7 @@ import org.photonvision.targeting.PhotonPipelineResult;
 
 import static org.photonvision.PhotonUtils.calculateDistanceToTargetMeters;
 
-public class VisionProcessing extends SubsystemBase {
+public class VisionProcessingPhoton extends SubsystemBase {
 
 //    private Drivetrain mDrivetrain;
 //    private Shooter mShooter;
@@ -15,7 +15,7 @@ public class VisionProcessing extends SubsystemBase {
     private PhotonCamera mCamera;
     private PhotonPipelineResult mResult;
 
-    public VisionProcessing(){
+    public VisionProcessingPhoton(){
 //        mDrivetrain = subsystemA;
 //        mShooter = subsystemB;
 

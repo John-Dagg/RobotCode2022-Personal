@@ -82,4 +82,10 @@ public final class Constants {
         public static final double turnSpeed = 0.25;
     }
 
+    public static final class LimelightVision{
+
+        public static final double acceptableAngleP = 2;
+        public static final double acceptableAngleN = -2;
+    }
+
 }

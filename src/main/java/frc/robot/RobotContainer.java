@@ -18,13 +18,16 @@ public class RobotContainer {
   private final Intake mIntake = new Intake();
   private final Shooter mShooter = new Shooter();
   private final Indexer mIndexer = new Indexer();
-  private final VisionProcessing mVision = new VisionProcessing();
+  private final VisionProcessingPhoton mVision = new VisionProcessingPhoton();
+  private final VPLimelight mLimelightVision = new VPLimelight();
+
+  private final AlignTargetLimeLight mAlignTarget = new AlignTargetLimeLight(mDrivetrain, mLimelightVision);
 
   private final ShootFar mShootFar = new ShootFar(mShooter, mIndexer);
   private final ShootClose mShootClose = new ShootClose(mShooter, mIndexer);
-//  private final StopAuton m_autoCommand = new StopAuton(mDrivetrain);
-  private final AutonTest m_autoCommand = new AutonTest(mDrivetrain);
-  private final AlignTarget mAlignTarget = new AlignTarget(mVision, mDrivetrain, mShooter);
+  private final StopAuton m_autoCommand = new StopAuton(mDrivetrain);
+//  private final AlignTarget mAlignTarget = new AlignTarget(mVision, mDrivetrain, mShooter);
+  //  private final AutonTest m_autoCommand = new AutonTest(mDrivetrain);
 
   public RobotContainer() {
 
@@ -42,19 +45,12 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    /*
-    new JoystickButton(Constants.driverController, Button.ButtonID.RIGHT_BUMPER.getID())
-            .toggleWhenPressed(new ConditionalCommand(
-                    new RunCommand(mDrivetrain::lowGear), new RunCommand(mDrivetrain::highGear),
-                    new JoystickButton(Constants.driverController, Button.ButtonID.RIGHT_BUMPER.getID())));
-     */
-    /*
-    new JoystickButton(Constants.driverController, Button.ButtonID.LEFT_BUMPER.getID())
-            .toggleWhenPressed(new InstantCommand(mDrivetrain::lowGear)).negate();
 
-    new JoystickButton(Constants.driverController, Button.ButtonID.LEFT_BUMPER.getID())
-            .toggleWhenPressed(new InstantCommand(mDrivetrain::highGear));
-     */
+    new JoystickButton(Constants.operatorController, Button.ButtonID.A.getID())
+            .whenHeld(mAlignTarget);
+
+
+
 
     new JoystickButton(Constants.driverController, Button.ButtonID.LEFT_BUMPER.getID())
             .whenPressed(new ConditionalCommand(
@@ -67,13 +63,13 @@ public class RobotContainer {
                     new InstantCommand(mIntake::retractIntake),
                     new InstantCommand(mIntake::extendIntake),
                     mIntake::getFourBarState));
-/*
+
     new JoystickButton(Constants.driverController, Button.ButtonID.A.getID())
             .whenHeld(new StartEndCommand(mIntake::rollerIntake, mIntake::rollerStop));
 
     new JoystickButton(Constants.driverController, Button.ButtonID.B.getID())
             .whenHeld(new StartEndCommand(mIntake::rollerOuttake, mIntake::rollerStop));
-*/
+
     new JoystickButton(Constants.driverController, Button.ButtonID.X.getID())
             .whenHeld(mShootFar);
 
