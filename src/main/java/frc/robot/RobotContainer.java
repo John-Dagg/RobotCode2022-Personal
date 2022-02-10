@@ -35,7 +35,7 @@ public class RobotContainer {
     configureButtonBindings();
 
     mDrivetrain.setDefaultCommand(new RunCommand(mDrivetrain::arcadeDrive, mDrivetrain));
-    mLimelightVision.setDefaultCommand(new RunCommand(mLimelightVision::printNetworkTables));
+    mLimelightVision.setDefaultCommand(new RunCommand(mLimelightVision::printNetworkTables, mLimelightVision));
 //    mDrivetrain.setDefaultCommand(new RunCommand(mDrivetrain::getYaw, mDrivetrain));
 
   }
@@ -48,10 +48,10 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    new JoystickButton(Constants.operatorController, Button.ButtonID.A.getID())
+    new JoystickButton(Constants.driverController, Button.ButtonID.X.getID())
             .whenHeld(mAlignTarget);
 
-    new JoystickButton(Constants.operatorController, Button.ButtonID.B.getID())
+    new JoystickButton(Constants.driverController, Button.ButtonID.B.getID())
             .whenHeld(mDistanceTarget);
 
 
@@ -61,7 +61,7 @@ public class RobotContainer {
                     new InstantCommand(mDrivetrain::highGear),
                     new InstantCommand(mDrivetrain::lowGear),
                     mDrivetrain::getLowGear));
-
+/*
     new JoystickButton(Constants.driverController, Button.ButtonID.RIGHT_BUMPER.getID())
             .whenPressed(new ConditionalCommand(
                     new InstantCommand(mIntake::retractIntake),
@@ -91,6 +91,7 @@ public class RobotContainer {
 
     new JoystickButton(Constants.driverController, Button.ButtonID.Y.getID())
             .whenInactive(mIndexer::setIndexerIdle);
+*/
 /*
     new JoystickButton(Constants.driverController, Button.ButtonID.A.getID())
             .whenHeld(mAlignTarget);

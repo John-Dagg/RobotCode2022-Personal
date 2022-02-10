@@ -84,8 +84,10 @@ public final class Constants {
 
     public static final class LimelightVision{
 
-        public static final double acceptableAngleP = 2;
-        public static final double acceptableAngleN = -2;
+        public static final double goalAngleP = 1;
+        public static final double goalAngleN = -1;
+        public static final double deccelAngle = 30;
+
 
         public static final double targetHeight = 104;
         public static final double cameraHeight = 8;

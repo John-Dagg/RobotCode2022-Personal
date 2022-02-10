@@ -16,7 +16,7 @@ public class AlignTargetLimeLight extends CommandBase {
     private CANSparkMax mLeftLeader, mRightLeader;
     private SparkMaxPIDController mLeftPIDController, mRightPIDController;
 
-    private double speed;
+    private double speed, deccelSpeed;
 
     public AlignTargetLimeLight(Drivetrain subsystemA, VPLimelight subsystemB){
 
@@ -37,45 +37,49 @@ public class AlignTargetLimeLight extends CommandBase {
 
     @Override
     public void initialize(){
-        speed = 0.25;
+        speed = 0.5;
     }
 
     @Override
     public void execute(){
+        mVision.updateTargets();
         if(mVision.getTargets() >= 1) {
             mVision.steadyArray();
             aimTarget();
         } else {
-            mVision.flashArray();
-//            findTarget();
+//            mVision.flashArray();
+            findTarget();
         }
     }
 
     @Override
     public void end(boolean isFinished){
-
+        mVision.steadyArray();
     }
 
     public void aimTarget(){
-        if (mVision.getxOffset() > Constants.LimelightVision.acceptableAngleP) {
-            mLeftLeader.set(-speed);
-            mRightLeader.set(speed);
-        } else if (mVision.getxOffset() < Constants.LimelightVision.acceptableAngleN) {
-            mLeftLeader.set(speed);
-            mRightLeader.set(-speed);
+        if (mVision.getxOffset() > Constants.LimelightVision.goalAngleP) {
+            mLeftLeader.set(-calcTurn());
+            mRightLeader.set(calcTurn());
+        } else if (mVision.getxOffset() < Constants.LimelightVision.goalAngleN) {
+            mLeftLeader.set(calcTurn());
+            mRightLeader.set(-calcTurn());
+        } else {
+            mLeftLeader.set(0);
+            mRightLeader.set(0);
         }
     }
 
     public void findTarget(){
-        mLeftLeader.set(-speed);
-        mRightLeader.set(speed);
+        mLeftLeader.set(-0.5);
+        mRightLeader.set(0.5);
     }
 
     public void aimTargetPID() {
-        if (mVision.getxOffset() > Constants.LimelightVision.acceptableAngleP) {
+        if (mVision.getxOffset() > Constants.LimelightVision.goalAngleP) {
             mLeftPIDController.setReference(-25, CANSparkMax.ControlType.kVelocity); //Should be in rotations per minute
             mRightPIDController.setReference(25, CANSparkMax.ControlType.kVelocity);
-        } else if (mVision.getxOffset() < Constants.LimelightVision.acceptableAngleN){
+        } else if (mVision.getxOffset() < Constants.LimelightVision.goalAngleN){
             mLeftPIDController.setReference(25, CANSparkMax.ControlType.kVelocity);
             mRightPIDController.setReference(-25, CANSparkMax.ControlType.kVelocity);
         }
@@ -84,6 +88,11 @@ public class AlignTargetLimeLight extends CommandBase {
     public void findTargetPID() {
         mLeftPIDController.setReference(-25, CANSparkMax.ControlType.kVelocity); //Should be in rotations per minute
         mRightPIDController.setReference(25, CANSparkMax.ControlType.kVelocity);
+    }
+
+    public double calcTurn(){
+        return deccelSpeed = (speed * Math.abs(mVision.getxOffset())) / (Constants.LimelightVision.deccelAngle - Constants.LimelightVision.goalAngleP)
+                + (speed * Constants.LimelightVision.goalAngleP) / (Constants.LimelightVision.goalAngleP - Constants.LimelightVision.deccelAngle);
     }
 
 }
