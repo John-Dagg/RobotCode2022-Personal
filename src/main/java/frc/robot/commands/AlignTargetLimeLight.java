@@ -18,6 +18,8 @@ public class AlignTargetLimeLight extends CommandBase {
 
     private double speed, deccelSpeed;
 
+    private boolean stopFlag;
+
     public AlignTargetLimeLight(Drivetrain subsystemA, VPLimelight subsystemB){
 
         mDrivetrain = subsystemA;
@@ -37,6 +39,7 @@ public class AlignTargetLimeLight extends CommandBase {
 
     @Override
     public void initialize(){
+        stopFlag = false;
         speed = 0.5;
     }
 
@@ -57,6 +60,11 @@ public class AlignTargetLimeLight extends CommandBase {
         mVision.steadyArray();
     }
 
+    @Override
+    public boolean isFinished(){
+        return stopFlag;
+    }
+
     public void aimTarget(){
         if (mVision.getxOffset() > Constants.LimelightVision.goalAngleP) {
             mLeftLeader.set(-calcTurn());
@@ -67,6 +75,7 @@ public class AlignTargetLimeLight extends CommandBase {
         } else {
             mLeftLeader.set(0);
             mRightLeader.set(0);
+            stopFlag = true;
         }
     }
 

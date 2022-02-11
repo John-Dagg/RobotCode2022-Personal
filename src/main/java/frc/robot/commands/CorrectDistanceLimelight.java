@@ -27,6 +27,8 @@ public class CorrectDistanceLimelight extends CommandBase {
     private final double conversion = 0.1429 * 6 * Math.PI * 2; //Rotations to inches
 
     private boolean distanceCompleted;
+    private boolean stopFlag;
+
 
     public CorrectDistanceLimelight(Drivetrain subsystemA, VPLimelight subsystemB){
         mDrivetrain = subsystemA;
@@ -52,6 +54,7 @@ public class CorrectDistanceLimelight extends CommandBase {
 
     @Override
     public void initialize(){
+        stopFlag = false;
         speed = 0.25;
         buffer = 10;
         mVision.updateTargets();
@@ -90,6 +93,7 @@ public class CorrectDistanceLimelight extends CommandBase {
                     distanceCompleted = true;
                     System.out.println("Distance Traveled: " + actualTravel);
                 }
+                stopFlag = true;
             }
         } else {
 //            mAlign.findTarget();
@@ -98,6 +102,11 @@ public class CorrectDistanceLimelight extends CommandBase {
 
 //        System.out.println(initDistance);
 //        System.out.println(goalTravel - actualTravel);
+    }
+
+    @Override
+    public boolean isFinished(){
+        return stopFlag;
     }
 
     public double calcDistance(){
