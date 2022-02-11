@@ -33,8 +33,8 @@ public class AutonTest extends CommandBase {
         mDrivetrain = subsystem;
         addRequirements(mDrivetrain);
 
-        mLeftFile = new File("frc/robot/TrajectoryFiles/LeftTrajectory.csv");
-        mRightFile = new File("frc/robot/TrajectoryFiles/RightTrajectory.csv");
+        mLeftFile = new File("java/frc/robot/TrajectoryFiles/LeftTrajectory.csv");
+        mRightFile = new File("java/frc/robot/TrajectoryFiles/RightTrajectory.csv");
 
         mLeftTrajectory = new Trajectory(mLeftFile, REV);
         mRightTrajectory = new Trajectory(mRightFile, REV);

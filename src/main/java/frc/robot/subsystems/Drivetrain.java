@@ -58,7 +58,7 @@ public class Drivetrain extends SubsystemBase {
 //  Creates two encoder objects for their respective motors
     leftEncoder = leftLeader.getAlternateEncoder(4096);
     rightEncoder = rightLeader.getAlternateEncoder(4096);
-    leftEncoder.setInverted(true);
+    rightEncoder.setInverted(true);
     resetEncoders();
     resetYaw();
 
@@ -85,6 +85,11 @@ public class Drivetrain extends SubsystemBase {
     rightEncoder.setPosition(0);
   }
 
+  public void printTicks(){
+    System.out.println(leftEncoder.getPosition());
+    System.out.println(rightEncoder.getPosition());
+  }
+
   private double deadband(double percentOutput){
     return Math.abs(percentOutput) > Constants.DriveTrain.deadband ? percentOutput : 0;
   }
@@ -106,7 +111,8 @@ public class Drivetrain extends SubsystemBase {
     rightLeader.set(rightOutput * 0.5);
 
 //    System.out.println("Left velocity: " + leftEncoder.getVelocity() + " | Right velocity: " + rightEncoder.getVelocity());
-    getYaw();
+//    getYaw();
+//    printTicks();
   }
 
   public void tankDrive(){

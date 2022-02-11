@@ -26,16 +26,16 @@ public class RobotContainer {
 
   private final ShootFar mShootFar = new ShootFar(mShooter, mIndexer);
   private final ShootClose mShootClose = new ShootClose(mShooter, mIndexer);
-  private final StopAuton m_autoCommand = new StopAuton(mDrivetrain);
+//  private final StopAuton m_autoCommand = new StopAuton(mDrivetrain);
 //  private final AlignTarget mAlignTarget = new AlignTarget(mVision, mDrivetrain, mShooter);
-  //  private final AutonTest m_autoCommand = new AutonTest(mDrivetrain);
+//    private final AutonTest m_autoCommand = new AutonTest(mDrivetrain);
 
   public RobotContainer() {
 
     configureButtonBindings();
 
     mDrivetrain.setDefaultCommand(new RunCommand(mDrivetrain::arcadeDrive, mDrivetrain));
-    mLimelightVision.setDefaultCommand(new RunCommand(mLimelightVision::printNetworkTables, mLimelightVision));
+//    mLimelightVision.setDefaultCommand(new RunCommand(mLimelightVision::printNetworkTables, mLimelightVision));
 //    mDrivetrain.setDefaultCommand(new RunCommand(mDrivetrain::getYaw, mDrivetrain));
 
   }
@@ -53,6 +53,10 @@ public class RobotContainer {
 
     new JoystickButton(Constants.driverController, Button.ButtonID.B.getID())
             .whenHeld(mDistanceTarget);
+
+    new JoystickButton(Constants.driverController, Button.ButtonID.X.getID())
+            .whenPressed(mDrivetrain::resetEncoders);
+
 
 
 
@@ -108,7 +112,8 @@ public class RobotContainer {
 //Uncomment code in the Robot class
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+//    return m_autoCommand;
+    return null;
   }
 
 }
