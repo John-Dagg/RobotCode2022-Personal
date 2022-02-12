@@ -31,7 +31,7 @@ public class RobotContainer {
   private final ShootClose mShootClose = new ShootClose(mShooter, mIndexer);
 //  private final StopAuton m_autoCommand = new StopAuton(mDrivetrain);
 //  private final AlignTarget mAlignTarget = new AlignTarget(mVision, mDrivetrain, mShooter);
-//    private final AutonTest m_autoCommand = new AutonTest(mDrivetrain);
+    private final AutonTest m_autoCommand = new AutonTest(mDrivetrain);
 
   public RobotContainer() {
 
@@ -115,8 +115,8 @@ public class RobotContainer {
 //Uncomment code in the Robot class
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-//    return m_autoCommand;
-    return null;
+    return m_autoCommand;
+//    return null;
   }
 
 }
