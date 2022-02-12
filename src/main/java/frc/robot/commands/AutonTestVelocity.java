@@ -5,18 +5,15 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.TrajectoryFollowing.Trajectory;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.utility.PIDConfig;
 
 import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import static frc.robot.TrajectoryFollowing.Trajectory.TargetMotorController.REV;
 
-public class AutonTest extends CommandBase {
+public class AutonTestVelocity extends CommandBase {
 
     // Needs a lot of work
 
@@ -34,11 +31,12 @@ public class AutonTest extends CommandBase {
     private double mInitTime;
     private boolean mStopBool;
 
-    private final double conversion = 0.1429 * 6 * Math.PI * 2;
+    //rotations per minute to inches per second
+    private final double conversion = ((1.0*(6 * Math.PI)) / 7) / 60;
 
     private String mTrajectoryDirectory = Filesystem.getDeployDirectory().toString()+"/";
 
-    public AutonTest(Drivetrain subsystem){
+    public AutonTestVelocity(Drivetrain subsystem){
         mDrivetrain = subsystem;
         addRequirements(mDrivetrain);
 
@@ -59,6 +57,11 @@ public class AutonTest extends CommandBase {
 
         mLeftPIDController.setFeedbackDevice(mDrivetrain.getLeftEncoder());
         mRightPIDController.setFeedbackDevice(mDrivetrain.getRightEncoder());
+
+        mLeftEncoder.setVelocityConversionFactor(conversion);
+        mRightEncoder.setVelocityConversionFactor(conversion);
+
+
     }
 
     private int getTimeElapsed(){
@@ -73,7 +76,7 @@ public class AutonTest extends CommandBase {
         mDrivetrain.resetEncoders();
         mDrivetrain.resetYaw();
 
-        PIDConfig.setPIDF(mLeftPIDController, mRightPIDController, 0.1, 0.01, 0.01, 0.01);
+        PIDConfig.setPIDF(mLeftPIDController, mRightPIDController, 0.01, 0.01, 0.01, 0.01);
 
     }
     @Override
@@ -81,19 +84,13 @@ public class AutonTest extends CommandBase {
         int time = getTimeElapsed();
 
         if (!isFinished()){
-//            System.out.println("Working");
+//            System.out.println("Left Trajectory Velocity: "+mLeftTrajectory.getPoints().get(time).getVelocity());
+//            System.out.println("Right Trajectory Velocity: "+mRightTrajectory.getPoints().get(time).getVelocity());
 
-            if (time >= mLeftTrajectory.getPoints().size() * mLeftTrajectory.getPoints().get(0).getDt()
-                    || time >= mRightTrajectory.getPoints().size() * mRightTrajectory.getPoints().get(0).getDt())
-                return;
+            mLeftPIDController.setReference(mLeftTrajectory.getPoints().get(time).getVelocity()/600, CANSparkMax.ControlType.kVelocity);
+            mRightPIDController.setReference(mRightTrajectory.getPoints().get(time).getVelocity()/600, CANSparkMax.ControlType.kVelocity);
 
-            System.out.println("Left Trajectory Velocity: "+mLeftTrajectory.getPoints().get(time).getVelocity());
-            System.out.println("Right Trajectory Velocity: "+mRightTrajectory.getPoints().get(time).getVelocity());
-
-//            mLeftPIDController.setReference(mLeftTrajectory.getPoints().get(time).getVelocity() , CANSparkMax.ControlType.kVelocity);
-//            mRightPIDController.setReference(mRightTrajectory.getPoints().get(time).getVelocity(), CANSparkMax.ControlType.kVelocity);
-
-
+            System.out.println("Error: "+ (mLeftEncoder.getVelocity() - mLeftTrajectory.getPoints().get(time).getVelocity()));
 
 
 //            mLeftPIDController.setReference(0.5, CANSparkMax.ControlType.kVelocity);
@@ -108,10 +105,6 @@ public class AutonTest extends CommandBase {
 
 //            mDrivetrain.printRPM();
 //            mDrivetrain.printPosition();
-
-//            System.out.println("Average rpm: " + (inputLeft + inputRight)/60);
-//            System.out.println("Average inches per second: "+(inchesPerSecondLeft + inchesPerSecondRight) / 2);
-
 
         }
 

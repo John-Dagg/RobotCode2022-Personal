@@ -29,9 +29,9 @@ public class RobotContainer {
 
   private final ShootFar mShootFar = new ShootFar(mShooter, mIndexer);
   private final ShootClose mShootClose = new ShootClose(mShooter, mIndexer);
-//  private final StopAuton m_autoCommand = new StopAuton(mDrivetrain);
-//  private final AlignTarget mAlignTarget = new AlignTarget(mVision, mDrivetrain, mShooter);
-    private final AutonTest m_autoCommand = new AutonTest(mDrivetrain);
+  private final StopAuton mStopAuton = new StopAuton(mDrivetrain);
+  private final AutonTestVelocity mVelocityAuton = new AutonTestVelocity(mDrivetrain);
+  private final AutonTestPosition mPositionAuton = new AutonTestPosition(mDrivetrain);
 
   public RobotContainer() {
 
@@ -69,6 +69,8 @@ public class RobotContainer {
                     new InstantCommand(mDrivetrain::lowGear),
                     mDrivetrain::getLowGear));
 /*
+    Waiting for Build
+
     new JoystickButton(Constants.driverController, Button.ButtonID.RIGHT_BUMPER.getID())
             .whenPressed(new ConditionalCommand(
                     new InstantCommand(mIntake::retractIntake),
@@ -99,23 +101,12 @@ public class RobotContainer {
     new JoystickButton(Constants.driverController, Button.ButtonID.Y.getID())
             .whenInactive(mIndexer::setIndexerIdle);
 */
-/*
-    new JoystickButton(Constants.driverController, Button.ButtonID.A.getID())
-            .whenHeld(mAlignTarget);
-*/
+
   }
 
-
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-
-//Uncomment code in the Robot class
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return m_autoCommand;
+
+    return mPositionAuton;
 //    return null;
   }
 
