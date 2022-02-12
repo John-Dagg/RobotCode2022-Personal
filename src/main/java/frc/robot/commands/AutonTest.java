@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.TrajectoryFollowing.Trajectory;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.utility.PIDConfig;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -72,12 +73,7 @@ public class AutonTest extends CommandBase {
         mDrivetrain.resetEncoders();
         mDrivetrain.resetYaw();
 
-        mLeftPIDController.setP(Constants.DriveTrain.kP);
-        mLeftPIDController.setP(Constants.DriveTrain.kI);
-        mLeftPIDController.setP(Constants.DriveTrain.kD);
-        mRightPIDController.setP(Constants.DriveTrain.kP);
-        mRightPIDController.setP(Constants.DriveTrain.kI);
-        mRightPIDController.setP(Constants.DriveTrain.kD);
+        PIDConfig.setPIDF(mLeftPIDController, mRightPIDController, 0.1, 0.01, 0.01, 0.01);
 
     }
     @Override
@@ -91,11 +87,12 @@ public class AutonTest extends CommandBase {
                     || time >= mRightTrajectory.getPoints().size() * mRightTrajectory.getPoints().get(0).getDt())
                 return;
 
-//            System.out.println("Left Trajectory Velocity: "+mLeftTrajectory.getPoints().get(time).getVelocity());
-//            System.out.println("Right Trajectory Velocity: "+mRightTrajectory.getPoints().get(time).getVelocity());
+            System.out.println("Left Trajectory Velocity: "+mLeftTrajectory.getPoints().get(time).getVelocity());
+            System.out.println("Right Trajectory Velocity: "+mRightTrajectory.getPoints().get(time).getVelocity());
 
-            mLeftPIDController.setReference(mLeftTrajectory.getPoints().get(time).getVelocity() , CANSparkMax.ControlType.kVelocity);
-            mRightPIDController.setReference(mRightTrajectory.getPoints().get(time).getVelocity(), CANSparkMax.ControlType.kVelocity);
+//            mLeftPIDController.setReference(mLeftTrajectory.getPoints().get(time).getVelocity() , CANSparkMax.ControlType.kVelocity);
+//            mRightPIDController.setReference(mRightTrajectory.getPoints().get(time).getVelocity(), CANSparkMax.ControlType.kVelocity);
+
 
 
 
@@ -110,7 +107,7 @@ public class AutonTest extends CommandBase {
             double inchesPerSecondRight = (inputRight * conversion) / 60;
 
 //            mDrivetrain.printRPM();
-            mDrivetrain.printPosition();
+//            mDrivetrain.printPosition();
 
 //            System.out.println("Average rpm: " + (inputLeft + inputRight)/60);
 //            System.out.println("Average inches per second: "+(inchesPerSecondLeft + inchesPerSecondRight) / 2);

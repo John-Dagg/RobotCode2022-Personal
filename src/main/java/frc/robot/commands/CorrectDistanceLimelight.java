@@ -44,10 +44,10 @@ public class CorrectDistanceLimelight extends CommandBase {
         mLeftEncoder.setPosition(0);
         mRightEncoder.setPosition(0);
 
-        mLeftPIDController = mLeftLeader.getPIDController();
-        mRightPIDController = mRightLeader.getPIDController();
+//        mLeftPIDController = mLeftLeader.getPIDController();
+//        mRightPIDController = mRightLeader.getPIDController();
 
-        PIDConfig.setPID(mLeftPIDController, mRightPIDController, 0, 0, 0); //Needs Tuning
+//        PIDConfig.setPID(mLeftPIDController, mRightPIDController, 0, 0, 0); //Needs Tuning
 
         mAlign = new AlignTargetLimeLight(mDrivetrain, mVision);
     }

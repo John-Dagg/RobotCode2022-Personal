@@ -30,10 +30,10 @@ public class AlignTargetLimeLight extends CommandBase {
         mLeftLeader = mDrivetrain.getLeftLeader();
         mRightLeader = mDrivetrain.getRightLeader();
 
-        mLeftPIDController = mLeftLeader.getPIDController();
-        mRightPIDController = mRightLeader.getPIDController();
+//        mLeftPIDController = mLeftLeader.getPIDController();
+//        mRightPIDController = mRightLeader.getPIDController();
 
-        PIDConfig.setPID(mLeftPIDController, mRightPIDController, 0, 0, 0); //Tune eventually
+//        PIDConfig.setPID(mLeftPIDController, mRightPIDController, 0, 0, 0); //Tune eventually
 
     }
 

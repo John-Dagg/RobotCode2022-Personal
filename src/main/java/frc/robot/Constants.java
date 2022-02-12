@@ -31,7 +31,7 @@ public final class Constants {
 
         public static final int[] shifterPorts = {0, 1};
 
-        public static final double deadband = 0.01;
+        public static final double deadband = 0.05;
 
         public static final double kP = 0.01;
         public static final double kI = 0.01;

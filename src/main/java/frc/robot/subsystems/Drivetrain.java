@@ -91,8 +91,8 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void printRPM(){
-    System.out.println(leftEncoder.getVelocity());
-    System.out.println(rightEncoder.getVelocity());
+    System.out.println("Left Encoder: "+leftEncoder.getVelocity());
+    System.out.println("Right Encoder: "+rightEncoder.getVelocity());
   }
 
   private double deadband(double percentOutput){
@@ -115,7 +115,7 @@ public class Drivetrain extends SubsystemBase {
     leftLeader.set(leftOutput * 0.5);
     rightLeader.set(rightOutput * 0.5);
 
-    printPosition();
+//    printRPM();
 
 //    System.out.println("Left velocity: " + leftEncoder.getVelocity() + " | Right velocity: " + rightEncoder.getVelocity());
 //    getYaw();
