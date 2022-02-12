@@ -2,7 +2,7 @@ import edu.wpi.first.gradlerio.deploy.roborio.RoboRIO
 
 plugins {
     id "java"
-    id "edu.wpi.first.GradleRIO" version "2022.1.1"
+    id "edu.wpi.first.GradleRIO" version "2022.3.1"
 }
 
 sourceCompatibility = JavaVersion.VERSION_11
@@ -19,7 +19,7 @@ deploy {
             // or from command line. If not found an exception will be thrown.
             // You can use getTeamOrDefault(team) instead of getTeamNumber if you
             // want to store a team number in this file.
-            team = project.frc.getTeamNumber()
+            team = project.frc.getTeamOrDefault(2851)
             debug = project.frc.getDebugOrDefault(false)
 
             artifacts {

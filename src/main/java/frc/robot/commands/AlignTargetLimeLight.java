@@ -58,6 +58,9 @@ public class AlignTargetLimeLight extends CommandBase {
     @Override
     public void end(boolean isFinished){
         mVision.steadyArray();
+        if(stopFlag){
+            System.out.println("Ending Command 1");
+        }
     }
 
     @Override
@@ -76,6 +79,8 @@ public class AlignTargetLimeLight extends CommandBase {
             mLeftLeader.set(0);
             mRightLeader.set(0);
             stopFlag = true;
+            end(stopFlag);
+            System.out.println("Please work");
         }
     }
 

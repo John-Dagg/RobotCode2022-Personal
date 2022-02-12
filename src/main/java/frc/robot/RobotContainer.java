@@ -23,7 +23,9 @@ public class RobotContainer {
 
   private final AlignTargetLimeLight mAlignTarget = new AlignTargetLimeLight(mDrivetrain, mLimelightVision);
   private final CorrectDistanceLimelight mDistanceTarget = new CorrectDistanceLimelight(mDrivetrain, mLimelightVision);
-  private final CompleteVisionAlign mCompleteVision = new CompleteVisionAlign(mDrivetrain, mLimelightVision, mAlignTarget, mDistanceTarget);
+  private final AlignTargetLimeLight mSoloAlignTarget = new AlignTargetLimeLight(mDrivetrain, mLimelightVision);
+  private final CorrectDistanceLimelight mSoloDistanceTarget = new CorrectDistanceLimelight(mDrivetrain, mLimelightVision);
+  private final CompleteVisionAlign mCompleteVision = new CompleteVisionAlign(mAlignTarget, mDistanceTarget);
 
   private final ShootFar mShootFar = new ShootFar(mShooter, mIndexer);
   private final ShootClose mShootClose = new ShootClose(mShooter, mIndexer);
@@ -50,13 +52,15 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     new JoystickButton(Constants.driverController, Button.ButtonID.X.getID())
-            .whenHeld(mAlignTarget);
+            .whenHeld(mSoloAlignTarget);
 
     new JoystickButton(Constants.driverController, Button.ButtonID.B.getID())
-            .whenHeld(mDistanceTarget);
+            .whenHeld(mSoloDistanceTarget);
 
     new JoystickButton(Constants.driverController, Button.ButtonID.A.getID())
-            .whenPressed(mCompleteVision);
+            .whenHeld(mCompleteVision);
+
+
 
 
     new JoystickButton(Constants.driverController, Button.ButtonID.LEFT_BUMPER.getID())

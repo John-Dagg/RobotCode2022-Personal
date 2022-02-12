@@ -7,20 +7,19 @@ import frc.robot.subsystems.VPLimelight;
 
 public class CompleteVisionAlign extends SequentialCommandGroup {
 
-    private Drivetrain mDrivetrain;
-    private VPLimelight mVision;
+
 
     private AlignTargetLimeLight mAlignTarget;
     private CorrectDistanceLimelight mCorrectDistance;
 
 
-    public CompleteVisionAlign(Drivetrain subsystemA, VPLimelight subsystemB, AlignTargetLimeLight commandA, CorrectDistanceLimelight commandB){
-        mDrivetrain = subsystemA;
-        mVision = subsystemB;
-        addRequirements(mDrivetrain, mVision);
+    public CompleteVisionAlign(AlignTargetLimeLight commandA, CorrectDistanceLimelight commandB){
+
+        mAlignTarget = commandA;
+        mCorrectDistance = commandB;
 
 
-        addCommands(mAlignTarget, mCorrectDistance, mAlignTarget, new InstantCommand(mVision::flashArray));
+        addCommands(mAlignTarget, mCorrectDistance);
 
     }
 
