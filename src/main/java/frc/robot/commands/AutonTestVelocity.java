@@ -31,7 +31,7 @@ public class AutonTestVelocity extends CommandBase {
     private double mInitTime;
     private boolean mStopBool;
 
-    //rotations per minute to inches per second
+    //inches per second to rotations per minute
     private final double conversion = ((1.0*(6 * Math.PI)) / 7) / 60;
 
     private String mTrajectoryDirectory = Filesystem.getDeployDirectory().toString()+"/";
@@ -58,8 +58,8 @@ public class AutonTestVelocity extends CommandBase {
         mLeftPIDController.setFeedbackDevice(mDrivetrain.getLeftEncoder());
         mRightPIDController.setFeedbackDevice(mDrivetrain.getRightEncoder());
 
-        mLeftEncoder.setVelocityConversionFactor(conversion);
-        mRightEncoder.setVelocityConversionFactor(conversion);
+//        mLeftEncoder.setVelocityConversionFactor(conversion);
+//        mRightEncoder.setVelocityConversionFactor(conversion);
 
 
     }
@@ -76,7 +76,7 @@ public class AutonTestVelocity extends CommandBase {
         mDrivetrain.resetEncoders();
         mDrivetrain.resetYaw();
 
-        PIDConfig.setPIDF(mLeftPIDController, mRightPIDController, 0.01, 0.01, 0.01, 0.01);
+        PIDConfig.setPIDF(mLeftPIDController, mRightPIDController, 0.001, 0.001, 0.001, 0.001);
 
     }
     @Override
@@ -87,21 +87,14 @@ public class AutonTestVelocity extends CommandBase {
 //            System.out.println("Left Trajectory Velocity: "+mLeftTrajectory.getPoints().get(time).getVelocity());
 //            System.out.println("Right Trajectory Velocity: "+mRightTrajectory.getPoints().get(time).getVelocity());
 
-            mLeftPIDController.setReference(mLeftTrajectory.getPoints().get(time).getVelocity()/600, CANSparkMax.ControlType.kVelocity);
-            mRightPIDController.setReference(mRightTrajectory.getPoints().get(time).getVelocity()/600, CANSparkMax.ControlType.kVelocity);
+            mLeftPIDController.setReference(mLeftTrajectory.getPoints().get(time).getVelocity() * conversion, CANSparkMax.ControlType.kVelocity);
+            mRightPIDController.setReference(mRightTrajectory.getPoints().get(time).getVelocity() * conversion, CANSparkMax.ControlType.kVelocity);
 
-            System.out.println("Error: "+ (mLeftEncoder.getVelocity() - mLeftTrajectory.getPoints().get(time).getVelocity()));
+//            System.out.println("Error: "+ (mLeftEncoder.getVelocity() - mLeftTrajectory.getPoints().get(time).getVelocity()));
 
 
 //            mLeftPIDController.setReference(0.5, CANSparkMax.ControlType.kVelocity);
 //            mRightPIDController.setReference(0.5, CANSparkMax.ControlType.kVelocity);
-
-
-            double inputLeft = mLeftEncoder.getVelocity();
-            double inputRight = mRightEncoder.getVelocity();
-
-            double inchesPerSecondLeft = (inputLeft * conversion) / 60;
-            double inchesPerSecondRight = (inputRight * conversion) / 60;
 
 //            mDrivetrain.printRPM();
 //            mDrivetrain.printPosition();

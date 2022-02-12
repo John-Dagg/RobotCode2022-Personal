@@ -64,8 +64,8 @@ public class AutonTestPosition extends CommandBase {
         PIDConfig.setPID(mLeftPIDController, mRightPIDController, 0.01, 0.01, 0.01);
 
 //
-//        mLeftPIDController.setReference(-0.01, CANSparkMax.ControlType.kPosition);
-//        mRightPIDController.setReference(-0.01, CANSparkMax.ControlType.kPosition);
+
+
     }
 
     @Override
@@ -74,11 +74,25 @@ public class AutonTestPosition extends CommandBase {
         if (!isFinished()){
 
 //            System.out.println("Working");
-            mLeftPIDController.setReference(mLeftTrajectory.getPoints().get(time).getPosition(), CANSparkMax.ControlType.kPosition);
-            mRightPIDController.setReference(mRightTrajectory.getPoints().get(time).getPosition(), CANSparkMax.ControlType.kPosition);
+//            mLeftPIDController.setReference(mLeftTrajectory.getPoints().get(time).getPosition(), CANSparkMax.ControlType.kPosition);
+//            mRightPIDController.setReference(mRightTrajectory.getPoints().get(time).getPosition(), CANSparkMax.ControlType.kPosition);
 
 //            mLeftPIDController.setReference(-0.01, CANSparkMax.ControlType.kPosition);
 //            mRightPIDController.setReference(-0.01, CANSparkMax.ControlType.kPosition);
+
+            if (getTimeElapsed() < 1000){
+                mLeftPIDController.setReference(-10, CANSparkMax.ControlType.kPosition);
+                mRightPIDController.setReference(-10, CANSparkMax.ControlType.kPosition);
+            } else {
+                /*
+                mLeftPIDController.setReference(0, CANSparkMax.ControlType.kPosition);
+                mRightPIDController.setReference(0, CANSparkMax.ControlType.kPosition);
+
+                 */
+            }
+
+
+
 
         }
     }
@@ -96,6 +110,7 @@ public class AutonTestPosition extends CommandBase {
     @Override
     public boolean isFinished(){
         boolean stop = getTimeElapsed() >= mLeftTrajectory.getPoints().size() || getTimeElapsed() >= mRightTrajectory.getPoints().size();
-        return stop;
+        boolean stop2 = getTimeElapsed() > 1000;
+        return stop2;
     }
 }
