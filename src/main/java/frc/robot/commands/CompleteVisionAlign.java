@@ -20,7 +20,7 @@ public class CompleteVisionAlign extends SequentialCommandGroup {
         addRequirements(mDrivetrain, mVision);
 
 
-        addCommands(mAlignTarget, mCorrectDistance, mAlignTarget, new InstantCommand(mVision::flashArray));
+        addCommands(mAlignTarget, mCorrectDistance);
 
     }
 

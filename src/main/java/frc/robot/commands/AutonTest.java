@@ -8,6 +8,8 @@ import frc.robot.TrajectoryFollowing.Trajectory;
 import frc.robot.subsystems.Drivetrain;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static frc.robot.TrajectoryFollowing.Trajectory.TargetMotorController.REV;
 
@@ -29,12 +31,28 @@ public class AutonTest extends CommandBase {
     private double mInitTime;
     private boolean mStopBool;
 
+    private String mTrajectoryDirectory = "/TrajectoryFiles/";//"/frc/robot/TrajectoryFollowing";//System.getProperty("user.dir")+"../TrajectoryFiles/"; //"java/frc/robot/TrajectoryFiles/"
+
     public AutonTest(Drivetrain subsystem){
         mDrivetrain = subsystem;
         addRequirements(mDrivetrain);
 
-        mLeftFile = new File("java/frc/robot/TrajectoryFiles/LeftTrajectory.csv");
-        mRightFile = new File("java/frc/robot/TrajectoryFiles/RightTrajectory.csv");
+//        Path p1 = Paths.get(System.getProperty("user.dir"), "Documents", "GitHub", "RobotCode2022-Personal", "src", "main", "java", "frc", "robot", "TrajectoryFiles", "LeftTrajectory.csv");
+//
+//        Path p2 = Paths.get(System.getProperty("user.dir"), "Documents", "GitHub", "RobotCode2022-Personal", "src", "main", "java", "frc", "robot", "TrajectoryFiles", "RightTrajectory.csv");
+
+
+//        File curDir = new File(System.getProperty("user.dir"));
+//
+//        File[] filesList = curDir.listFiles();
+//
+//        for(File f:filesList) {
+//            System.out.println("FILE?: "+f.getName());
+//        }
+
+        System.out.println();
+        mLeftFile = new File(mTrajectoryDirectory+"LeftTrajectory.csv");
+        mRightFile = new File(mTrajectoryDirectory+"RightTrajectory.csv");
 
         mLeftTrajectory = new Trajectory(mLeftFile, REV);
         mRightTrajectory = new Trajectory(mRightFile, REV);
@@ -71,7 +89,7 @@ public class AutonTest extends CommandBase {
         int time = getTimeElapsed();
 
         while (!isFinished()){
-            System.out.println("Working");
+//            System.out.println("Working");
 
             mLeftPIDController.setReference(mLeftTrajectory.getPoints().get(time).getVelocity(), CANSparkMax.ControlType.kVelocity);
             mRightPIDController.setReference(mRightTrajectory.getPoints().get(time).getVelocity(), CANSparkMax.ControlType.kVelocity);

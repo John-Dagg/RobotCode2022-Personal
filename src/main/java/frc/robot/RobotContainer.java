@@ -23,13 +23,13 @@ public class RobotContainer {
 
   private final AlignTargetLimeLight mAlignTarget = new AlignTargetLimeLight(mDrivetrain, mLimelightVision);
   private final CorrectDistanceLimelight mDistanceTarget = new CorrectDistanceLimelight(mDrivetrain, mLimelightVision);
-  private final CompleteVisionAlign mCompleteVision = new CompleteVisionAlign(mDrivetrain, mLimelightVision, mAlignTarget, mDistanceTarget);
+//  private final CompleteVisionAlign mCompleteVision = new CompleteVisionAlign(mDrivetrain, mLimelightVision, mAlignTarget, mDistanceTarget);
 
   private final ShootFar mShootFar = new ShootFar(mShooter, mIndexer);
   private final ShootClose mShootClose = new ShootClose(mShooter, mIndexer);
 //  private final StopAuton m_autoCommand = new StopAuton(mDrivetrain);
 //  private final AlignTarget mAlignTarget = new AlignTarget(mVision, mDrivetrain, mShooter);
-//    private final AutonTest m_autoCommand = new AutonTest(mDrivetrain);
+    private final AutonTest m_autoCommand = new AutonTest(mDrivetrain);
 
   public RobotContainer() {
 
@@ -55,8 +55,8 @@ public class RobotContainer {
     new JoystickButton(Constants.driverController, Button.ButtonID.B.getID())
             .whenHeld(mDistanceTarget);
 
-    new JoystickButton(Constants.driverController, Button.ButtonID.A.getID())
-            .whenPressed(mCompleteVision);
+//    new JoystickButton(Constants.driverController, Button.ButtonID.A.getID())
+//            .whenPressed(mCompleteVision);
 
 
     new JoystickButton(Constants.driverController, Button.ButtonID.LEFT_BUMPER.getID())
@@ -64,6 +64,9 @@ public class RobotContainer {
                     new InstantCommand(mDrivetrain::highGear),
                     new InstantCommand(mDrivetrain::lowGear),
                     mDrivetrain::getLowGear));
+
+//    new JoystickButton(Constants.driverController, Button.ButtonID.Y.getID())
+//            .whenPressed(m_autoCommand)
 /*
     new JoystickButton(Constants.driverController, Button.ButtonID.RIGHT_BUMPER.getID())
             .whenPressed(new ConditionalCommand(
@@ -111,8 +114,8 @@ public class RobotContainer {
 //Uncomment code in the Robot class
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-//    return m_autoCommand;
-    return null;
+    return m_autoCommand;
+//    return null;
   }
 
 }
