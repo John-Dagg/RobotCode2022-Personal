@@ -22,10 +22,10 @@ public class Trajectory {
 
     public Trajectory(File file, TargetMotorController targetMotorController, int unitsPerInch)
     {
+        System.out.println("FILE: "+file.getName());
         try
         {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
-
             String line;
             String[] properties;
 
@@ -58,6 +58,7 @@ public class Trajectory {
 
     public ArrayList<TrajectoryPoint> getPoints()
     {
+//        System.out.println("LENGTH: "+mPoints.size());
         return mPoints;
     }
 

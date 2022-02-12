@@ -33,9 +33,9 @@ public final class Constants {
 
         public static final double deadband = 0.01;
 
-        public static final double kP = 0;
-        public static final double kI = 0;
-        public static final double kD = 0;
+        public static final double kP = 0.01;
+        public static final double kI = 0.01;
+        public static final double kD = 0.01;
         public static final double kF = 0;
 
         public static final double iprHighGear = 1.0; // Inches per rotation for high gear. Currently placeholder

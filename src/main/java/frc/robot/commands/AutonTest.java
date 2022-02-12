@@ -1,7 +1,9 @@
 package frc.robot.commands;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.TrajectoryFollowing.Trajectory;
@@ -19,46 +21,40 @@ public class AutonTest extends CommandBase {
 
 
     private Drivetrain mDrivetrain;
-    private Trajectory mLeftTrajectory;
-    private Trajectory mRightTrajectory;
 
-    private File mLeftFile;
-    private File mRightFile;
+    private Trajectory mLeftTrajectory, mRightTrajectory;
+    private File mLeftFile, mRightFile;
 
-    private SparkMaxPIDController mLeftPIDController;
-    private SparkMaxPIDController mRightPIDController;
+
+    private CANSparkMax mLeftLeader, mRightLeader;
+    private SparkMaxPIDController mLeftPIDController, mRightPIDController;
+    private RelativeEncoder mLeftEncoder, mRightEncoder;
 
     private double mInitTime;
     private boolean mStopBool;
 
-    private String mTrajectoryDirectory = "/TrajectoryFiles/";//"/frc/robot/TrajectoryFollowing";//System.getProperty("user.dir")+"../TrajectoryFiles/"; //"java/frc/robot/TrajectoryFiles/"
+    private final double conversion = 0.1429 * 6 * Math.PI * 2;
+
+    private String mTrajectoryDirectory = Filesystem.getDeployDirectory().toString()+"/";
 
     public AutonTest(Drivetrain subsystem){
         mDrivetrain = subsystem;
         addRequirements(mDrivetrain);
 
-//        Path p1 = Paths.get(System.getProperty("user.dir"), "Documents", "GitHub", "RobotCode2022-Personal", "src", "main", "java", "frc", "robot", "TrajectoryFiles", "LeftTrajectory.csv");
-//
-//        Path p2 = Paths.get(System.getProperty("user.dir"), "Documents", "GitHub", "RobotCode2022-Personal", "src", "main", "java", "frc", "robot", "TrajectoryFiles", "RightTrajectory.csv");
-
-
-//        File curDir = new File(System.getProperty("user.dir"));
-//
-//        File[] filesList = curDir.listFiles();
-//
-//        for(File f:filesList) {
-//            System.out.println("FILE?: "+f.getName());
-//        }
-
-        System.out.println();
         mLeftFile = new File(mTrajectoryDirectory+"LeftTrajectory.csv");
         mRightFile = new File(mTrajectoryDirectory+"RightTrajectory.csv");
 
-        mLeftTrajectory = new Trajectory(mLeftFile, REV);
-        mRightTrajectory = new Trajectory(mRightFile, REV);
+        mLeftTrajectory = new Trajectory(mLeftFile, REV, 1);
+        mRightTrajectory = new Trajectory(mRightFile, REV, 1);
+
+        mLeftLeader = mDrivetrain.getLeftLeader();
+        mRightLeader = mDrivetrain.getRightLeader();
 
         mLeftPIDController = mDrivetrain.getLeftLeader().getPIDController();
         mRightPIDController = mDrivetrain.getRightLeader().getPIDController();
+
+        mLeftEncoder = mDrivetrain.getLeftEncoder();
+        mRightEncoder = mDrivetrain.getRightEncoder();
 
         mLeftPIDController.setFeedbackDevice(mDrivetrain.getLeftEncoder());
         mRightPIDController.setFeedbackDevice(mDrivetrain.getRightEncoder());
@@ -88,11 +84,38 @@ public class AutonTest extends CommandBase {
     public void execute(){
         int time = getTimeElapsed();
 
-        while (!isFinished()){
+        if (!isFinished()){
 //            System.out.println("Working");
 
-            mLeftPIDController.setReference(mLeftTrajectory.getPoints().get(time).getVelocity(), CANSparkMax.ControlType.kVelocity);
+            if (time >= mLeftTrajectory.getPoints().size() * mLeftTrajectory.getPoints().get(0).getDt()
+                    || time >= mRightTrajectory.getPoints().size() * mRightTrajectory.getPoints().get(0).getDt())
+                return;
+
+//            System.out.println("Left Trajectory Velocity: "+mLeftTrajectory.getPoints().get(time).getVelocity());
+//            System.out.println("Right Trajectory Velocity: "+mRightTrajectory.getPoints().get(time).getVelocity());
+
+            mLeftPIDController.setReference(mLeftTrajectory.getPoints().get(time).getVelocity() , CANSparkMax.ControlType.kVelocity);
             mRightPIDController.setReference(mRightTrajectory.getPoints().get(time).getVelocity(), CANSparkMax.ControlType.kVelocity);
+
+
+
+//            mLeftPIDController.setReference(0.5, CANSparkMax.ControlType.kVelocity);
+//            mRightPIDController.setReference(0.5, CANSparkMax.ControlType.kVelocity);
+
+
+            double inputLeft = mLeftEncoder.getVelocity();
+            double inputRight = mRightEncoder.getVelocity();
+
+            double inchesPerSecondLeft = (inputLeft * conversion) / 60;
+            double inchesPerSecondRight = (inputRight * conversion) / 60;
+
+//            mDrivetrain.printRPM();
+            mDrivetrain.printPosition();
+
+//            System.out.println("Average rpm: " + (inputLeft + inputRight)/60);
+//            System.out.println("Average inches per second: "+(inchesPerSecondLeft + inchesPerSecondRight) / 2);
+
+
         }
 
     }
