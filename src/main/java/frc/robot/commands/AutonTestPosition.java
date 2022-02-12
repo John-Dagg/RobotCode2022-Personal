@@ -22,7 +22,7 @@ public class AutonTestPosition extends CommandBase {
     private SparkMaxPIDController mLeftPIDController, mRightPIDController;
     private RelativeEncoder mLeftEncoder, mRightEncoder;
 
-    private String mTrajectoryDirectory = Filesystem.getDeployDirectory().toString();
+    private String mTrajectoryDirectory = Filesystem.getDeployDirectory().toString()+"/";
 
     private double mInitTime;
     private int time;
@@ -50,8 +50,9 @@ public class AutonTestPosition extends CommandBase {
         mRightPIDController.setFeedbackDevice(mDrivetrain.getRightEncoder());
     }
 
-    public double getTimeElapsed(){
-        return System.currentTimeMillis() - mInitTime;
+    public int getTimeElapsed(){
+        double timeElapsed = (System.currentTimeMillis() - mInitTime);
+        return (int)timeElapsed;
     }
 
     @Override
@@ -61,15 +62,24 @@ public class AutonTestPosition extends CommandBase {
         mDrivetrain.resetEncoders();
 
         PIDConfig.setPID(mLeftPIDController, mRightPIDController, 0.01, 0.01, 0.01);
+
+//
+//        mLeftPIDController.setReference(-0.01, CANSparkMax.ControlType.kPosition);
+//        mRightPIDController.setReference(-0.01, CANSparkMax.ControlType.kPosition);
     }
 
     @Override
     public void execute(){
+        time = getTimeElapsed();
         if (!isFinished()){
-            time = (int)getTimeElapsed();
 
+//            System.out.println("Working");
             mLeftPIDController.setReference(mLeftTrajectory.getPoints().get(time).getPosition(), CANSparkMax.ControlType.kPosition);
             mRightPIDController.setReference(mRightTrajectory.getPoints().get(time).getPosition(), CANSparkMax.ControlType.kPosition);
+
+//            mLeftPIDController.setReference(-0.01, CANSparkMax.ControlType.kPosition);
+//            mRightPIDController.setReference(-0.01, CANSparkMax.ControlType.kPosition);
+
         }
     }
 
@@ -85,7 +95,7 @@ public class AutonTestPosition extends CommandBase {
 
     @Override
     public boolean isFinished(){
-        boolean stop = getTimeElapsed() < mLeftTrajectory.getPoints().size() || getTimeElapsed() < mRightTrajectory.getPoints().size();
+        boolean stop = getTimeElapsed() >= mLeftTrajectory.getPoints().size() || getTimeElapsed() >= mRightTrajectory.getPoints().size();
         return stop;
     }
 }
