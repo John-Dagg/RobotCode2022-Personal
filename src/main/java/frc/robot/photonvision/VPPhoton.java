@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.photonvision;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -8,16 +8,14 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import static org.photonvision.PhotonUtils.calculateDistanceToTargetMeters;
 
 public class VPPhoton extends SubsystemBase {
+    //Subject for removal due to arrival of Limelight 2.0
+    //Unfinished
 
-//    private Drivetrain mDrivetrain;
-//    private Shooter mShooter;
 
     private PhotonCamera mCamera;
     private PhotonPipelineResult mResult;
 
     public VPPhoton(){
-//        mDrivetrain = subsystemA;
-//        mShooter = subsystemB;
 
         mCamera = new PhotonCamera("vptest");
         mCamera.setDriverMode(false);
@@ -58,9 +56,9 @@ public class VPPhoton extends SubsystemBase {
 
     public double getDistance(){
         if (refreshTarget()) {
-            return calculateDistanceToTargetMeters(Constants.Vision.cameraHeight,
-                    Constants.Vision.targetHeightA,
-                    Constants.Vision.cameraPitch,
+            return calculateDistanceToTargetMeters(Constants.PhotonVision.cameraHeight,
+                    Constants.PhotonVision.targetHeightA,
+                    Constants.PhotonVision.cameraPitch,
                     getPitch());
         }
         return 0;
@@ -68,7 +66,7 @@ public class VPPhoton extends SubsystemBase {
 
     public double configTurn(double Yaw){
         Yaw = getYaw();
-        return 2.5 * (Math.abs(Yaw)) / Constants.Vision.turnRange - Constants.Vision.turnLowerLimit / Constants.Vision.turnRange;
+        return 2.5 * (Math.abs(Yaw)) / Constants.PhotonVision.turnRange - Constants.PhotonVision.turnLowerLimit / Constants.PhotonVision.turnRange;
     }
 
 }

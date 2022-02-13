@@ -66,11 +66,13 @@ public final class Constants {
 
     public static final class Climber{
 
-        public static final int climberPort = 11;
+        public static final int climberPortA = 11;
+        public static final int climberPortB = 12;
         public static final int[] solenoidPorts = {6, 7};
+        public static final int brakePort = 8;
     }
 
-    public static final class Vision{
+    public static final class PhotonVision{
 
         public static final double cameraHeight = Units.inchesToMeters(25);
         public static final double cameraPitch = Units.degreesToRadians(0);

@@ -1,17 +1,17 @@
-package frc.robot.commands;
+package frc.robot.autons;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.TrajectoryFollowing.Trajectory;
+import frc.robot.trajectoryfollowing.Trajectory;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.utility.PIDConfig;
 
 import java.io.File;
 
-import static frc.robot.TrajectoryFollowing.Trajectory.TargetMotorController.REV;
+import static frc.robot.trajectoryfollowing.Trajectory.TargetMotorController.REV;
 
 public class AutonTestVelocity extends CommandBase {
 

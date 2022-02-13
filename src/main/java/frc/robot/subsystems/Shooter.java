@@ -17,11 +17,15 @@ import frc.robot.utility.MotorControllerFactory;
 
 public class Shooter extends SubsystemBase {
 
+    //Waiting for Build/Electrical to test
+
     private TalonFX shooterMotorLeader, shooterMotorFollower;
     private DoubleSolenoid angler;
 
     private double integratedTicks = 2048;
     private double maxRPM = 6000;
+
+    //Needs testing
     private double closeVel = 0.65;
     private double farVel = 0.85;
     private double idleVel = 0;
@@ -59,6 +63,7 @@ public class Shooter extends SubsystemBase {
         shooterMotorLeader.set(TalonFXControlMode.PercentOutput, idleVel);
     }
 
+    //For use of commands to index the ball once the shooter is at the correct speed
     public double getShooterVel(){
         double ticks = shooterMotorLeader.getSelectedSensorVelocity();
         double RPM = (ticks / integratedTicks) * 10 * 60;
@@ -66,6 +71,7 @@ public class Shooter extends SubsystemBase {
         return percentOutput;
     }
 
+    //For use of commands to index the ball into the shooter before the falcons on the shooter reach full speed
     public double getShooterCloseVel(){
         return closeVel - 0.1;
     }

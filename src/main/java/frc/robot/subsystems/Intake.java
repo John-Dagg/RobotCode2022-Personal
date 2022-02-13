@@ -9,6 +9,8 @@ import frc.robot.utility.MotorControllerFactory;
 
 public class Intake extends SubsystemBase {
 
+    //Waiting for Design/Build/Electrical to test
+
     private CANSparkMax rollerBar, staticRoller;
     private DoubleSolenoid fourBar;
 

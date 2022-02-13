@@ -1,4 +1,4 @@
-package frc.robot.TrajectoryFollowing;
+package frc.robot.trajectoryfollowing;
 
 import java.io.BufferedReader;
 import java.io.File;

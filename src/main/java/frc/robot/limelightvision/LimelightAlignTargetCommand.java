@@ -1,14 +1,12 @@
-package frc.robot.commands;
+package frc.robot.limelightvision;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxPIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.VPLimelight;
-import frc.robot.utility.PIDConfig;
 
-public class AlignTargetLimeLight extends CommandBase {
+public class LimelightAlignTargetCommand extends CommandBase {
 
     private Drivetrain mDrivetrain;
     private VPLimelight mVision;
@@ -20,7 +18,7 @@ public class AlignTargetLimeLight extends CommandBase {
 
     private boolean stopFlag;
 
-    public AlignTargetLimeLight(Drivetrain subsystemA, VPLimelight subsystemB){
+    public LimelightAlignTargetCommand(Drivetrain subsystemA, VPLimelight subsystemB){
 
         mDrivetrain = subsystemA;
         mVision = subsystemB;

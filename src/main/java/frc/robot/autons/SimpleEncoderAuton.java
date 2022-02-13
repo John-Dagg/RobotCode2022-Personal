@@ -1,9 +1,11 @@
-package frc.robot.commands;
+package frc.robot.autons;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 
 public class SimpleEncoderAuton extends CommandBase {
+
+    //Incomplete. Encoder based auton to work on so that I don't go insane working on trajectory following
 
     private Drivetrain mDrivetrain;
 

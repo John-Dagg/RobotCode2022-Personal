@@ -1,12 +1,12 @@
-package frc.robot.commands;
+package frc.robot.photonvision;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.VPPhoton;
 
-public class AlignTarget extends CommandBase {
+public class PhotonAlignTargetCommand extends CommandBase {
+    //Subject for removal due to arrival of Limelight 2.0
 
     private VPPhoton mVision;
     private Drivetrain mDrivetrain;
@@ -14,7 +14,7 @@ public class AlignTarget extends CommandBase {
     private double angle, turnSpeed;
 
 
-    public AlignTarget(VPPhoton subsystemA, Drivetrain subsystemB, Shooter subsystemC){
+    public PhotonAlignTargetCommand(VPPhoton subsystemA, Drivetrain subsystemB, Shooter subsystemC){
         mVision = subsystemA;
         mDrivetrain = subsystemB;
         mShooter= subsystemC;
@@ -29,10 +29,10 @@ public class AlignTarget extends CommandBase {
     @Override
     public void execute(){
         angle = mVision.getYaw();
-        if (angle < -Constants.Vision.turnLowerLimit) {
+        if (angle < -Constants.PhotonVision.turnLowerLimit) {
             turnSpeed = mVision.configTurn(angle);
         }
-        else if (angle < -Constants.Vision.turnLowerLimit) {
+        else if (angle < -Constants.PhotonVision.turnLowerLimit) {
             turnSpeed = -mVision.configTurn(angle);
         }
         else {

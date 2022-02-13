@@ -1,4 +1,4 @@
-package frc.robot.TrajectoryFollowing;
+package frc.robot.trajectoryfollowing;
 
 public class TrajectoryPoint {
 
