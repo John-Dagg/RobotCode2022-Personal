@@ -5,7 +5,6 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.sensors.Pigeon2;
-import com.revrobotics.AlternateEncoderType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxAlternateEncoder;
@@ -58,8 +57,8 @@ public class Drivetrain extends SubsystemBase {
     rightLeader.set(0);
 
 //  Creates two encoder objects for their respective motors
-    leftEncoder = leftLeader.getAlternateEncoder(SparkMaxAlternateEncoder.Type.kQuadrature, 2048);
-    rightEncoder = rightLeader.getAlternateEncoder(SparkMaxAlternateEncoder.Type.kQuadrature, 2048);
+    leftEncoder = leftLeader.getAlternateEncoder(SparkMaxAlternateEncoder.Type.kQuadrature, 4096);
+    rightEncoder = rightLeader.getAlternateEncoder(SparkMaxAlternateEncoder.Type.kQuadrature, 4096);
     rightEncoder.setInverted(true);
     resetEncoders();
     resetYaw();

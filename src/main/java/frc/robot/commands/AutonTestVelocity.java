@@ -35,7 +35,7 @@ public class AutonTestVelocity extends CommandBase {
     private boolean mStopBool;
 
     //inches per second to rotations per minute
-    private final double conversion = ((1.0*(6 * Math.PI)) / 7) / 60;
+    private final double conversion = ((6.0 * Math.PI) / (7.0 * 60.0));
 
     private String mTrajectoryDirectory = Filesystem.getDeployDirectory().toString()+"/";
 
@@ -81,26 +81,42 @@ public class AutonTestVelocity extends CommandBase {
         mDrivetrain.resetEncoders();
         mDrivetrain.resetYaw();
 
-        PIDConfig.setPIDF(mLeftPIDController, mRightPIDController, 0.001, 0, 0, 0);
+        PIDConfig.setPIDF(mLeftPIDController, mRightPIDController, 0.5, 0.01, 0.01, 0.01); // Can't be zero
 
         mThread = new Thread(this::run);
         mThread.start();
 
     }
 
-    public void run(){
-        int time = getTimeElapsed();
+    private void run(){
+
 
         while (!isFinished() && !mStopBool){
-
+            int time = getTimeElapsed();
             if (time >= mLeftTrajectory.getPoints().size() * mLeftTrajectory.getPoints().get(0).getDt()
                     || time >= mRightTrajectory.getPoints().size() * mRightTrajectory.getPoints().get(0).getDt())
                 return;
 
+//            System.out.println("Running");
+/*
+            mLeftPIDController.setReference((-mLeftTrajectory.getPoints().get(time).getVelocity() * conversion)*10, CANSparkMax.ControlType.kVelocity);
+            mRightPIDController.setReference((-mRightTrajectory.getPoints().get(time).getVelocity() * conversion)*10, CANSparkMax.ControlType.kVelocity);
 
 
-            mLeftPIDController.setReference(mLeftTrajectory.getPoints().get(time).getVelocity() * conversion, CANSparkMax.ControlType.kVelocity);
-            mRightPIDController.setReference(mRightTrajectory.getPoints().get(time).getVelocity() * conversion, CANSparkMax.ControlType.kVelocity);
+
+            if (x % 20 == 0) {
+                System.out.println((-mRightTrajectory.getPoints().get(time).getVelocity() * conversion) * 10);
+
+            }
+            x++;
+ */
+
+//            mLeftPIDController.setReference(-mLeftTrajectory.getPoints().get(time).getVelocity() * conversion, CANSparkMax.ControlType.kVelocity);
+//            mRightPIDController.setReference(-mRightTrajectory.getPoints().get(time).getVelocity() * conversion, CANSparkMax.ControlType.kVelocity);
+
+            mLeftLeader.set(-mLeftTrajectory.getPoints().get(time).getVelocity() / 12);
+            mRightLeader.set(-mRightTrajectory.getPoints().get(time).getVelocity() / 12);
+            System.out.println(-mLeftTrajectory.getPoints().get(time).getVelocity());
 
 
         }

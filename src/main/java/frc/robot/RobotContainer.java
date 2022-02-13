@@ -18,7 +18,7 @@ public class RobotContainer {
   private final Intake mIntake = new Intake();
   private final Shooter mShooter = new Shooter();
   private final Indexer mIndexer = new Indexer();
-  private final VisionProcessingPhoton mVision = new VisionProcessingPhoton();
+  private final VPPhoton mVision = new VPPhoton();
   private final VPLimelight mLimelightVision = new VPLimelight();
 
   private final AlignTargetLimeLight mAlignTarget = new AlignTargetLimeLight(mDrivetrain, mLimelightVision);

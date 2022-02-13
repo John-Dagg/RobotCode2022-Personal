@@ -4,17 +4,17 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.VisionProcessingPhoton;
+import frc.robot.subsystems.VPPhoton;
 
 public class AlignTarget extends CommandBase {
 
-    private VisionProcessingPhoton mVision;
+    private VPPhoton mVision;
     private Drivetrain mDrivetrain;
     private Shooter mShooter;
     private double angle, turnSpeed;
 
 
-    public AlignTarget(VisionProcessingPhoton subsystemA, Drivetrain subsystemB, Shooter subsystemC){
+    public AlignTarget(VPPhoton subsystemA, Drivetrain subsystemB, Shooter subsystemC){
         mVision = subsystemA;
         mDrivetrain = subsystemB;
         mShooter= subsystemC;
