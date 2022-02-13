@@ -16,6 +16,7 @@ import static frc.robot.trajectoryfollowing.Trajectory.TargetMotorController.REV
 public class AutonTestPosition extends CommandBase {
 
     //Needs a lot of work
+    //Currently trying to work on Velocity Control instead
 
     private Drivetrain mDrivetrain;
     private File mLeftFile, mRightFile;
@@ -39,12 +40,15 @@ public class AutonTestPosition extends CommandBase {
         mLeftTrajectory = new Trajectory(mLeftFile, REV, 1);
         mRightTrajectory = new Trajectory(mRightFile, REV, 1);
 
+        //Provides access to the drivetrain motors
         mLeftLeader = mDrivetrain.getLeftLeader();
         mRightLeader = mDrivetrain.getRightLeader();
 
+        //Allows use of the Sparkmaxes as PID controllers
         mLeftPIDController = mDrivetrain.getLeftLeader().getPIDController();
         mRightPIDController = mDrivetrain.getRightLeader().getPIDController();
 
+        //Provides access to the drivetrain encoders
         mLeftEncoder = mDrivetrain.getLeftEncoder();
         mRightEncoder = mDrivetrain.getRightEncoder();
 
@@ -65,11 +69,10 @@ public class AutonTestPosition extends CommandBase {
 
         PIDConfig.setPID(mLeftPIDController, mRightPIDController, 0.01, 0.01, 0.01);
 
-//
-
-
     }
 
+
+    //A big mess that I need to look at another time
     @Override
     public void execute(){
         time = getTimeElapsed();

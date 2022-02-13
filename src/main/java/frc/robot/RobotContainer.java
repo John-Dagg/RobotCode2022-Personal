@@ -123,6 +123,12 @@ public class RobotContainer {
                     new InstantCommand(mClimber::angleB),
                     mClimber::getAngle));
 
+    new JoystickButton(Constants.operatorController, Button.ButtonID.LEFT_BUMPER.getID())
+            .whenHeld(new RunCommand(mClimber::winchUp));
+
+    new JoystickButton(Constants.operatorController, Button.ButtonID.RIGHT_BUMPER.getID())
+            .whenHeld(new RunCommand(mClimber::winchDown));
+
  */
 
   }
