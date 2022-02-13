@@ -28,6 +28,9 @@ public class AutonTestVelocity extends CommandBase {
     private SparkMaxPIDController mLeftPIDController, mRightPIDController;
     private RelativeEncoder mLeftEncoder, mRightEncoder;
 
+    private Thread mThread;
+
+
     private double mInitTime;
     private boolean mStopBool;
 
@@ -71,33 +74,34 @@ public class AutonTestVelocity extends CommandBase {
 
     @Override
     public void initialize(){
+
+        mStopBool = false;
         mInitTime = System.currentTimeMillis();
 
         mDrivetrain.resetEncoders();
         mDrivetrain.resetYaw();
 
-        PIDConfig.setPIDF(mLeftPIDController, mRightPIDController, 0.001, 0.001, 0.001, 0.001);
+        PIDConfig.setPIDF(mLeftPIDController, mRightPIDController, 0.001, 0, 0, 0);
+
+        mThread = new Thread(this::run);
+        mThread.start();
 
     }
-    @Override
-    public void execute(){
+
+    public void run(){
         int time = getTimeElapsed();
 
-        if (!isFinished()){
-//            System.out.println("Left Trajectory Velocity: "+mLeftTrajectory.getPoints().get(time).getVelocity());
-//            System.out.println("Right Trajectory Velocity: "+mRightTrajectory.getPoints().get(time).getVelocity());
+        while (!isFinished() && !mStopBool){
+
+            if (time >= mLeftTrajectory.getPoints().size() * mLeftTrajectory.getPoints().get(0).getDt()
+                    || time >= mRightTrajectory.getPoints().size() * mRightTrajectory.getPoints().get(0).getDt())
+                return;
+
+
 
             mLeftPIDController.setReference(mLeftTrajectory.getPoints().get(time).getVelocity() * conversion, CANSparkMax.ControlType.kVelocity);
             mRightPIDController.setReference(mRightTrajectory.getPoints().get(time).getVelocity() * conversion, CANSparkMax.ControlType.kVelocity);
 
-//            System.out.println("Error: "+ (mLeftEncoder.getVelocity() - mLeftTrajectory.getPoints().get(time).getVelocity()));
-
-
-//            mLeftPIDController.setReference(0.5, CANSparkMax.ControlType.kVelocity);
-//            mRightPIDController.setReference(0.5, CANSparkMax.ControlType.kVelocity);
-
-//            mDrivetrain.printRPM();
-//            mDrivetrain.printPosition();
 
         }
 
@@ -105,10 +109,11 @@ public class AutonTestVelocity extends CommandBase {
 
     @Override
     public void end(boolean interrupted){
-        mDrivetrain.getLeftLeader().set(0);
-        mDrivetrain.getRightLeader().set(0);
+        mRightLeader.set(0);
+        mLeftLeader.set(0);
         mDrivetrain.resetEncoders();
         mDrivetrain.resetYaw();
+        mStopBool = true;
     }
 
     @Override
