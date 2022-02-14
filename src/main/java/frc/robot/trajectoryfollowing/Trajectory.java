@@ -76,8 +76,8 @@ public class Trajectory {
     public double findMaxVelocity(){
         double maxVel = 0;
         for(int i = 0; i < mVelocities.size(); i++){
-            if (mVelocities.get(i) > maxVel){
-                maxVel = i;
+            if (Math.abs(mVelocities.get(i)) > maxVel){
+                maxVel = mVelocities.get(i);
             }
         }
         return maxVel;
