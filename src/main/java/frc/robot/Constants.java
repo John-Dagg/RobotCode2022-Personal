@@ -31,11 +31,11 @@ public final class Constants {
 
         public static final int[] shifterPorts = {0, 1};
 
-        public static final double deadband = 0.01;
+        public static final double deadband = 0.05;
 
-        public static final double kP = 0;
-        public static final double kI = 0;
-        public static final double kD = 0;
+        public static final double kP = 0.01;
+        public static final double kI = 0.01;
+        public static final double kD = 0.01;
         public static final double kF = 0;
 
         public static final double iprHighGear = 1.0; // Inches per rotation for high gear. Currently placeholder
@@ -66,11 +66,13 @@ public final class Constants {
 
     public static final class Climber{
 
-        public static final int climberPort = 11;
+        public static final int climberPortA = 11;
+        public static final int climberPortB = 12;
         public static final int[] solenoidPorts = {6, 7};
+        public static final int brakePort = 8;
     }
 
-    public static final class Vision{
+    public static final class PhotonVision{
 
         public static final double cameraHeight = Units.inchesToMeters(25);
         public static final double cameraPitch = Units.degreesToRadians(0);

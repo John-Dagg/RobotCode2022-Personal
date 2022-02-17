@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.limelightvision;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -15,19 +15,7 @@ public class VPLimelight extends SubsystemBase {
 
     public VPLimelight(){
         mNetworkTable = NetworkTableInstance.getDefault().getTable("limelight");
-/*
-        vpTargets = mNetworkTable.getEntry("tv");
-        vpxOffset = mNetworkTable.getEntry("tx");
-        vpyOffset = mNetworkTable.getEntry("ty");
-        vpTargetArea = mNetworkTable.getEntry("ta");
-        vpTargetSkew = mNetworkTable.getEntry("ts");
 
-        targets = vpTargets.getDouble(0.0);
-        xOffset = vpxOffset.getDouble(0.0);
-        yOffset = vpyOffset.getDouble(0.0);
-        targetArea = vpTargetArea.getDouble(0.0);
-        targetSkew = vpTargetSkew.getDouble(0.0);
-*/
         //printNetworkTables();
     }
 
@@ -71,10 +59,12 @@ public class VPLimelight extends SubsystemBase {
 
     public void flashArray(){
         NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(2);
+        //Flashes limelight's lights
     }
 
     public void steadyArray(){
         NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(0);
+        //Set the limelight's array to the settings in the pipeline
 
     }
 

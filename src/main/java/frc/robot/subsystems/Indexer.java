@@ -6,10 +6,10 @@ import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.utility.MotorControllerFactory;
 
 public class Indexer extends SubsystemBase {
+
+    //Waiting on Build/Electrical for testing
 
     private CANSparkMax indexerMotor;
 
@@ -28,20 +28,24 @@ public class Indexer extends SubsystemBase {
 //        colorSensor = new ColorSensorV3(mPort);
         colorMatch = new ColorMatch();
 
+        //Custom colors to align with the cargos
         mCargoRed = new Color(0.45, 0.35, 0.15);
         mCargoBlue = new Color(0.15, 0.35, 0.45);
 
         colorMatch.addColorMatch(mCargoBlue);
         colorMatch.addColorMatch(mCargoRed);
-        colorMatch.setConfidenceThreshold(0.92);
+        colorMatch.setConfidenceThreshold(0.92); //Custom tested threshold. Tune once robot is completed
 
     }
 
+    //Returns the closest color the sensor is detecting that was added to the Color Matcher
+    //If the color is not within the confidence threshold to match with either color added to the Matcher returns null
     public Color getCurrentColor(){
         return detectedColor = colorMatch.matchColor(colorSensor.getColor()).color;
 
     }
 
+    //Returns whether the color sensor is seeing a specific color
     public boolean getMatch(){
         boolean matched = false;
         if(detectedColor != null) {
@@ -52,6 +56,7 @@ public class Indexer extends SubsystemBase {
         return matched;
     }
 
+    //Checks if a ball passes into the indexer and stops it if the color sensor sees a ball
     public boolean checkIndexer(){
         boolean indexState = false;
         if (getMatch()){
@@ -61,6 +66,7 @@ public class Indexer extends SubsystemBase {
         return indexState;
     }
 
+    //Idles the indexer to push ball into the chamber. Once the color sensor sees a ball stops the indexer
     public void setIndexerIdle(){
         if (checkIndexer()){
             indexerMotor.set(0);
@@ -69,6 +75,7 @@ public class Indexer extends SubsystemBase {
         }
     }
 
+    //Feeds the balls into the shooter
     public void feedIndexer(){
         indexerMotor.set(0.5);
     }

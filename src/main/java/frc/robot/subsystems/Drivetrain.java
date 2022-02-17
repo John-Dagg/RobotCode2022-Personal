@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.sensors.Pigeon2;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxAlternateEncoder;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -16,80 +17,111 @@ import frc.robot.Constants;
 
 public class Drivetrain extends SubsystemBase {
 
-  private CANSparkMax leftLeader, leftFollowerA, leftFollowerB,
-          rightLeader, rightFollowerA, rightFollowerB;
-  private RelativeEncoder leftEncoder, rightEncoder;
-  private DoubleSolenoid shifter;
+  //Tested and Functional
+
+  private CANSparkMax mLeftLeader, mLeftFollowerA, mLeftFollowerB,
+          mRightLeader, mRightFollowerA, mRightFollowerB;
+  private RelativeEncoder mLeftEncoder, mRightEncoder;
+  private DoubleSolenoid mShifter;
   private Pigeon2 mPigeon;
 
   private double yaw;
 
   public Drivetrain() {
-    leftLeader = MotorControllerFactory.makeSparkMax(Constants.DriveTrain.leftLeaderPort);
-    leftFollowerA = MotorControllerFactory.makeSparkMax(Constants.DriveTrain.leftFollowerAPort);
-    leftFollowerB = MotorControllerFactory.makeSparkMax(Constants.DriveTrain.leftFollowerBPort);
-    rightLeader = MotorControllerFactory.makeSparkMax(Constants.DriveTrain.rightLeaderPort);
-    rightFollowerA = MotorControllerFactory.makeSparkMax(Constants.DriveTrain.rightFollowerAPort);
-    rightFollowerB = MotorControllerFactory.makeSparkMax(Constants.DriveTrain.rightFollowerBPort);
+    mLeftLeader = MotorControllerFactory.makeSparkMax(Constants.DriveTrain.leftLeaderPort);
+    mLeftFollowerA = MotorControllerFactory.makeSparkMax(Constants.DriveTrain.leftFollowerAPort);
+    mLeftFollowerB = MotorControllerFactory.makeSparkMax(Constants.DriveTrain.leftFollowerBPort);
+    mRightLeader = MotorControllerFactory.makeSparkMax(Constants.DriveTrain.rightLeaderPort);
+    mRightFollowerA = MotorControllerFactory.makeSparkMax(Constants.DriveTrain.rightFollowerAPort);
+    mRightFollowerB = MotorControllerFactory.makeSparkMax(Constants.DriveTrain.rightFollowerBPort);
 
-    rightLeader.setIdleMode(CANSparkMax.IdleMode.kBrake);
-    rightFollowerA.setIdleMode(CANSparkMax.IdleMode.kBrake);
-    rightFollowerB.setIdleMode(CANSparkMax.IdleMode.kBrake);
-    leftLeader.setIdleMode(CANSparkMax.IdleMode.kBrake);
-    leftFollowerA.setIdleMode(CANSparkMax.IdleMode.kBrake);
-    leftFollowerB.setIdleMode(CANSparkMax.IdleMode.kBrake);
+    //Probably should change but for the purpose of testing scary autons
+    mRightLeader.setIdleMode(CANSparkMax.IdleMode.kBrake);
+    mRightFollowerA.setIdleMode(CANSparkMax.IdleMode.kBrake);
+    mRightFollowerB.setIdleMode(CANSparkMax.IdleMode.kBrake);
+    mLeftLeader.setIdleMode(CANSparkMax.IdleMode.kBrake);
+    mLeftFollowerA.setIdleMode(CANSparkMax.IdleMode.kBrake);
+    mLeftFollowerB.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
-    mPigeon = new Pigeon2(0);
 
-    shifter = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.DriveTrain.shifterPorts[0], Constants.DriveTrain.shifterPorts[1]);
+    mShifter = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.DriveTrain.shifterPorts[0], Constants.DriveTrain.shifterPorts[1]);
 
-    rightLeader.setInverted(true);
-    rightFollowerA.setInverted(true);
-    rightFollowerB.setInverted(true);
+    mRightLeader.setInverted(true);
+    mRightFollowerA.setInverted(true);
+    mRightFollowerB.setInverted(true);
 
-    leftFollowerA.follow(leftLeader);
-    leftFollowerB.follow(leftLeader);
-    rightFollowerA.follow(rightLeader);
-    rightFollowerB.follow(rightLeader);
+    mLeftFollowerA.follow(mLeftLeader);
+    mLeftFollowerB.follow(mLeftLeader);
+    mRightFollowerA.follow(mRightLeader);
+    mRightFollowerB.follow(mRightLeader);
 
-    leftLeader.set(0);
-    rightLeader.set(0);
-
-//  Creates two encoder objects for their respective motors
-    leftEncoder = leftLeader.getAlternateEncoder(4096);
-    rightEncoder = rightLeader.getAlternateEncoder(4096);
-    rightEncoder.setInverted(true);
+    //Creates two encoder objects for their respective motors
+    mLeftEncoder = mLeftLeader.getAlternateEncoder(SparkMaxAlternateEncoder.Type.kQuadrature, 4096);
+    mRightEncoder = mRightLeader.getAlternateEncoder(SparkMaxAlternateEncoder.Type.kQuadrature, 4096);
+    mRightEncoder.setInverted(true);
     resetEncoders();
+
+    //Creates an object for interacting with the Pigeon gyro
+    mPigeon = new Pigeon2(0);
     resetYaw();
 
-  }
 
+  }
+  //Return objects for interfacing with the motors, encoders, and gyro of the drivetrain
   public CANSparkMax getLeftLeader(){
-    return leftLeader;
+    return mLeftLeader;
   }
 
   public CANSparkMax getRightLeader(){
-    return rightLeader;
+    return mRightLeader;
   }
 
   public RelativeEncoder getLeftEncoder(){
-    return leftEncoder;
+    return mLeftEncoder;
   }
 
   public RelativeEncoder getRightEncoder(){
-    return rightEncoder;
+    return mRightEncoder;
   }
+
+  public Pigeon2 getPigeon(){return mPigeon;}
+
+
 
   public void resetEncoders(){
-    leftEncoder.setPosition(0);
-    rightEncoder.setPosition(0);
+    mLeftEncoder.setPosition(0);
+    mRightEncoder.setPosition(0);
   }
 
-  public void printTicks(){
-    System.out.println(leftEncoder.getPosition());
-    System.out.println(rightEncoder.getPosition());
+  //Prints rotations of the shaft the encoder is on
+  public void printPosition(){
+    System.out.println("LEFT ROTATIONS: " + mLeftEncoder.getPosition());
+    System.out.println("RIGHT ROTATIONS: " + mRightEncoder.getPosition());
   }
 
+  //Prints rotations per minute of the shaft the encoder is on
+  public void printRPM(){
+    System.out.println("LEFT RPM: " + mLeftEncoder.getVelocity());
+    System.out.println("RIGHT RPM: " + mRightEncoder.getVelocity());
+  }
+
+  public void resetYaw(){
+    mPigeon.setYaw(0);
+  }
+
+  public void printYaw(){
+    System.out.println(getYaw());
+  }
+
+  public double getYaw(){
+    yaw = mPigeon.getYaw();
+    if(Math.abs(yaw) > 360){
+      resetYaw();
+    }
+    return yaw;
+  }
+
+  //Ternary operator that sets the percent output to zero if the joystick values aren't above a certain threshold
   private double deadband(double percentOutput){
     return Math.abs(percentOutput) > Constants.DriveTrain.deadband ? percentOutput : 0;
   }
@@ -107,12 +139,9 @@ public class Drivetrain extends SubsystemBase {
     double leftOutput = left < 0 ? Math.max(left, -1) : Math.min(left, 1);
     double rightOutput = right < 0 ? Math.max(right, -1) : Math.min(right, 1);
 
-    leftLeader.set(leftOutput * 0.5);
-    rightLeader.set(rightOutput * 0.5);
+    mLeftLeader.set(leftOutput * 0.5);
+    mRightLeader.set(rightOutput * 0.5);
 
-//    System.out.println("Left velocity: " + leftEncoder.getVelocity() + " | Right velocity: " + rightEncoder.getVelocity());
-//    getYaw();
-//    printTicks();
   }
 
   public void tankDrive(){
@@ -125,50 +154,37 @@ public class Drivetrain extends SubsystemBase {
     double leftOutput = left < 0 ? Math.max(left, -1) : Math.min(left, 1);
     double rightOutput = right < 0 ? Math.max(right, -1) : Math.min(right, 1);
 
-    leftLeader.set(leftOutput * 0.5);
-    rightLeader.set(rightOutput * 0.5);
+    mLeftLeader.set(leftOutput * 0.5);
+    mRightLeader.set(rightOutput * 0.5);
   }
 
   public void stopDrive(){
-    leftLeader.set(0);
-    rightLeader.set(0);
+    mLeftLeader.set(0);
+    mRightLeader.set(0);
   }
 
+  //For use in PhotonVision. Subject for removal
   public void vpDrive(double turnSpeed){
-    leftLeader.set(turnSpeed);
-    rightLeader.set(-turnSpeed);
+    mLeftLeader.set(turnSpeed);
+    mRightLeader.set(-turnSpeed);
   }
-
-  public double getYaw(){
-    yaw = mPigeon.getYaw();
-    if(Math.abs(yaw) > 360){
-      resetYaw();
-    }
-//    System.out.println("Yaw: " + yaw);
-    return yaw;
-  }
-
-  public void resetYaw(){
-    mPigeon.setYaw(0);
-  }
-
 
   public void lowGear(){
-    shifter.set(DoubleSolenoid.Value.kReverse);
-    System.out.println("Low Gear");
+    mShifter.set(DoubleSolenoid.Value.kReverse);
+//    System.out.println("Low Gear"); //For Testing
   }
 
   public void highGear(){
-    shifter.set(DoubleSolenoid.Value.kForward);
-    System.out.println("High Gear");
+    mShifter.set(DoubleSolenoid.Value.kForward);
+//    System.out.println("High Gear"); //For Testing
   }
 
   public boolean getLowGear(){
     boolean gear = true;
-    if(shifter.get() == DoubleSolenoid.Value.kReverse){
-      gear = true; //Low
-    } else if(shifter.get() == DoubleSolenoid.Value.kForward){
-      gear = false; //High
+    if(mShifter.get() == DoubleSolenoid.Value.kReverse){
+      gear = true; //Low Gear
+    } else if(mShifter.get() == DoubleSolenoid.Value.kForward){
+      gear = false; //High Gear
     }
     return gear;
   }

@@ -1,22 +1,19 @@
-package frc.robot.commands;
+package frc.robot.limelightvision;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxAlternateEncoder;
 import com.revrobotics.SparkMaxPIDController;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.VPLimelight;
-import frc.robot.utility.PIDConfig;
 
-public class CorrectDistanceLimelight extends CommandBase {
+public class LimelightDistanceCommand extends CommandBase {
 
     private Drivetrain mDrivetrain;
     private VPLimelight mVision;
 
-    private AlignTargetLimeLight mAlign;
+    private LimelightAlignTargetCommand mAlign;
 
     private CANSparkMax mLeftLeader, mRightLeader;
     private SparkMaxPIDController mLeftPIDController, mRightPIDController;
@@ -30,7 +27,7 @@ public class CorrectDistanceLimelight extends CommandBase {
     private boolean stopFlag;
 
 
-    public CorrectDistanceLimelight(Drivetrain subsystemA, VPLimelight subsystemB){
+    public LimelightDistanceCommand(Drivetrain subsystemA, VPLimelight subsystemB){
         mDrivetrain = subsystemA;
         mVision = subsystemB;
 
@@ -44,12 +41,12 @@ public class CorrectDistanceLimelight extends CommandBase {
         mLeftEncoder.setPosition(0);
         mRightEncoder.setPosition(0);
 
-        mLeftPIDController = mLeftLeader.getPIDController();
-        mRightPIDController = mRightLeader.getPIDController();
+//        mLeftPIDController = mLeftLeader.getPIDController();
+//        mRightPIDController = mRightLeader.getPIDController();
 
-        PIDConfig.setPID(mLeftPIDController, mRightPIDController, 0, 0, 0); //Needs Tuning
+//        PIDConfig.setPID(mLeftPIDController, mRightPIDController, 0, 0, 0); //Needs Tuning
 
-        mAlign = new AlignTargetLimeLight(mDrivetrain, mVision);
+        mAlign = new LimelightAlignTargetCommand(mDrivetrain, mVision);
     }
 
     @Override
