@@ -1,24 +1,28 @@
 package frc.robot.limelightvision;
 
+import edu.wpi.first.wpilibj2.command.CommandBase;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxPIDController;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
 
-public class LimelightAlignTargetCommand extends CommandBase {
+public class LimelightAlignRightCommand extends CommandBase {
 
     private Drivetrain mDrivetrain;
     private VPLimelight mVision;
 
     private CANSparkMax mLeftLeader, mRightLeader;
     private SparkMaxPIDController mLeftPIDController, mRightPIDController;
+    private MotorControllerGroup mLeftMotors, mRightMotors;
 
     private double speed, deccelSpeed;
 
     private boolean stopFlag;
 
-    public LimelightAlignTargetCommand(Drivetrain subsystemA, VPLimelight subsystemB){
+    public LimelightAlignRightCommand(Drivetrain subsystemA, VPLimelight subsystemB){
 
         mDrivetrain = subsystemA;
         mVision = subsystemB;
@@ -28,11 +32,8 @@ public class LimelightAlignTargetCommand extends CommandBase {
         mLeftLeader = mDrivetrain.getLeftLeader();
         mRightLeader = mDrivetrain.getRightLeader();
 
-//        mLeftPIDController = mLeftLeader.getPIDController();
-//        mRightPIDController = mRightLeader.getPIDController();
-
-//        PIDConfig.setPID(mLeftPIDController, mRightPIDController, 0, 0, 0); //Tune eventually
-
+        mLeftMotors = mDrivetrain.getLeftMotors();
+        mRightMotors = mDrivetrain.getRightMotors();
     }
 
     @Override
@@ -68,14 +69,14 @@ public class LimelightAlignTargetCommand extends CommandBase {
 
     public void aimTarget(){
         if (mVision.getxOffset() > Constants.LimelightVision.goalAngleP) {
-            mLeftLeader.set(-calcTurn());
-            mRightLeader.set(calcTurn());
+            mLeftMotors.set(calcTurn());
+            mRightMotors.set(-calcTurn());
         } else if (mVision.getxOffset() < Constants.LimelightVision.goalAngleN) {
-            mLeftLeader.set(calcTurn());
-            mRightLeader.set(-calcTurn());
+            mLeftMotors.set(-calcTurn());
+            mRightMotors.set(calcTurn());
         } else {
-            mLeftLeader.set(0);
-            mRightLeader.set(0);
+            mLeftMotors.set(0);
+            mRightMotors.set(0);
             stopFlag = true;
             end(stopFlag);
             System.out.println("Please work");
@@ -83,23 +84,8 @@ public class LimelightAlignTargetCommand extends CommandBase {
     }
 
     public void findTarget(){
-        mLeftLeader.set(-0.5);
-        mRightLeader.set(0.5);
-    }
-
-    public void aimTargetPID() {
-        if (mVision.getxOffset() > Constants.LimelightVision.goalAngleP) {
-            mLeftPIDController.setReference(-25, CANSparkMax.ControlType.kVelocity); //Should be in rotations per minute
-            mRightPIDController.setReference(25, CANSparkMax.ControlType.kVelocity);
-        } else if (mVision.getxOffset() < Constants.LimelightVision.goalAngleN){
-            mLeftPIDController.setReference(25, CANSparkMax.ControlType.kVelocity);
-            mRightPIDController.setReference(-25, CANSparkMax.ControlType.kVelocity);
-        }
-    }
-
-    public void findTargetPID() {
-        mLeftPIDController.setReference(-25, CANSparkMax.ControlType.kVelocity); //Should be in rotations per minute
-        mRightPIDController.setReference(25, CANSparkMax.ControlType.kVelocity);
+        mLeftMotors.set(1);
+        mRightMotors.set(-1);
     }
 
     public double calcTurn(){
@@ -108,5 +94,4 @@ public class LimelightAlignTargetCommand extends CommandBase {
     }
 
 }
-
 

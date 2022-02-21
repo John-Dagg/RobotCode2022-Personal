@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Joystick;
 
@@ -19,6 +20,22 @@ public final class Constants {
 
     public static final Joystick driverController = new Joystick(0);
     public static final Joystick operatorController = new Joystick(1);
+
+    public static final class Auton {
+
+        public static final double ks = 0.26019; //Volts
+        public static final double kv = 3.82; //Volt seconds per meter
+        public static final double ka = 0.41681 ; //Volt seconds squared per meter
+
+        public static final double kP = 1.6; //Proportional Gain
+
+        public static final double robotWidth = Units.inchesToMeters(25.5);
+        public static final DifferentialDriveKinematics driveKinematics = new DifferentialDriveKinematics(robotWidth);
+
+        //Constants for using the ramsete controller
+        public static final double ramseteB = 2;
+        public static final double ramseteZeta = 0.7;
+    }
 
     public static final class DriveTrain {
 

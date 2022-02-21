@@ -2,8 +2,8 @@ package frc.robot.limelightvision;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxPIDController;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
@@ -13,10 +13,10 @@ public class LimelightDistanceCommand extends CommandBase {
     private Drivetrain mDrivetrain;
     private VPLimelight mVision;
 
-    private LimelightAlignTargetCommand mAlign;
+    private LimelightAlignLeftCommand mAlign;
 
     private CANSparkMax mLeftLeader, mRightLeader;
-    private SparkMaxPIDController mLeftPIDController, mRightPIDController;
+    private MotorControllerGroup mLeftMotors, mRightMotors;
     private RelativeEncoder mLeftEncoder, mRightEncoder;
 
     private double yOffset, speed, goalDistance, initDistance, goalTravel, actualTravel, buffer;
@@ -36,6 +36,9 @@ public class LimelightDistanceCommand extends CommandBase {
         mLeftLeader = mDrivetrain.getLeftLeader();
         mRightLeader = mDrivetrain.getRightLeader();
 
+        mLeftMotors = mDrivetrain.getLeftMotors();
+        mRightMotors = mDrivetrain.getRightMotors();
+
         mLeftEncoder = mLeftLeader.getAlternateEncoder(4096);
         mRightEncoder = mRightLeader.getAlternateEncoder(4096);
         mLeftEncoder.setPosition(0);
@@ -46,14 +49,14 @@ public class LimelightDistanceCommand extends CommandBase {
 
 //        PIDConfig.setPID(mLeftPIDController, mRightPIDController, 0, 0, 0); //Needs Tuning
 
-        mAlign = new LimelightAlignTargetCommand(mDrivetrain, mVision);
+        mAlign = new LimelightAlignLeftCommand(mDrivetrain, mVision);
     }
 
     @Override
     public void initialize(){
         stopFlag = false;
-        speed = 0.25;
-        buffer = 10;
+        speed = 0.5;
+        buffer = 5;
         mVision.updateTargets();
         goalDistance = 120; //inches
         initDistance = calcDistance();
@@ -74,18 +77,19 @@ public class LimelightDistanceCommand extends CommandBase {
 
         actualTravel = ((mLeftEncoder.getPosition() + mRightEncoder.getPosition()) / 2) * conversion;
 //        System.out.println(mRightEncoder.getPosition());
-
+        speed = calcSpeed();
+        System.out.println(speed);
 
         if (mVision.getTargets() >= 1) {
             if (actualTravel < (goalTravel - buffer)){
-                mLeftLeader.set(-speed);
-                mRightLeader.set(-speed);
+                mLeftMotors.set(speed);
+                mRightMotors.set(speed);
             } else if(actualTravel > (goalTravel + buffer)){
-                mLeftLeader.set(speed);
-                mRightLeader.set(speed);
+                mLeftMotors.set(-speed);
+                mRightMotors.set(-speed);
             } else {
-                mLeftLeader.set(0);
-                mRightLeader.set(0);
+                mLeftMotors.set(0);
+                mRightMotors.set(0);
                 if (!distanceCompleted) {
                     distanceCompleted = true;
                     System.out.println("Distance Traveled: " + actualTravel);
@@ -112,9 +116,12 @@ public class LimelightDistanceCommand extends CommandBase {
                 / Math.tan(Units.degreesToRadians(Constants.LimelightVision.cameraAngle + yOffset));
     }
 
-    public void adjustDistance(){
-
-
+    public double calcSpeed(){
+        actualTravel = ((mLeftEncoder.getPosition() + mRightEncoder.getPosition()) / 2) * conversion;
+        double calcSpeed = ((goalTravel - actualTravel) / goalTravel);
+        double speed = calcSpeed > 1 ? 1 : calcSpeed;
+        double finalSpeed = speed < 0.5 ? 0.5 : calcSpeed;
+        return finalSpeed;
     }
 
     public double lowBand(double targetDistance){

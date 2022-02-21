@@ -6,11 +6,11 @@ public class LimelightCompleteVisionCommand extends SequentialCommandGroup {
 
 
 
-    private LimelightAlignTargetCommand mAlignTarget;
+    private LimelightAlignLeftCommand mAlignTarget;
     private LimelightDistanceCommand mCorrectDistance;
 
 
-    public LimelightCompleteVisionCommand(LimelightAlignTargetCommand commandA, LimelightDistanceCommand commandB){
+    public LimelightCompleteVisionCommand(LimelightAlignLeftCommand commandA, LimelightDistanceCommand commandB){
 
         mAlignTarget = commandA;
         mCorrectDistance = commandB;

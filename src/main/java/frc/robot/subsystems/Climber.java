@@ -16,7 +16,7 @@ import frc.robot.utility.MotorControllerFactory;
 public class Climber extends SubsystemBase {
 
     //Waiting on Design/Build/Electrical for testing
-
+/*
     //Motors subject to change
     private TalonSRX climberLeader, climberFollower;
     private DoubleSolenoid climberSolenoid;
@@ -24,12 +24,12 @@ public class Climber extends SubsystemBase {
 
     public Climber() {
 
-        climberLeader = MotorControllerFactory.makeTalonSRX(Constants.Climber.climberPortA);
-        climberFollower = MotorControllerFactory.makeTalonSRX(Constants.Climber.climberPortB);
+//        climberLeader = MotorControllerFactory.makeTalonSRX(Constants.Climber.climberPortA);
+//        climberFollower = MotorControllerFactory.makeTalonSRX(Constants.Climber.climberPortB);
 
         //Pneumatics module subject to change
-        climberSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.Climber.solenoidPorts[0], Constants.Climber.solenoidPorts[1]);
-        brake = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.Climber.brakePort);
+//        climberSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.Climber.solenoidPorts[0], Constants.Climber.solenoidPorts[1]);
+//        brake = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.Climber.brakePort);
 
         climberLeader.follow(climberFollower);
         climberLeader.setNeutralMode(NeutralMode.Brake); //So the winch doesn't uncoil when the motor isn't being powered
@@ -61,5 +61,7 @@ public class Climber extends SubsystemBase {
             return false; // Should never happen
         }
     }
+
+ */
 
 }
