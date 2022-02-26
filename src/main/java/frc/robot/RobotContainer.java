@@ -54,14 +54,14 @@ public class RobotContainer {
   private final ShootFar mShootFar = new ShootFar(mShooter, mIndexer);
   private final ShootClose mShootClose = new ShootClose(mShooter, mIndexer);
 
-  //Autons
-  private final StopAuton mStopAuton = new StopAuton(mDrivetrain);
-  private final AutonTestVelocity mVelocityAuton = new AutonTestVelocity(mDrivetrain);
-  private final AutonTestPosition mPositionAuton = new AutonTestPosition(mDrivetrain);
+  //Autons (unused)
+//  private final StopAuton mStopAuton = new StopAuton(mDrivetrain);
+//  private final AutonTestVelocity mVelocityAuton = new AutonTestVelocity(mDrivetrain);
+//  private final AutonTestPosition mPositionAuton = new AutonTestPosition(mDrivetrain);
   
   //Auton
-  private String soloPath = "Curve";
-  private String soloTrajectoryFile = "output/"+soloPath+".wpilib.json";
+  private final String soloPath = "Curve";
+  private final String soloTrajectoryFile = "output/"+soloPath+".wpilib.json";
   private Path soloTrajectoryPath;
   private Trajectory soloTrajectory;
 
@@ -86,7 +86,7 @@ public class RobotContainer {
 
     configureButtonBindings();
 
-    mDrivetrain.setDefaultCommand(new RunCommand(mDrivetrain::arcadeDrive, mDrivetrain));
+    mDrivetrain.setDefaultCommand(new RunCommand(mDrivetrain::masterDrive, mDrivetrain));
 //    mLimelightVision.setDefaultCommand(new RunCommand(mLimelightVision::printNetworkTables, mLimelightVision));
 
   }
@@ -167,6 +167,7 @@ public class RobotContainer {
 
   }
 
+  //Global auton execution called here
   public Command getAutonomousCommand() {
 
     try {
@@ -187,11 +188,12 @@ public class RobotContainer {
       System.out.println("Couldn't find trajectory path");
       e.printStackTrace();
     }
-
-    fullTrajectory = trajectory1.concatenate(trajectory2).concatenate(trajectory3);
+    // How to concatenate trajectories (currently not in use)
+//    fullTrajectory = trajectory1.concatenate(trajectory2).concatenate(trajectory3);
 
     RamseteController mController = new RamseteController(Constants.Auton.ramseteB, Constants.Auton.ramseteZeta);
 
+    // Set false for testing purposes ONLY
     mController.setEnabled(true);
 
     PIDController leftPID = new PIDController(Constants.Auton.kP, 0, 0);
@@ -210,16 +212,7 @@ public class RobotContainer {
             leftPID,
             rightPID,
             (leftVolts, rightVolts) -> {
-              mDrivetrain.tankDriveVolts(leftVolts, rightVolts);
-/*
-              SmartDashboard.putNumber("Left Reference", leftPID.getSetpoint());
-              SmartDashboard.putNumber("Left Measurement", mDrivetrain.getWheelSpeeds().leftMetersPerSecond);
-
-              SmartDashboard.putNumber("Right Reference", rightPID.getSetpoint());
-              SmartDashboard.putNumber("Right Measurement", mDrivetrain.getWheelSpeeds().rightMetersPerSecond);
- */
-
-            }, mDrivetrain);
+              mDrivetrain.tankDriveVolts(leftVolts, rightVolts); }, mDrivetrain);
 
     mDrivetrain.resetOdometry(soloTrajectory.getInitialPose());
 

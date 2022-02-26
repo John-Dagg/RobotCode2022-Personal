@@ -21,6 +21,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.io.Axis;
 import frc.robot.utility.MotorControllerFactory;
 import frc.robot.Constants;
+import frc.robot.Constants.*;
+import frc.robot.Constants.DriveTrain.*;
+
 
 public class Drivetrain extends SubsystemBase {
 
@@ -41,13 +44,15 @@ public class Drivetrain extends SubsystemBase {
 
   private double mYaw, mLeftVolts, mRightVolts;
 
+  private DriveState mState;
+
   public Drivetrain() {
-    mLeftLeader = MotorControllerFactory.makeSparkMax(Constants.DriveTrain.leftLeaderPort);
-    mLeftFollowerA = MotorControllerFactory.makeSparkMax(Constants.DriveTrain.leftFollowerAPort);
-    mLeftFollowerB = MotorControllerFactory.makeSparkMax(Constants.DriveTrain.leftFollowerBPort);
-    mRightLeader = MotorControllerFactory.makeSparkMax(Constants.DriveTrain.rightLeaderPort);
-    mRightFollowerA = MotorControllerFactory.makeSparkMax(Constants.DriveTrain.rightFollowerAPort);
-    mRightFollowerB = MotorControllerFactory.makeSparkMax(Constants.DriveTrain.rightFollowerBPort);
+    mLeftLeader = MotorControllerFactory.makeSparkMax(DriveTrain.leftLeaderPort);
+    mLeftFollowerA = MotorControllerFactory.makeSparkMax(DriveTrain.leftFollowerAPort);
+    mLeftFollowerB = MotorControllerFactory.makeSparkMax(DriveTrain.leftFollowerBPort);
+    mRightLeader = MotorControllerFactory.makeSparkMax(DriveTrain.rightLeaderPort);
+    mRightFollowerA = MotorControllerFactory.makeSparkMax(DriveTrain.rightFollowerAPort);
+    mRightFollowerB = MotorControllerFactory.makeSparkMax(DriveTrain.rightFollowerBPort);
 
     mRightLeader.setIdleMode(CANSparkMax.IdleMode.kCoast);
     mRightFollowerA.setIdleMode(CANSparkMax.IdleMode.kCoast);
@@ -84,7 +89,9 @@ public class Drivetrain extends SubsystemBase {
     mRightEncoder.setInverted(true);
     resetEncoders();
 
-    mShifter = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.DriveTrain.shifterPorts[0], Constants.DriveTrain.shifterPorts[1]);
+    mShifter = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, DriveTrain.shifterPorts[0], DriveTrain.shifterPorts[1]);
+
+    mState = DriveState.TELE_DRIVE;
   }
   //Return objects for interfacing with the motors, encoders, and gyro of the drivetrain
   public MotorControllerGroup getLeftMotors(){
@@ -113,27 +120,13 @@ public class Drivetrain extends SubsystemBase {
 
   public Pigeon2 getPigeon(){return mPigeon;}
 
-
-
   public void resetEncoders(){
     mLeftEncoder.setPosition(0);
     mRightEncoder.setPosition(0);
   }
 
-  public void printPosition(){
-    System.out.println("Left Meters: " + mLeftEncoder.getPosition() * positionConversion + " | Right Meters: " + mRightEncoder.getPosition() * positionConversion);
-  }
-
-  public void printVelocity(){
-    System.out.println("Left m/s: " + mLeftEncoder.getVelocity() * velocityConversion + " | Right m/s: " + mRightEncoder.getVelocity() * velocityConversion);
-  }
-
   public void resetYaw(){
     mPigeon.setYaw(0);
-  }
-
-  public void printYaw(){
-    System.out.println(getHeading());
   }
 
   public double getHeading(){
@@ -146,7 +139,23 @@ public class Drivetrain extends SubsystemBase {
 
   //Ternary operator that sets the percent output to zero if the joystick values aren't above a certain threshold
   private double deadband(double percentOutput){
-    return Math.abs(percentOutput) > Constants.DriveTrain.deadband ? percentOutput : 0;
+    return Math.abs(percentOutput) > DriveTrain.deadband ? percentOutput : 0;
+  }
+
+  public void masterDrive() {
+    switch (mState) {
+      case TELE_DRIVE:
+        arcadeDrive();
+        break;
+      case TELE_LIMELIGHT:
+        break;
+      case AUTO_DRIVE:
+        break;
+      case AUTO_LIMELIGHT:
+        break;
+      default:
+        break;
+    }
   }
 
   public void arcadeDrive(){
