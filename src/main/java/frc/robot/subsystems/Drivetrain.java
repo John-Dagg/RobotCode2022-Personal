@@ -162,6 +162,9 @@ public class Drivetrain extends SubsystemBase {
     double throttle = deadband(Constants.driverController.getRawAxis(Axis.AxisID.LEFT_Y.getID()));
     double turn = deadband(Constants.driverController.getRawAxis(Axis.AxisID.RIGHT_X.getID()));
 
+    throttle = Math.abs(throttle)*throttle;
+    turn = Math.abs(turn)*turn;
+
     /*
     double left = throttle - turn;
     double right = throttle + turn;
