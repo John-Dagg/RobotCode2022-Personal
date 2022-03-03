@@ -165,11 +165,13 @@ public class Drivetrain extends SubsystemBase {
   public void arcadeDrive(){
     double throttle = deadband(Constants.driverController.getRawAxis(Axis.AxisID.LEFT_Y.getID()));
     double turn = deadband(Constants.driverController.getRawAxis(Axis.AxisID.RIGHT_X.getID()));
+    /*
     throttle = (throttle == 0) ? 0 : Math.abs(throttle)*throttle;
     turn = (turn == 0) ? 0 : turn/Math.abs(turn)*Math.sqrt(Math.abs(turn));
     turn = ((lastTurn == turn && Math.abs(turn) < 0.33) || turn == 0) ? 0 : turn;
     lastThrottle = (throttle == 0) ? lastThrottle : throttle;
     lastTurn = (turn == 0) ? lastTurn : turn;
+     */
 
 
     /*
@@ -212,12 +214,6 @@ public class Drivetrain extends SubsystemBase {
   public void stopDrive(){
     mLeftLeader.set(0);
     mRightLeader.set(0);
-  }
-
-  //For use in PhotonVision. Subject for removal
-  public void vpDrive(double turnSpeed){
-    mLeftLeader.set(turnSpeed);
-    mRightLeader.set(-turnSpeed);
   }
 
   public void lowGear(){

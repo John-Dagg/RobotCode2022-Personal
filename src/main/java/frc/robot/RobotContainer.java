@@ -14,14 +14,9 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.autons.AutonTestPosition;
-import frc.robot.autons.AutonTestVelocity;
-import frc.robot.autons.StopAuton;
 import frc.robot.commands.*;
 import frc.robot.io.Button;
 import frc.robot.limelightvision.*;
-import frc.robot.photonvision.PhotonAlignTargetCommand;
-import frc.robot.photonvision.VPPhoton;
 import frc.robot.subsystems.*;
 
 import java.io.IOException;
@@ -35,10 +30,6 @@ public class RobotContainer {
   private final Shooter mShooter = new Shooter();
   private final Indexer mIndexer = new Indexer();
   private final Climber mClimber = new Climber();
-
-  //Photon Vision
-  private final VPPhoton mPhotonVision = new VPPhoton();
-  private final PhotonAlignTargetCommand mPhotonAlignTarget = new PhotonAlignTargetCommand(mPhotonVision, mDrivetrain, mShooter);
 
   //Limelight Vision
   private final VPLimelight mLimelightVision = new VPLimelight();
@@ -111,6 +102,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
+    /*
     new JoystickButton(Constants.driverController, Button.ButtonID.X.getID())
             .whenHeld(mLeftAlign);
 
@@ -122,6 +114,8 @@ public class RobotContainer {
 
     new JoystickButton(Constants.driverController, Button.ButtonID.Y.getID())
             .whenHeld(mAlignTarget.andThen(new WaitCommand(1)).andThen(mDistance));
+
+     */
 
     //If the left bumper is pressed and the drivetrain is in low gear perform the first command
     //If the left bumper is pressed and the drivetrain is in high gear perform the second command
