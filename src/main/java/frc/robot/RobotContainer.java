@@ -89,7 +89,7 @@ public class RobotContainer {
 
     configureButtonBindings();
 
-    mDrivetrain.setDefaultCommand(new RunCommand(mDrivetrain::masterDrive, mDrivetrain));
+    mDrivetrain.setDefaultCommand(new RunCommand(mDrivetrain::arcadeDrive, mDrivetrain));
 //    mLimelightVision.setDefaultCommand(new RunCommand(mLimelightVision::printNetworkTables, mLimelightVision));
 
   }
@@ -102,18 +102,37 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
+    /***
+     * Driver Controller
+     * Left X and Right Y - Arcade Drive
+     * Left Bumper - Shifts Gears
+     * Right Bumper - Extend/Retract Intake
+     * A - Intake
+     * B - Outtake
+     * X - Align Target Angle
+     * Y - Align Target Distance
+     *
+     * Operator Controller
+     * X - Shoot Far
+     * Y - Shoot Close
+     * A - Change Climber Angle
+     * B - Engage Brake
+     * Left Bumper - Winch Up
+     * Right Bumper - Winch Down
+     */
+
     /*
     new JoystickButton(Constants.driverController, Button.ButtonID.X.getID())
             .whenHeld(mLeftAlign);
 
-    new JoystickButton(Constants.driverController, Button.ButtonID.B.getID())
-            .whenHeld(mRightAlign);
-
-    new JoystickButton(Constants.driverController, Button.ButtonID.A.getID())
-            .whenHeld(mSoloDistanceTarget);
+//    new JoystickButton(Constants.driverController, Button.ButtonID.B.getID())
+//            .whenHeld(mRightAlign);
 
     new JoystickButton(Constants.driverController, Button.ButtonID.Y.getID())
-            .whenHeld(mAlignTarget.andThen(new WaitCommand(1)).andThen(mDistance));
+            .whenHeld(mSoloDistanceTarget);
+
+//    new JoystickButton(Constants.driverController, Button.ButtonID.Y.getID())
+//            .whenHeld(mAlignTarget.andThen(new WaitCommand(1)).andThen(mDistance));
 
      */
 
@@ -139,22 +158,22 @@ public class RobotContainer {
     new JoystickButton(Constants.driverController, Button.ButtonID.B.getID())
             .whenHeld(new StartEndCommand(mIntake::rollerOuttake, mIntake::rollerStop));
 
-    new JoystickButton(Constants.driverController, Button.ButtonID.X.getID())
+    new JoystickButton(Constants.operatorController, Button.ButtonID.X.getID())
             .whenHeld(mShootFar);
 
-    new JoystickButton(Constants.driverController, Button.ButtonID.X.getID())
+    new JoystickButton(Constants.operatorController, Button.ButtonID.X.getID())
             .whenInactive(mShooter::setShooterIdle);
 
-    new JoystickButton(Constants.driverController, Button.ButtonID.X.getID())
+    new JoystickButton(Constants.operatorController, Button.ButtonID.X.getID())
             .whenInactive(mIndexer::setIndexerIdle);
 
-    new JoystickButton(Constants.driverController, Button.ButtonID.Y.getID())
+    new JoystickButton(Constants.operatorController, Button.ButtonID.Y.getID())
             .whenHeld(mShootClose);
 
-    new JoystickButton(Constants.driverController, Button.ButtonID.Y.getID())
+    new JoystickButton(Constants.operatorController, Button.ButtonID.Y.getID())
             .whenInactive(mShooter::setShooterIdle);
 
-    new JoystickButton(Constants.driverController, Button.ButtonID.Y.getID())
+    new JoystickButton(Constants.operatorController, Button.ButtonID.Y.getID())
             .whenInactive(mIndexer::setIndexerIdle);
 
     new JoystickButton(Constants.operatorController, Button.ButtonID.A.getID())
@@ -162,6 +181,9 @@ public class RobotContainer {
                     new InstantCommand(mClimber::angleA),
                     new InstantCommand(mClimber::angleB),
                     mClimber::getAngle));
+
+    new JoystickButton(Constants.operatorController, Button.ButtonID.B.getID())
+            .whenPressed(new InstantCommand(mClimber::brake);
 
     new JoystickButton(Constants.operatorController, Button.ButtonID.LEFT_BUMPER.getID())
             .whenHeld(new RunCommand(mClimber::winchUp));

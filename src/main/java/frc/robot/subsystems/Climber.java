@@ -16,12 +16,12 @@ import frc.robot.utility.MotorControllerFactory;
 public class Climber extends SubsystemBase {
 
     //Waiting on Design/Build/Electrical for testing
-/*
+
     //Motors subject to change
     private TalonSRX climberLeader, climberFollower;
     private DoubleSolenoid climberSolenoid;
     private Solenoid brake;
-
+/*
     public Climber() {
 
 //        climberLeader = MotorControllerFactory.makeTalonSRX(Constants.Climber.climberPortA);
@@ -29,7 +29,7 @@ public class Climber extends SubsystemBase {
 
         //Pneumatics module subject to change
 //        climberSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.Climber.solenoidPorts[0], Constants.Climber.solenoidPorts[1]);
-//        brake = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.Climber.brakePort);
+        brake = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.Climber.brakePort);
 
         climberLeader.follow(climberFollower);
         climberLeader.setNeutralMode(NeutralMode.Brake); //So the winch doesn't uncoil when the motor isn't being powered
@@ -42,6 +42,10 @@ public class Climber extends SubsystemBase {
 
     public void winchDown(){
         climberLeader.set(TalonSRXControlMode.PercentOutput, 1.0); //Uncertain about direction
+    }
+
+    public void brake(){
+        brake.set(true);
     }
 
     public void angleA(){
