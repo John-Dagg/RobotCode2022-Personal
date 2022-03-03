@@ -83,7 +83,9 @@ public class RobotContainer {
   private Trajectory trajectoryTest;
 
   private Trajectory fullTrajectory;
-  private RamseteCommand autonCommand;
+  private RamseteCommand autonCommandA;
+  private LimelightAlignRightCommand autonCommandB = new LimelightAlignRightCommand(mDrivetrain, mLimelightVision);
+  private ShootClose autonCommandC = new ShootClose(mShooter, mIndexer);
 
   public RobotContainer() {
 
@@ -144,7 +146,7 @@ public class RobotContainer {
                     new InstantCommand(mDrivetrain::lowGear),
                     mDrivetrain::getLowGear));
 /*
-    Waiting for Build
+    Waiting for Build lol
 
     new JoystickButton(Constants.driverController, Button.ButtonID.RIGHT_BUMPER.getID())
             .whenPressed(new ConditionalCommand(
@@ -222,7 +224,7 @@ public class RobotContainer {
       e.printStackTrace();
     }
     // How to concatenate trajectories (currently not in use)
-//    fullTrajectory = trajectory1.concatenate(trajectory2).concatenate(trajectory3);
+    fullTrajectory = trajectory1.concatenate(trajectory2).concatenate(trajectory3);
 
     RamseteController mController = new RamseteController(Constants.Auton.ramseteB, Constants.Auton.ramseteZeta);
 
@@ -232,7 +234,7 @@ public class RobotContainer {
     PIDController leftPID = new PIDController(Constants.Auton.kP, 0, 0);
     PIDController rightPID = new PIDController(Constants.Auton.kP, 0, 0);
 
-    autonCommand = new RamseteCommand(
+    autonCommandA = new RamseteCommand(
             trajectoryTest,
             mDrivetrain::getPose,
             mController,
@@ -249,7 +251,10 @@ public class RobotContainer {
 
     mDrivetrain.resetOdometry(soloTrajectory.getInitialPose());
 
-    return autonCommand.andThen(() -> mDrivetrain.tankDriveVolts(0,0));
+//    return autonCommand.andThen(() -> mDrivetrain.tankDriveVolts(0,0));
+    return new SequentialCommandGroup(autonCommandA.andThen(() -> mDrivetrain.tankDriveVolts(0,0)),
+                                      autonCommandB,
+                                      autonCommandC);
 
   }
 
