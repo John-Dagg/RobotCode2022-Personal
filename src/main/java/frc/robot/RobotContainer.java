@@ -62,6 +62,10 @@ public class RobotContainer {
   //Auton
   private final String soloPath = "Curve";
   private final String soloTrajectoryFile = "output/"+soloPath+".wpilib.json";
+
+  private final String testPath = "test1";
+  private final String testTrajectoryFile = "output/"+soloPath+".wpilib.json";
+
   private Path soloTrajectoryPath;
   private Trajectory soloTrajectory;
 
@@ -69,15 +73,23 @@ public class RobotContainer {
   private String pathing2 = "5BallPath2";
   private String pathing3 = "5BallPath3";
 
+  private final String pathingTest = "test1";
+
+
   private String trajectoryFile1 = "output/"+pathing1+".wpilib.json";
   private String trajectoryFile2 = "output/"+pathing2+".wpilib.json";
   private String trajectoryFile3 = "output/"+pathing3+".wpilib.json";
+
+  private final String trajectoryFileTest = "output/"+pathingTest+".wpilib.json";
+
   private Path trajectoryPath1;
   private Path trajectoryPath2;
   private Path trajectoryPath3;
+  private Path trajectoryPathTest;
   private Trajectory trajectory1;
   private Trajectory trajectory2;
   private Trajectory trajectory3;
+  private Trajectory trajectoryTest;
 
   private Trajectory fullTrajectory;
   private RamseteCommand autonCommand;
@@ -184,6 +196,11 @@ public class RobotContainer {
       soloTrajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(soloTrajectoryFile);
       soloTrajectory = TrajectoryUtil.fromPathweaverJson(soloTrajectoryPath);
 
+      trajectoryPathTest = Filesystem.getDeployDirectory().toPath().resolve(trajectoryFileTest);
+      trajectoryTest = TrajectoryUtil.fromPathweaverJson(trajectoryPathTest);
+
+
+
     } catch (IOException e){
       System.out.println("Couldn't find trajectory path");
       e.printStackTrace();
@@ -200,7 +217,7 @@ public class RobotContainer {
     PIDController rightPID = new PIDController(Constants.Auton.kP, 0, 0);
 
     autonCommand = new RamseteCommand(
-            soloTrajectory,
+            trajectoryTest,
             mDrivetrain::getPose,
             mController,
             new SimpleMotorFeedforward(

@@ -50,6 +50,7 @@ public class LimelightAlignLeftCommand extends CommandBase {
 //            mVision.flashArray();
             findTarget();
         }
+        System.out.println(mVision.getyOffset());
     }
 
     @Override

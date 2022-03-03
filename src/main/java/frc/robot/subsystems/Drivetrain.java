@@ -44,6 +44,8 @@ public class Drivetrain extends SubsystemBase {
 
   private double mYaw, mLeftVolts, mRightVolts;
 
+  private double lastThrottle, lastTurn;
+
   private DriveState mState;
 
   public Drivetrain() {
@@ -91,7 +93,9 @@ public class Drivetrain extends SubsystemBase {
 
     mShifter = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, DriveTrain.shifterPorts[0], DriveTrain.shifterPorts[1]);
 
-    mState = DriveState.TELE_DRIVE;
+    lastThrottle = lastTurn = 0.;
+
+    mState = DriveTrain.defaultState;
   }
   //Return objects for interfacing with the motors, encoders, and gyro of the drivetrain
   public MotorControllerGroup getLeftMotors(){
@@ -161,9 +165,12 @@ public class Drivetrain extends SubsystemBase {
   public void arcadeDrive(){
     double throttle = deadband(Constants.driverController.getRawAxis(Axis.AxisID.LEFT_Y.getID()));
     double turn = deadband(Constants.driverController.getRawAxis(Axis.AxisID.RIGHT_X.getID()));
+    throttle = (throttle == 0) ? 0 : Math.abs(throttle)*throttle;
+    turn = (turn == 0) ? 0 : turn/Math.abs(turn)*Math.sqrt(Math.abs(turn));
+    turn = ((lastTurn == turn && Math.abs(turn) < 0.33) || turn == 0) ? 0 : turn;
+    lastThrottle = (throttle == 0) ? lastThrottle : throttle;
+    lastTurn = (turn == 0) ? lastTurn : turn;
 
-    throttle = Math.abs(throttle)*throttle;
-    turn = Math.abs(turn)*turn;
 
     /*
     double left = throttle - turn;
@@ -178,7 +185,7 @@ public class Drivetrain extends SubsystemBase {
     mLeftLeader.set(leftOutput * 0.5);
     mRightLeader.set(rightOutput * 0.5);
      */
-
+    System.out.println(throttle + " | " + turn);
     mDrive.arcadeDrive(-throttle, turn);
 
 //    printVelocity();

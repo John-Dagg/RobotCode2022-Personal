@@ -112,9 +112,9 @@ public final class Constants {
         public static final double deccelAngle = 30;
 
 
-        public static final double targetHeight = 104;
-        public static final double cameraHeight = 9.5;
-        public static final double cameraAngle = 22;
+        public static final double targetHeight = 104; //in
+        public static final double cameraHeight = 9.5; //in
+        public static final double cameraAngle = 22; //in
     }
 
 
