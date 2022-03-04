@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.io.Axis;
 import frc.robot.utility.MotorControllerFactory;
 
 public class Shooter extends SubsystemBase {
@@ -82,6 +83,10 @@ public class Shooter extends SubsystemBase {
 
     public TalonFX getShooterLeader(){
         return shooterMotorLeader;
+    }
+
+    public void shooterTest(){
+        shooterMotorLeader.set(TalonFXControlMode.PercentOutput, Constants.operatorController.getRawAxis(Axis.AxisID.LEFT_Y.getID()));
     }
 
 

@@ -23,13 +23,13 @@ public class Intake extends SubsystemBase {
     }
 
     public void rollerIntake(){
-        rollerBar.set(0.5);
-        staticRoller.set(0.5);
+        rollerBar.set(1);
+        staticRoller.set(1);
     }
 
     public void rollerOuttake(){
-        rollerBar.set(-0.5);
-        staticRoller.set(-0.5);
+        rollerBar.set(-1);
+        staticRoller.set(-1);
 
     }
 

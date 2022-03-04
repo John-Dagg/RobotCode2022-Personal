@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorSensorV3;
@@ -7,6 +9,7 @@ import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.io.Axis;
 import frc.robot.utility.MotorControllerFactory;
 
 public class Indexer extends SubsystemBase {
@@ -14,7 +17,7 @@ public class Indexer extends SubsystemBase {
     //Waiting on Build/Electrical for testing
     //RIP Color Sensor
 
-    private CANSparkMax indexerMotor;
+    private TalonSRX indexerMotor;
 
     private ColorSensorV3 colorSensor;
     private ColorMatch colorMatch;
@@ -24,7 +27,7 @@ public class Indexer extends SubsystemBase {
 
     public Indexer(){
 
-        indexerMotor = MotorControllerFactory.makeSparkMax(Constants.Indexer.indexerPort);
+        indexerMotor = MotorControllerFactory.makeTalonSRX(Constants.Indexer.indexerPort);
 
         /*
         mPort = I2C.Port.kOnboard;
@@ -74,12 +77,16 @@ public class Indexer extends SubsystemBase {
     //Idles the indexer to push ball into the chamber. Once the color sensor sees a ball stops the indexer
 
     public void setIndexerIdle(){
-        indexerMotor.set(0);
+        indexerMotor.set(TalonSRXControlMode.PercentOutput, 0);
     }
 
     //Feeds the balls into the shooter
     public void feedIndexer(){
-        indexerMotor.set(0.5);
+        indexerMotor.set(TalonSRXControlMode.PercentOutput, 0.5);
+    }
+
+    public void indexerTest() {
+        indexerMotor.set(TalonSRXControlMode.PercentOutput, Constants.operatorController.getRawAxis(Axis.AxisID.RIGHT_Y.getID()));
     }
 
 
