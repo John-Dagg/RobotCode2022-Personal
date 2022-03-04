@@ -18,7 +18,7 @@ import frc.robot.utility.MotorControllerFactory;
 public class Shooter extends SubsystemBase {
 
     //Waiting for Build/Electrical to test
-/*
+
     private TalonFX shooterMotorLeader, shooterMotorFollower;
     private DoubleSolenoid angler;
 
@@ -80,7 +80,10 @@ public class Shooter extends SubsystemBase {
         return farVel - 0.1;
     }
 
+    public TalonFX getShooterLeader(){
+        return shooterMotorLeader;
+    }
 
- */
+
 
 }

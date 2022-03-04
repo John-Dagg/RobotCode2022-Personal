@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class VPLimelight extends SubsystemBase {
-/*
+
     private NetworkTable mNetworkTable;
 
     private NetworkTableEntry vpTargets, vpxOffset, vpyOffset, vpTargetArea, vpTargetSkew;
@@ -68,6 +68,6 @@ public class VPLimelight extends SubsystemBase {
 
     }
 
- */
+
 
 }

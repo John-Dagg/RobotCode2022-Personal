@@ -24,7 +24,7 @@ public class Indexer extends SubsystemBase {
 
     public Indexer(){
 
-//        indexerMotor = MotorControllerFactory.makeSparkMax(Constants.Indexer.indexerPort);
+        indexerMotor = MotorControllerFactory.makeSparkMax(Constants.Indexer.indexerPort);
 
         /*
         mPort = I2C.Port.kOnboard;
@@ -72,7 +72,7 @@ public class Indexer extends SubsystemBase {
     */
 
     //Idles the indexer to push ball into the chamber. Once the color sensor sees a ball stops the indexer
-    /*
+
     public void setIndexerIdle(){
         indexerMotor.set(0);
     }
@@ -82,7 +82,7 @@ public class Indexer extends SubsystemBase {
         indexerMotor.set(0.5);
     }
 
-     */
+
 
 
 }
