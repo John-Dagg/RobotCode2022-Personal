@@ -39,13 +39,12 @@ public class ShootCustom extends CommandBase {
     public double calcSpeed(){
         //Equation to find the required initial velocity of a projectile
         //Assumes the ball will reach the same speed as the wheels which is inaccurate sadly
-
-        double velocitySquared = ((calcDistance() * calcDistance()) * 9.8)
-        / (calcDistance() * Math.sin(2 * 65) - (2 * (Constants.LimelightVision.targetHeight
+        double dist = calcDistance();
+        double velocitySquared = ((dist * dist) * 9.8)
+        / (dist * Math.sin(2 * 65) - (2 * (Constants.LimelightVision.targetHeight
                 - Constants.LimelightVision.targetHeight) * Math.cos(65) * Math.cos(65)));
         double vel = Math.sqrt(velocitySquared);
-        double limitedVel = vel < 0 ? Math.max(vel, -1.0) : Math.min(vel, 1.0);
-        return limitedVel;
+        return vel < 0 ? Math.max(vel, -1.0) : Math.min(vel, 1.0);
     }
 
     public void setShooterCustom(){
