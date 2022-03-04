@@ -8,7 +8,7 @@ import frc.robot.Constants;
 import frc.robot.utility.MotorControllerFactory;
 
 public class Intake extends SubsystemBase {
-
+/*
     //Waiting for Design/Build/Electrical to test
 
     private CANSparkMax rollerBar, staticRoller;
@@ -16,9 +16,9 @@ public class Intake extends SubsystemBase {
 
     public Intake(){
 
-//        rollerBar = MotorControllerFactory.makeSparkMax(Constants.Intake.intakeMotorPort);
-//        staticRoller = MotorControllerFactory.makeSparkMax(Constants.Intake.intakeStaticMotorPort);
-//        fourBar = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.Intake.fourBarPorts[0], Constants.Intake.fourBarPorts[1]);
+        rollerBar = MotorControllerFactory.makeSparkMax(Constants.Intake.intakeMotorPort);
+        staticRoller = MotorControllerFactory.makeSparkMax(Constants.Intake.intakeStaticMotorPort);
+        fourBar = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.Intake.fourBarPorts[0], Constants.Intake.fourBarPorts[1]);
 
     }
 
@@ -56,4 +56,6 @@ public class Intake extends SubsystemBase {
         return state;
     }
 
+
+ */
 }

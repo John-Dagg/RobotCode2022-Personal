@@ -6,10 +6,13 @@ import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.utility.MotorControllerFactory;
 
 public class Indexer extends SubsystemBase {
 
     //Waiting on Build/Electrical for testing
+    //RIP Color Sensor
 
     private CANSparkMax indexerMotor;
 
@@ -23,9 +26,9 @@ public class Indexer extends SubsystemBase {
 
 //        indexerMotor = MotorControllerFactory.makeSparkMax(Constants.Indexer.indexerPort);
 
-
+        /*
         mPort = I2C.Port.kOnboard;
-//        colorSensor = new ColorSensorV3(mPort);
+        colorSensor = new ColorSensorV3(mPort);
         colorMatch = new ColorMatch();
 
         //Custom colors to align with the cargos
@@ -35,9 +38,10 @@ public class Indexer extends SubsystemBase {
         colorMatch.addColorMatch(mCargoBlue);
         colorMatch.addColorMatch(mCargoRed);
         colorMatch.setConfidenceThreshold(0.92); //Custom tested threshold. Tune once robot is completed
+        */
 
     }
-
+    /*
     //Returns the closest color the sensor is detecting that was added to the Color Matcher
     //If the color is not within the confidence threshold to match with either color added to the Matcher returns null
     public Color getCurrentColor(){
@@ -65,18 +69,20 @@ public class Indexer extends SubsystemBase {
         }
         return indexState;
     }
+    */
 
     //Idles the indexer to push ball into the chamber. Once the color sensor sees a ball stops the indexer
+    /*
     public void setIndexerIdle(){
-        if (checkIndexer()){
-            indexerMotor.set(0);
-        } else {
-            indexerMotor.set(0.1);
-        }
+        indexerMotor.set(0);
     }
 
     //Feeds the balls into the shooter
     public void feedIndexer(){
         indexerMotor.set(0.5);
     }
+
+     */
+
+
 }

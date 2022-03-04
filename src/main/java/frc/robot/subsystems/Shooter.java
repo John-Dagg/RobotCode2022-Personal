@@ -18,7 +18,7 @@ import frc.robot.utility.MotorControllerFactory;
 public class Shooter extends SubsystemBase {
 
     //Waiting for Build/Electrical to test
-
+/*
     private TalonFX shooterMotorLeader, shooterMotorFollower;
     private DoubleSolenoid angler;
 
@@ -28,18 +28,18 @@ public class Shooter extends SubsystemBase {
     //Needs testing
     private double closeVel = 0.65;
     private double farVel = 0.85;
-    private double idleVel = 0;
+    private double idleVel = 0.00;
 
     public Shooter(){
 
-//        shooterMotorLeader = MotorControllerFactory.makeTalonFX(Constants.Shooter.shooterAPort);
-//        shooterMotorFollower = MotorControllerFactory.makeTalonFX(Constants.Shooter.shooterBPort);
+        shooterMotorLeader = MotorControllerFactory.makeTalonFX(Constants.Shooter.shooterAPort);
+        shooterMotorFollower = MotorControllerFactory.makeTalonFX(Constants.Shooter.shooterBPort);
 
-//        angler = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.Shooter.anglerPorts[0], Constants.Shooter.anglerPorts[1]);
+        angler = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.Shooter.anglerPorts[0], Constants.Shooter.anglerPorts[1]);
 
-//        shooterMotorFollower.setInverted(true);
-//        shooterMotorFollower.follow(shooterMotorLeader);
-//        shooterMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+        shooterMotorFollower.setInverted(true);
+        shooterMotorFollower.follow(shooterMotorLeader);
+        shooterMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
 
     }
 
@@ -80,5 +80,7 @@ public class Shooter extends SubsystemBase {
         return farVel - 0.1;
     }
 
+
+ */
 
 }

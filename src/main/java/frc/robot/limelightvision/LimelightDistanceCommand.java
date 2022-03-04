@@ -10,7 +10,7 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.utility.MathEqs.*;
 
 public class LimelightDistanceCommand extends CommandBase {
-
+/*
     private Drivetrain mDrivetrain;
     private VPLimelight mVision;
 
@@ -132,5 +132,7 @@ public class LimelightDistanceCommand extends CommandBase {
     public double highBand(double targetDistance){
         return targetDistance + 24;
     }
+
+ */
 
 }

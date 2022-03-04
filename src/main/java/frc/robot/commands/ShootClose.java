@@ -5,7 +5,7 @@ import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Shooter;
 
 public class ShootClose extends CommandBase {
-
+/*
     private Shooter mShooter;
     private Indexer mIndexer;
 
@@ -34,4 +34,6 @@ public class ShootClose extends CommandBase {
         mIndexer.setIndexerIdle();
         mShooter.setShooterIdle();
     }
+
+ */
 }

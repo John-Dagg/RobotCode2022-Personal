@@ -18,9 +18,9 @@ public class Climber extends SubsystemBase {
     //Waiting on Design/Build/Electrical for testing
 
     //Motors subject to change
-    private TalonSRX climberLeader, climberFollower;
-    private DoubleSolenoid climberSolenoid;
-    private Solenoid brake;
+//    private TalonSRX climberLeader, climberFollower;
+//    private DoubleSolenoid climberSolenoid;
+//    private Solenoid brake;
 /*
     public Climber() {
 

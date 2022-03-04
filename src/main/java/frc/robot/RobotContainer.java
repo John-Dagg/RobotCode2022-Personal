@@ -29,27 +29,22 @@ public class RobotContainer {
   private final Intake mIntake = new Intake();
   private final Shooter mShooter = new Shooter();
   private final Indexer mIndexer = new Indexer();
-  private final Climber mClimber = new Climber();
+//  private final Climber mClimber = new Climber();
 
   //Limelight Vision
-  private final VPLimelight mLimelightVision = new VPLimelight();
-  private final LimelightAlignLeftCommand mAlignTarget = new LimelightAlignLeftCommand(mDrivetrain, mLimelightVision);
-  private final LimelightDistanceCommand mDistanceTarget = new LimelightDistanceCommand(mDrivetrain, mLimelightVision);
-  private final LimelightAlignLeftCommand mLeftAlign = new LimelightAlignLeftCommand(mDrivetrain, mLimelightVision);
-  private final LimelightAlignRightCommand mRightAlign = new LimelightAlignRightCommand(mDrivetrain, mLimelightVision);
-  private final LimelightDistanceCommand mSoloDistanceTarget = new LimelightDistanceCommand(mDrivetrain, mLimelightVision);
-  private final LimelightDistanceCommand mDistance = new LimelightDistanceCommand(mDrivetrain, mLimelightVision);
+//  private final VPLimelight mLimelightVision = new VPLimelight();
+//  private final LimelightAlignLeftCommand mAlignTarget = new LimelightAlignLeftCommand(mDrivetrain, mLimelightVision);
+//  private final LimelightDistanceCommand mDistanceTarget = new LimelightDistanceCommand(mDrivetrain, mLimelightVision);
+//  private final LimelightAlignLeftCommand mLeftAlign = new LimelightAlignLeftCommand(mDrivetrain, mLimelightVision);
+//  private final LimelightAlignRightCommand mRightAlign = new LimelightAlignRightCommand(mDrivetrain, mLimelightVision);
+//  private final LimelightDistanceCommand mSoloDistanceTarget = new LimelightDistanceCommand(mDrivetrain, mLimelightVision);
+//  private final LimelightDistanceCommand mDistance = new LimelightDistanceCommand(mDrivetrain, mLimelightVision);
 //  private final LimelightCompleteVisionCommand mCompleteVision = new LimelightCompleteVisionCommand(mAlignTarget, mDistanceTarget);
 
   //Complex Commands (that can't be inlined)
-  private final ShootFar mShootFar = new ShootFar(mShooter, mIndexer);
-  private final ShootClose mShootClose = new ShootClose(mShooter, mIndexer);
+//  private final ShootFar mShootFar = new ShootFar(mShooter, mIndexer);
+//  private final ShootClose mShootClose = new ShootClose(mShooter, mIndexer);
 
-  //Autons (unused)
-//  private final StopAuton mStopAuton = new StopAuton(mDrivetrain);
-//  private final AutonTestVelocity mVelocityAuton = new AutonTestVelocity(mDrivetrain);
-//  private final AutonTestPosition mPositionAuton = new AutonTestPosition(mDrivetrain);
-  
   //Auton
   private final String soloPath = "Curve";
   private final String soloTrajectoryFile = "output/"+soloPath+".wpilib.json";
@@ -84,14 +79,14 @@ public class RobotContainer {
 
   private Trajectory fullTrajectory;
   private RamseteCommand autonCommandA;
-  private LimelightAlignRightCommand autonCommandB = new LimelightAlignRightCommand(mDrivetrain, mLimelightVision);
-  private ShootClose autonCommandC = new ShootClose(mShooter, mIndexer);
+//  private LimelightAlignRightCommand autonCommandB = new LimelightAlignRightCommand(mDrivetrain, mLimelightVision);
+//  private ShootClose autonCommandC = new ShootClose(mShooter, mIndexer);
 
   public RobotContainer() {
 
     configureButtonBindings();
 
-    mDrivetrain.setDefaultCommand(new RunCommand(mDrivetrain::arcadeDrive, mDrivetrain));
+//    mDrivetrain.setDefaultCommand(new RunCommand(mDrivetrain::arcadeDrive, mDrivetrain));
 //    mLimelightVision.setDefaultCommand(new RunCommand(mLimelightVision::printNetworkTables, mLimelightVision));
 
   }
@@ -199,7 +194,7 @@ public class RobotContainer {
 
   //Global auton execution called here
   public Command getAutonomousCommand() {
-
+/*
     try {
 
       trajectoryPath1 = Filesystem.getDeployDirectory().toPath().resolve(trajectoryFile1);
@@ -256,6 +251,8 @@ public class RobotContainer {
                                       autonCommandB,
                                       autonCommandC);
 
+ */
+  return null;
   }
 
 }

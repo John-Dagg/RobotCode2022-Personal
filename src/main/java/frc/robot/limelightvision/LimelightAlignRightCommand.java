@@ -10,7 +10,7 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
 
 public class LimelightAlignRightCommand extends CommandBase {
-
+/*
     private Drivetrain mDrivetrain;
     private VPLimelight mVision;
 
@@ -92,6 +92,6 @@ public class LimelightAlignRightCommand extends CommandBase {
         return deccelSpeed = (speed * Math.abs(mVision.getxOffset())) / (Constants.LimelightVision.deccelAngle - Constants.LimelightVision.goalAngleP)
                 + (speed * Constants.LimelightVision.goalAngleP) / (Constants.LimelightVision.goalAngleP - Constants.LimelightVision.deccelAngle);
     }
-
+*/
 }
 
