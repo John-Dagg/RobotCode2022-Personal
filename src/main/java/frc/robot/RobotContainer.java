@@ -86,7 +86,7 @@ public class RobotContainer {
 
     configureButtonBindings();
 
-//    mDrivetrain.setDefaultCommand(new RunCommand(mDrivetrain::arcadeDrive, mDrivetrain));
+    mDrivetrain.setDefaultCommand(new RunCommand(mDrivetrain::arcadeDrive, mDrivetrain));
 //    mIndexer.setDefaultCommand(new RunCommand(mIndexer::indexerTest, mIndexer));
 //    mShooter.setDefaultCommand(new RunCommand(mShooter::shooterTest, mShooter));
 //    mLimelightVision.setDefaultCommand(new RunCommand(mLimelightVision::printNetworkTables, mLimelightVision));
