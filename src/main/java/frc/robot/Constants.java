@@ -73,7 +73,7 @@ public final class Constants {
 
     public static final class Indexer {
 
-        public static final int indexerPort = 11;
+        public static final int indexerPort = 8;
     }
 
     public static final class Shooter {

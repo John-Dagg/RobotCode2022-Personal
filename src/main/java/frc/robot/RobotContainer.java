@@ -42,8 +42,8 @@ public class RobotContainer {
 //  private final LimelightCompleteVisionCommand mCompleteVision = new LimelightCompleteVisionCommand(mAlignTarget, mDistanceTarget);
 
   //Complex Commands (that can't be inlined)
-//  private final ShootFar mShootFar = new ShootFar(mShooter, mIndexer);
-//  private final ShootClose mShootClose = new ShootClose(mShooter, mIndexer);
+  private final ShootFar mShootFar = new ShootFar(mShooter, mIndexer);
+  private final ShootClose mShootClose = new ShootClose(mShooter, mIndexer);
 
   //Auton
   private final String soloPath = "Curve";
@@ -86,8 +86,8 @@ public class RobotContainer {
 
     configureButtonBindings();
 
-    mDrivetrain.setDefaultCommand(new RunCommand(mDrivetrain::arcadeDrive, mDrivetrain));
-//    mIndexer.setDefaultCommand(new RunCommand(mIndexer::indexerTest, mIndexer));
+//    mDrivetrain.setDefaultCommand(new RunCommand(mDrivetrain::arcadeDrive, mDrivetrain));
+    mIndexer.setDefaultCommand(new RunCommand(mIndexer::indexerTest, mIndexer));
 //    mShooter.setDefaultCommand(new RunCommand(mShooter::shooterTest, mShooter));
 //    mLimelightVision.setDefaultCommand(new RunCommand(mLimelightVision::printNetworkTables, mLimelightVision));
 
@@ -137,11 +137,11 @@ public class RobotContainer {
 
     //If the left bumper is pressed and the drivetrain is in low gear perform the first command
     //If the left bumper is pressed and the drivetrain is in high gear perform the second command
-    new JoystickButton(Constants.driverController, Button.ButtonID.LEFT_BUMPER.getID())
-            .whenPressed(new ConditionalCommand(
-                    new InstantCommand(mDrivetrain::highGear),
-                    new InstantCommand(mDrivetrain::lowGear),
-                    mDrivetrain::getLowGear));
+//    new JoystickButton(Constants.driverController, Button.ButtonID.LEFT_BUMPER.getID())
+//            .whenPressed(new ConditionalCommand(
+//                    new InstantCommand(mDrivetrain::highGear),
+//                    new InstantCommand(mDrivetrain::lowGear),
+//                    mDrivetrain::getLowGear));
 /*
     Waiting for Build lol
 
@@ -156,7 +156,7 @@ public class RobotContainer {
 
     new JoystickButton(Constants.driverController, Button.ButtonID.B.getID())
             .whenHeld(new StartEndCommand(mIntake::rollerOuttake, mIntake::rollerStop));
-
+*/
     new JoystickButton(Constants.operatorController, Button.ButtonID.X.getID())
             .whenHeld(mShootFar);
 
@@ -174,7 +174,7 @@ public class RobotContainer {
 
     new JoystickButton(Constants.operatorController, Button.ButtonID.Y.getID())
             .whenInactive(mIndexer::setIndexerIdle);
-
+/*
     new JoystickButton(Constants.operatorController, Button.ButtonID.A.getID())
             .whenPressed(new ConditionalCommand(
                     new InstantCommand(mClimber::angleA),

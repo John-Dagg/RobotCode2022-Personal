@@ -51,7 +51,7 @@ public class Drivetrain extends SubsystemBase {
   private DriveState mState;
 
   public Drivetrain() {
-
+/*
     mLeftLeader = MotorControllerFactory.makeSparkMax(DriveTrain.leftLeaderPort);
     mLeftFollowerA = MotorControllerFactory.makeSparkMax(DriveTrain.leftFollowerAPort);
     mLeftFollowerB = MotorControllerFactory.makeSparkMax(DriveTrain.leftFollowerBPort);
@@ -66,14 +66,14 @@ public class Drivetrain extends SubsystemBase {
     mLeftFollowerA.setIdleMode(CANSparkMax.IdleMode.kCoast);
     mLeftFollowerB.setIdleMode(CANSparkMax.IdleMode.kCoast);
 
-    mRightLeader.setInverted(true);
-    mRightFollowerA.setInverted(true);
-    mRightFollowerB.setInverted(true);
-
-    mLeftFollowerA.follow(mLeftLeader);
-    mLeftFollowerB.follow(mLeftLeader);
-    mRightFollowerA.follow(mRightLeader);
-    mRightFollowerB.follow(mRightLeader);
+//    mRightLeader.setInverted(true);
+//    mRightFollowerA.setInverted(true);
+//    mRightFollowerB.setInverted(true);
+//
+//    mLeftFollowerA.follow(mLeftLeader);
+//    mLeftFollowerB.follow(mLeftLeader);
+//    mRightFollowerA.follow(mRightLeader);
+//    mRightFollowerB.follow(mRightLeader);
 
 
     mLeftMotors = new MotorControllerGroup(mLeftLeader, mLeftFollowerA, mLeftFollowerB);
@@ -102,9 +102,11 @@ public class Drivetrain extends SubsystemBase {
     lastThrottle = lastTurn = 0.;
 
     mState = DriveTrain.defaultState;
+    */
+
   }
   //Return objects for interfacing with the motors, encoders, and gyro of the drivetrain
-
+/*
   public void lowGear(){
     mShifter.set(DoubleSolenoid.Value.kReverse);
 //    System.out.println("Low Gear"); //For Testing
@@ -194,14 +196,16 @@ public class Drivetrain extends SubsystemBase {
   public void arcadeDrive(){
     double throttle = deadband(Constants.driverController.getRawAxis(Axis.AxisID.LEFT_Y.getID()));
     double turn = deadband(Constants.driverController.getRawAxis(Axis.AxisID.RIGHT_X.getID()));
-
+/*
     throttle = (throttle == 0) ? 0 : Math.abs(throttle)*throttle;
     turn = (turn == 0) ? 0 : turn/Math.abs(turn)*Math.sqrt(Math.abs(turn));
     turn = ((lastTurn == turn && Math.abs(turn) < 0.33) || turn == 0) ? 0 : turn;
     lastThrottle = (throttle == 0) ? lastThrottle : throttle;
     lastTurn = (turn == 0) ? lastTurn : turn;
 
+ */
 
+/*
     double left = throttle - turn;
     double right = throttle + turn;
 
@@ -211,13 +215,14 @@ public class Drivetrain extends SubsystemBase {
     double leftOutput = left < 0 ? Math.max(left, -1) : Math.min(left, 1);
     double rightOutput = right < 0 ? Math.max(right, -1) : Math.min(right, 1);
 
-    mLeftLeader.set(leftOutput * 0.5);
-    mRightLeader.set(rightOutput * 0.5);
+//    mLeftLeader.set(leftOutput * 0.5);
+//    mRightLeader.set(rightOutput * 0.5);
 
 
-//    System.out.println(throttle + " | " + turn);
+    System.out.println(throttle + " | " + turn);
     mDrive.arcadeDrive(-throttle, turn);
 
+    mDrive.feed();
 //    printVelocity();
   }
 
@@ -277,7 +282,7 @@ public class Drivetrain extends SubsystemBase {
     mOdometry.resetPosition(pose, Rotation2d.fromDegrees(getHeading()));
   }
 
-
+*/
 
 
 
