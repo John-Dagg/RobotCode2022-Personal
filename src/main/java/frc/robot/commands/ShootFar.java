@@ -5,7 +5,7 @@ import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Shooter;
 
 public class ShootFar extends CommandBase {
-/*
+
     private Shooter mShooter;
     private Indexer mIndexer;
 
@@ -17,7 +17,7 @@ public class ShootFar extends CommandBase {
 
     @Override
     public void initialize(){
-        mShooter.setAnglerHigh();
+        mShooter.setAnglerLow();
         mShooter.setShooterFar();
     }
 
@@ -36,6 +36,6 @@ public class ShootFar extends CommandBase {
         mShooter.setShooterIdle();
     }
 
- */
+
 
 }
