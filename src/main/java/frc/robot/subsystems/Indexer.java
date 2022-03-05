@@ -27,7 +27,7 @@ public class Indexer extends SubsystemBase {
 
     public Indexer(){
 
-        indexerMotor = MotorControllerFactory.makeTalonSRX(Constants.Indexer.indexerPort);
+//        indexerMotor = MotorControllerFactory.makeTalonSRX(Constants.Indexer.indexerPort);
 
         /*
         mPort = I2C.Port.kOnboard;
@@ -75,7 +75,7 @@ public class Indexer extends SubsystemBase {
     */
 
     //Idles the indexer to push ball into the chamber. Once the color sensor sees a ball stops the indexer
-
+/*
     public void setIndexerIdle(){
         indexerMotor.set(TalonSRXControlMode.PercentOutput, 0);
     }
@@ -88,6 +88,8 @@ public class Indexer extends SubsystemBase {
     public void indexerTest() {
         indexerMotor.set(TalonSRXControlMode.PercentOutput, Constants.operatorController.getRawAxis(Axis.AxisID.RIGHT_Y.getID()));
     }
+
+ */
 
 
 

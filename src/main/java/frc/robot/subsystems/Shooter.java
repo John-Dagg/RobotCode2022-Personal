@@ -17,7 +17,7 @@ import frc.robot.io.Axis;
 import frc.robot.utility.MotorControllerFactory;
 
 public class Shooter extends SubsystemBase {
-
+/*
     //Waiting for Build/Electrical to test
 
     private TalonFX shooterMotorLeader, shooterMotorFollower;
@@ -90,5 +90,7 @@ public class Shooter extends SubsystemBase {
     }
 
 
+
+ */
 
 }

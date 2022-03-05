@@ -10,7 +10,7 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.limelightvision.VPLimelight;
 
 public class ShootCustom extends CommandBase {
-
+/*
     private Shooter mShooter;
     private Indexer mIndexer;
     private VPLimelight mVision;
@@ -75,6 +75,8 @@ public class ShootCustom extends CommandBase {
         mIndexer.setIndexerIdle();
         mShooter.setShooterIdle();
     }
+
+ */
 
 }
 

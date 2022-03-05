@@ -13,6 +13,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -33,6 +34,7 @@ public class Drivetrain extends SubsystemBase {
           mRightLeader, mRightFollowerA, mRightFollowerB;
   private RelativeEncoder mLeftEncoder, mRightEncoder;
   private DoubleSolenoid mShifter;
+  private Compressor mComp;
   private Pigeon2 mPigeon;
 
   private MotorControllerGroup mLeftMotors, mRightMotors;
@@ -49,7 +51,7 @@ public class Drivetrain extends SubsystemBase {
   private DriveState mState;
 
   public Drivetrain() {
-/*
+
     mLeftLeader = MotorControllerFactory.makeSparkMax(DriveTrain.leftLeaderPort);
     mLeftFollowerA = MotorControllerFactory.makeSparkMax(DriveTrain.leftFollowerAPort);
     mLeftFollowerB = MotorControllerFactory.makeSparkMax(DriveTrain.leftFollowerBPort);
@@ -93,14 +95,13 @@ public class Drivetrain extends SubsystemBase {
     mRightEncoder.setInverted(true);
     resetEncoders();
 
- */
 
 
-    mShifter = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, DriveTrain.shifterPorts[0], DriveTrain.shifterPorts[1]);
+    mShifter = new DoubleSolenoid(30, PneumaticsModuleType.REVPH, DriveTrain.shifterPorts[0], DriveTrain.shifterPorts[1]);
 
     lastThrottle = lastTurn = 0.;
 
-//    mState = DriveTrain.defaultState;
+    mState = DriveTrain.defaultState;
   }
   //Return objects for interfacing with the motors, encoders, and gyro of the drivetrain
 
@@ -124,7 +125,7 @@ public class Drivetrain extends SubsystemBase {
     return gear;
   }
 
-  /*
+
 
   public MotorControllerGroup getLeftMotors(){
     return mLeftMotors;
@@ -201,8 +202,6 @@ public class Drivetrain extends SubsystemBase {
     lastTurn = (turn == 0) ? lastTurn : turn;
 
 
-
-
     double left = throttle - turn;
     double right = throttle + turn;
 
@@ -216,7 +215,7 @@ public class Drivetrain extends SubsystemBase {
     mRightLeader.set(rightOutput * 0.5);
 
 
-    System.out.println(throttle + " | " + turn);
+//    System.out.println(throttle + " | " + turn);
     mDrive.arcadeDrive(-throttle, turn);
 
 //    printVelocity();
@@ -278,7 +277,7 @@ public class Drivetrain extends SubsystemBase {
     mOdometry.resetPosition(pose, Rotation2d.fromDegrees(getHeading()));
   }
 
-   */
+
 
 
 
