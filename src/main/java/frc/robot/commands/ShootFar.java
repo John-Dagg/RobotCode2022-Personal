@@ -17,7 +17,7 @@ public class ShootFar extends CommandBase {
 
     @Override
     public void initialize(){
-        mShooter.setAnglerLow();
+        mShooter.setAnglerHigh();
         mShooter.setShooterFar();
     }
 

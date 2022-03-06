@@ -51,7 +51,7 @@ public class Drivetrain extends SubsystemBase {
   private DriveState mState;
 
   public Drivetrain() {
-/*
+
     mLeftLeader = MotorControllerFactory.makeSparkMax(DriveTrain.leftLeaderPort);
     mLeftFollowerA = MotorControllerFactory.makeSparkMax(DriveTrain.leftFollowerAPort);
     mLeftFollowerB = MotorControllerFactory.makeSparkMax(DriveTrain.leftFollowerBPort);
@@ -102,11 +102,11 @@ public class Drivetrain extends SubsystemBase {
     lastThrottle = lastTurn = 0.;
 
     mState = DriveTrain.defaultState;
-    */
+
 
   }
   //Return objects for interfacing with the motors, encoders, and gyro of the drivetrain
-/*
+
   public void lowGear(){
     mShifter.set(DoubleSolenoid.Value.kReverse);
 //    System.out.println("Low Gear"); //For Testing
@@ -196,16 +196,16 @@ public class Drivetrain extends SubsystemBase {
   public void arcadeDrive(){
     double throttle = deadband(Constants.driverController.getRawAxis(Axis.AxisID.LEFT_Y.getID()));
     double turn = deadband(Constants.driverController.getRawAxis(Axis.AxisID.RIGHT_X.getID()));
-/*
+
     throttle = (throttle == 0) ? 0 : Math.abs(throttle)*throttle;
     turn = (turn == 0) ? 0 : turn/Math.abs(turn)*Math.sqrt(Math.abs(turn));
     turn = ((lastTurn == turn && Math.abs(turn) < 0.33) || turn == 0) ? 0 : turn;
     lastThrottle = (throttle == 0) ? lastThrottle : throttle;
     lastTurn = (turn == 0) ? lastTurn : turn;
 
- */
 
-/*
+
+
     double left = throttle - turn;
     double right = throttle + turn;
 
@@ -219,7 +219,7 @@ public class Drivetrain extends SubsystemBase {
 //    mRightLeader.set(rightOutput * 0.5);
 
 
-    System.out.println(throttle + " | " + turn);
+//    System.out.println(throttle + " | " + turn);
     mDrive.arcadeDrive(-throttle, turn);
 
     mDrive.feed();
@@ -264,6 +264,15 @@ public class Drivetrain extends SubsystemBase {
     mDrive.feed();
   }
 
+  public void printMotors() {
+    System.out.println("L1: "+mLeftLeader.getAppliedOutput()
+                      +" L2: "+mLeftFollowerA.getAppliedOutput()
+                      +" L3: "+mLeftFollowerB.getAppliedOutput()
+                      +" R1: "+mRightLeader.getAppliedOutput()
+                      +" R2: "+mRightFollowerA.getAppliedOutput()
+                      +" R3: "+mRightFollowerB.getAppliedOutput());
+  }
+
   @Override
   public void periodic(){
     mOdometry.update(Rotation2d.fromDegrees(mPigeon.getYaw()) , mLeftEncoder.getPosition() * positionConversion, mRightEncoder.getPosition() * positionConversion);
@@ -282,7 +291,7 @@ public class Drivetrain extends SubsystemBase {
     mOdometry.resetPosition(pose, Rotation2d.fromDegrees(getHeading()));
   }
 
-*/
+
 
 
 

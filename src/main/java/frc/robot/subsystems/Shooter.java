@@ -27,9 +27,9 @@ public class Shooter extends SubsystemBase {
     private double maxRPM = 6000;
 
     //Needs testing
-    private double closeVel = -0.65;
-    private double farVel = -1;
-    private double idleVel = 0.00;
+    private final double closeVel = -0.67;
+    private final double farVel = -1;
+    private final double idleVel = 0.00;
 
     public Shooter(){
 
@@ -45,11 +45,13 @@ public class Shooter extends SubsystemBase {
     }
 
     public void setAnglerLow(){
-        angler.set(DoubleSolenoid.Value.kReverse);
+        System.out.println(angler.get());
+        if (angler.get() != DoubleSolenoid.Value.kReverse) angler.set(DoubleSolenoid.Value.kReverse);
     }
 
     public void setAnglerHigh(){
-        angler.set(DoubleSolenoid.Value.kForward);
+        System.out.println(angler.get());
+        if (angler.get() != DoubleSolenoid.Value.kForward) angler.set(DoubleSolenoid.Value.kForward);
     }
 
     public void setShooterClose(){

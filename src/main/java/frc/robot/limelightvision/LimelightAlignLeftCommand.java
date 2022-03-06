@@ -8,7 +8,7 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
 
 public class LimelightAlignLeftCommand extends CommandBase {
-/*
+
     private Drivetrain mDrivetrain;
     private VPLimelight mVision;
 
@@ -43,11 +43,12 @@ public class LimelightAlignLeftCommand extends CommandBase {
     @Override
     public void execute(){
         mVision.updateTargets();
-        if(mVision.getTargets() >= 1) {
+        if(mVision.getTargets() >= 10) {
             mVision.steadyArray();
             aimTarget();
         } else {
 //            mVision.flashArray();
+            mDrivetrain.printMotors();
             findTarget();
         }
         System.out.println(mVision.getyOffset());
@@ -83,8 +84,8 @@ public class LimelightAlignLeftCommand extends CommandBase {
     }
 
     public void findTarget(){
-        mLeftMotors.set(-1);
-        mRightMotors.set(1);
+        mLeftLeader.set(0.5);
+        mRightLeader.set(0.5);
     }
 
     public double calcTurn(){
@@ -92,7 +93,7 @@ public class LimelightAlignLeftCommand extends CommandBase {
                 + (speed * Constants.LimelightVision.goalAngleP) / (Constants.LimelightVision.goalAngleP - Constants.LimelightVision.deccelAngle);
     }
 
- */
+
 
 }
 

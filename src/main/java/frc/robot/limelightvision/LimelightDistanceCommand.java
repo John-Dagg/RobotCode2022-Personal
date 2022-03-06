@@ -10,7 +10,7 @@ import frc.robot.subsystems.Drivetrain;
 import frc.robot.utility.MathEqs.*;
 
 public class LimelightDistanceCommand extends CommandBase {
-/*
+
     private Drivetrain mDrivetrain;
     private VPLimelight mVision;
 
@@ -27,8 +27,11 @@ public class LimelightDistanceCommand extends CommandBase {
     private boolean distanceCompleted;
     private boolean stopFlag;
 
+    private final double distanceClose = 62; //inches
+    private final double distanceFar = 250; //inches
 
-    public LimelightDistanceCommand(Drivetrain subsystemA, VPLimelight subsystemB){
+
+    public LimelightDistanceCommand(Drivetrain subsystemA, VPLimelight subsystemB, boolean close){
         mDrivetrain = subsystemA;
         mVision = subsystemB;
 
@@ -59,7 +62,7 @@ public class LimelightDistanceCommand extends CommandBase {
         speed = 0.5;
         buffer = 5;
         mVision.updateTargets();
-        goalDistance = 120; //inches
+//        goalDistance = goalDistance; //inches
         initDistance = calcDistance();
         goalTravel = initDistance - goalDistance;
         mLeftEncoder.setPosition(0);
@@ -133,6 +136,6 @@ public class LimelightDistanceCommand extends CommandBase {
         return targetDistance + 24;
     }
 
- */
+
 
 }
