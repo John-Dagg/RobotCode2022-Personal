@@ -79,14 +79,14 @@ public class RobotContainer {
 
   private Trajectory fullTrajectory;
   private RamseteCommand autonCommandA;
-//  private LimelightAlignRightCommand autonCommandB = new LimelightAlignRightCommand(mDrivetrain, mLimelightVision);
-//  private ShootClose autonCommandC = new ShootClose(mShooter, mIndexer);
+  private LimelightAlignLeftCommand autonCommandB = new LimelightAlignLeftCommand(mDrivetrain, mLimelightVision);
+  private ShootClose autonCommandC = new ShootClose(mShooter, mIndexer);
 
   public RobotContainer() {
 
     configureButtonBindings();
 
-    mDrivetrain.setDefaultCommand(new RunCommand(mDrivetrain::arcadeDrive, mDrivetrain));
+    mDrivetrain.setDefaultCommand(new RunCommand(mDrivetrain::masterDrive, mDrivetrain));
 //    mIndexer.setDefaultCommand(new RunCommand(mIndexer::indexerTest, mIndexer));
 //    mShooter.setDefaultCommand(new RunCommand(mShooter::shooterTest, mShooter));
 //    mLimelightVision.setDefaultCommand(new RunCommand(mLimelightVision::printNetworkTables, mLimelightVision));
@@ -196,7 +196,7 @@ public class RobotContainer {
 
   //Global auton execution called here
   public Command getAutonomousCommand() {
-/*
+
     try {
 
       trajectoryPath1 = Filesystem.getDeployDirectory().toPath().resolve(trajectoryFile1);
@@ -249,11 +249,11 @@ public class RobotContainer {
     mDrivetrain.resetOdometry(soloTrajectory.getInitialPose());
 
 //    return autonCommand.andThen(() -> mDrivetrain.tankDriveVolts(0,0));
-    return new SequentialCommandGroup(autonCommandA.andThen(() -> mDrivetrain.tankDriveVolts(0,0)),
-                                      autonCommandB,
-                                      autonCommandC);
+//    return new SequentialCommandGroup(autonCommandA.andThen(() -> mDrivetrain.tankDriveVolts(0,0)),
+//                                      autonCommandB,
+//                                      autonCommandC);
 
- */
+
   return null;
   }
 
