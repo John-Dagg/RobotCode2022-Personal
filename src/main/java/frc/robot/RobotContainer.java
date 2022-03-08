@@ -11,11 +11,14 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.autons.AutonGenerator;
 import frc.robot.commands.*;
+import frc.robot.io.Axis;
 import frc.robot.io.Button;
 import frc.robot.limelightvision.*;
 import frc.robot.subsystems.*;
@@ -23,6 +26,7 @@ import frc.robot.Constants.LimelightVision.*;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 
 public class RobotContainer {
 
@@ -36,7 +40,8 @@ public class RobotContainer {
 
   //Limelight Vision
 
-  private final LimelightAlignCommand mAlignTarget = new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.LEFT,TurnMode.TELEOP);
+  private final LimelightAlignCommand mLeftAlign = new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.LEFT, TurnMode.TELEOP);
+  private final LimelightAlignCommand mRightAlign = new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.RIGHT, TurnMode.TELEOP);
   private final LimelightDistanceCommand mDistanceTarget = new LimelightDistanceCommand(mDrivetrain, mLimelightVision, true);
 //  private final LimelightAlignLeftCommand mLeftAlign = new LimelightAlignLeftCommand(mDrivetrain, mLimelightVision);
 //  private final LimelightAlignRightCommand mRightAlign = new LimelightAlignRightCommand(mDrivetrain, mLimelightVision);
@@ -47,41 +52,12 @@ public class RobotContainer {
   //Complex Commands (that can't be inlined)
   private final ShootFar mShootFar = new ShootFar(mShooter, mIndexer);
   private final ShootClose mShootClose = new ShootClose(mShooter, mIndexer);
+  private final IntakeCargo mIntakeCargo = new IntakeCargo(mIntake);
 
   //Auton
-  private final String soloPath = "Curve";
-  private final String soloTrajectoryFile = "output/"+soloPath+".wpilib.json";
-
-  private final String testPath = "test1";
-  private final String testTrajectoryFile = "output/"+soloPath+".wpilib.json";
-
-  private Path soloTrajectoryPath;
-  private Trajectory soloTrajectory;
-
-  private final String pathing1 = "5BallPath1"; //Change this to change trajectory
-  private final String pathing2 = "5BallPath2";
-  private final String pathing3 = "5BallPath3";
-
-  private final String pathingTest = "test1";
-
-
-  private final String trajectoryFile1 = "output/"+pathing1+".wpilib.json";
-  private final String trajectoryFile2 = "output/"+pathing2+".wpilib.json";
-  private final String trajectoryFile3 = "output/"+pathing3+".wpilib.json";
-
-  private Path trajectoryPath1;
-  private Path trajectoryPath2;
-  private Path trajectoryPath3;
-  private Path trajectoryPathTest;
-  private Trajectory trajectory1;
-  private Trajectory trajectory2;
-  private Trajectory trajectory3;
-  private Trajectory trajectoryTest;
-
-  private Trajectory fullTrajectory;
-  private RamseteCommand autonCommandA;
-  private LimelightAlignLeftCommand autonCommandB = new LimelightAlignLeftCommand(mDrivetrain, mLimelightVision, false);
-  private ShootClose autonCommandC = new ShootClose(mShooter, mIndexer);
+  private AutonGenerator autonGenerator = new AutonGenerator();
+  private ArrayList<RamseteCommand> ramseteCommands;
+  private String[] mFiveBallAuton = {"FiveBallA", "FiveBallB", "FiveBallC", "FiveBallD"};
 
   public RobotContainer() {
 
@@ -122,8 +98,11 @@ public class RobotContainer {
      */
 
 
-    new POVButton(Constants.driverController, 90)
-            .whenHeld(mAlignTarget);
+//    new POVButton(Constants.driverController, 90)
+//            .whenHeld(mRightAlign);
+
+//    new POVButton(Constants.driverController, 270)
+//            .whenHeld(mLeftAlign);
 
 //    new JoystickButton(Constants.driverController, Button.ButtonID.B.getID())
 //            .whenHeld(mRightAlign);
@@ -134,7 +113,7 @@ public class RobotContainer {
 //    new JoystickButton(Constants.driverController, Button.ButtonID.Y.getID())
 //            .whenHeld(mAlignTarget.andThen(new WaitCommand(1)).andThen(mDistance));
 
-
+    //Drivetrain
 
     //If the left bumper is pressed and the drivetrain is in low gear perform the first command
     //If the left bumper is pressed and the drivetrain is in high gear perform the second command
@@ -145,6 +124,7 @@ public class RobotContainer {
                     mDrivetrain::getLowGear));
 
 //    Waiting for Build lol
+//    Intake
 
 //    new JoystickButton(Constants.driverController, Button.ButtonID.RIGHT_BUMPER.getID())
 //            .whenPressed(new ConditionalCommand(
@@ -152,11 +132,23 @@ public class RobotContainer {
 //                    new InstantCommand(mIntake::extendIntake),
 //                    mIntake::getFourBarState));
 
+    /*  Another option for intake control to add more buttons hopefully
+
+    if (new Joystick(Axis.AxisID.LEFT_TRIGGER.getID()).getTriggerPressed())
+            new StartEndCommand(mIntake::rollerIntake, mIntake::rollerStop);
+
+    if (new Joystick(Axis.AxisID.RIGHT_TRIGGER.getID()).getTriggerPressed())
+            new StartEndCommand(mIntake::rollerOuttake, mIntake::rollerStop);
+
+     */
+
     new JoystickButton(Constants.driverController, Button.ButtonID.A.getID())
             .whenHeld(new StartEndCommand(mIntake::rollerIntake, mIntake::rollerStop));
 
     new JoystickButton(Constants.driverController, Button.ButtonID.B.getID())
             .whenHeld(new StartEndCommand(mIntake::rollerOuttake, mIntake::rollerStop));
+
+//    Shooter
 
     new JoystickButton(Constants.operatorController, Button.ButtonID.X.getID())
             .whenHeld(mShootFar);
@@ -175,6 +167,9 @@ public class RobotContainer {
 
     new JoystickButton(Constants.operatorController, Button.ButtonID.Y.getID())
             .whenInactive(mIndexer::setIndexerIdle);
+
+//    Climber
+
 /*
     new JoystickButton(Constants.operatorController, Button.ButtonID.A.getID())
             .whenPressed(new ConditionalCommand(
@@ -198,64 +193,37 @@ public class RobotContainer {
   //Global auton execution called here
   public Command getAutonomousCommand() {
 
-    try {
+    ramseteCommands = autonGenerator.getAutonCommands(mFiveBallAuton);
 
-      trajectoryPath1 = Filesystem.getDeployDirectory().toPath().resolve(trajectoryFile1);
-      trajectory1 = TrajectoryUtil.fromPathweaverJson(trajectoryPath1);
+    mDrivetrain.resetOdometry(autonGenerator.getFirstTrajectory().getInitialPose());
 
-      trajectoryPath2 = Filesystem.getDeployDirectory().toPath().resolve(trajectoryFile2);
-      trajectory2 = TrajectoryUtil.fromPathweaverJson(trajectoryPath2);
+    //TODO: Find a better way to do this
+    /*
+    SequentialCommandGroup auton = mLeftAlign.andThen(mShootClose).andThen(ramseteCommands.get(0))
+            .andThen(ramseteCommands.get(1)).andThen(mLeftAlign).andThen(mShootClose)
+            .andThen(ramseteCommands.get(2)).andThen(ramseteCommands.get(3)).andThen(mDistanceTarget)
+            .andThen(mShootFar).andThen(mDrivetrain::stopDrive);
 
-      trajectoryPath3 = Filesystem.getDeployDirectory().toPath().resolve(trajectoryFile3);
-      trajectory3 = TrajectoryUtil.fromPathweaverJson(trajectoryPath3);
+     */
+    /***
+    * Aim -> Shoot -> Drive and Collect -> Aim -> Shoot -> Drive and Collect -> Correct Distance -> Aim -> Shoot -> Stop
+    */
 
-      soloTrajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(soloTrajectoryFile);
-      soloTrajectory = TrajectoryUtil.fromPathweaverJson(soloTrajectoryPath);
+    //TODO: Shooter won't stop I think
+    SequentialCommandGroup auton = new SequentialCommandGroup(
+            new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.RIGHT, TurnMode.AUTON),
+            new ShootClose(mShooter, mIndexer, 2000),
+            new ParallelRaceGroup(ramseteCommands.get(0).andThen(ramseteCommands.get(1)), new IntakeCargo(mIntake)),
+            new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.RIGHT, TurnMode.AUTON),
+            new ShootClose(mShooter, mIndexer, 4000),
+            new ParallelRaceGroup(ramseteCommands.get(2), new IntakeCargo(mIntake)),
+            ramseteCommands.get(3),
+            new LimelightDistanceCommand(mDrivetrain, mLimelightVision, false),
+            new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.RIGHT, TurnMode.AUTON),
+            new ShootFar(mShooter, mIndexer, 4000),
+            new InstantCommand(mDrivetrain::stopDrive));
 
-      String trajectoryFileTest = "output/" + pathingTest + ".wpilib.json";
-      trajectoryPathTest = Filesystem.getDeployDirectory().toPath().resolve(trajectoryFileTest);
-      trajectoryTest = TrajectoryUtil.fromPathweaverJson(trajectoryPathTest);
-
-
-
-    } catch (IOException e){
-      System.out.println("Couldn't find trajectory path");
-      e.printStackTrace();
-    }
-    // How to concatenate trajectories (currently not in use)
-    fullTrajectory = trajectory1.concatenate(trajectory2).concatenate(trajectory3);
-
-    RamseteController mController = new RamseteController(Constants.Auton.ramseteB, Constants.Auton.ramseteZeta);
-
-    // Set false for testing purposes ONLY
-    mController.setEnabled(true);
-
-    PIDController leftPID = new PIDController(Constants.Auton.kP, 0, 0);
-    PIDController rightPID = new PIDController(Constants.Auton.kP, 0, 0);
-
-    autonCommandA = new RamseteCommand(
-            trajectoryTest,
-            mDrivetrain::getPose,
-            mController,
-            new SimpleMotorFeedforward(
-                    Constants.Auton.ks,
-                    Constants.Auton.kv,
-                    Constants.Auton.ka),
-            Constants.Auton.driveKinematics,
-            mDrivetrain::getWheelSpeeds,
-            leftPID,
-            rightPID,
-            (leftVolts, rightVolts) -> {
-              mDrivetrain.tankDriveVolts(leftVolts, rightVolts); }, mDrivetrain);
-
-    mDrivetrain.resetOdometry(soloTrajectory.getInitialPose());
-
-//    return autonCommand.andThen(() -> mDrivetrain.tankDriveVolts(0,0));
-//    return new SequentialCommandGroup(autonCommandA.andThen(() -> mDrivetrain.tankDriveVolts(0,0)),
-//                                      autonCommandB,
-//                                      autonCommandC);
-
-
+//  return auton;
   return null;
   }
 

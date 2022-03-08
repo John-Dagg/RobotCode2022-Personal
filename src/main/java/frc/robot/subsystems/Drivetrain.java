@@ -26,6 +26,8 @@ import frc.robot.Constants;
 import frc.robot.Constants.*;
 import frc.robot.Constants.DriveTrain.*;
 
+import static frc.robot.Constants.DriveTrain.defaultState;
+
 
 public class Drivetrain extends SubsystemBase {
 
@@ -106,11 +108,11 @@ public class Drivetrain extends SubsystemBase {
 
     lastThrottle = lastTurn = 0.;
 
-    mState = DriveTrain.defaultState;
+    mState = defaultState;
 
 
   }
-  //Return objects for interfacing with the motors, encoders, and gyro of the drivetrain
+
 
   public void lowGear(){
     mShifter.set(DoubleSolenoid.Value.kReverse);
@@ -212,14 +214,14 @@ public class Drivetrain extends SubsystemBase {
 
 
 
-    double left = throttle - turn;
-    double right = throttle + turn;
+//    double left = throttle - turn;
+//    double right = throttle + turn;
 
     //Ternary operators that ensure the values supplied to the SparkMaxes are within the acceptable range.
     //Math.max returns the greater of the two values
     //Math.min returns the lower of the two values
-    double leftOutput = left < 0 ? Math.max(left, -1) : Math.min(left, 1);
-    double rightOutput = right < 0 ? Math.max(right, -1) : Math.min(right, 1);
+//    double leftOutput = left < 0 ? Math.max(left, -1) : Math.min(left, 1);
+//    double rightOutput = right < 0 ? Math.max(right, -1) : Math.min(right, 1);
 
 //    mLeftLeader.set(leftOutput * 0.5);
 //    mRightLeader.set(rightOutput * 0.5);
@@ -235,6 +237,7 @@ public class Drivetrain extends SubsystemBase {
   public void limelightDrive(){
     double[] values = mLimelight.getValues();
     mDrive.arcadeDrive(values[0], values[1]);
+    mDrive.feed();
   }
 
   public void tankDrive(){

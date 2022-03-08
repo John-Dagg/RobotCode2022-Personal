@@ -16,9 +16,9 @@ public class LimelightAlignCommand extends CommandBase {
     private final Drivetrain mDrivetrain;
     private final VPLimelight mVision;
 
-    private CANSparkMax mLeftLeader, mRightLeader;
-    private SparkMaxPIDController mLeftPIDController, mRightPIDController;
-    private MotorControllerGroup mLeftMotors, mRightMotors;
+//    private CANSparkMax mLeftLeader, mRightLeader;
+//    private SparkMaxPIDController mLeftPIDController, mRightPIDController;
+//    private MotorControllerGroup mLeftMotors, mRightMotors;
 
     private double speed;
 
@@ -26,7 +26,7 @@ public class LimelightAlignCommand extends CommandBase {
 
     private DriveState limelightMode;
 
-    private double searchDirection = 1;
+    private double searchDirection;
 
     public LimelightAlignCommand(Drivetrain subsystemA, VPLimelight subsystemB, TurnDirection turn, TurnMode mode){
 
@@ -35,11 +35,11 @@ public class LimelightAlignCommand extends CommandBase {
 
         addRequirements(mDrivetrain, mVision);
 
-        mLeftLeader = mDrivetrain.getLeftLeader();
-        mRightLeader = mDrivetrain.getRightLeader();
+//        mLeftLeader = mDrivetrain.getLeftLeader();
+//        mRightLeader = mDrivetrain.getRightLeader();
 
-        mLeftMotors = mDrivetrain.getLeftMotors();
-        mRightMotors = mDrivetrain.getRightMotors();
+//        mLeftMotors = mDrivetrain.getLeftMotors();
+//        mRightMotors = mDrivetrain.getRightMotors();
 
         searchDirection = (turn == TurnDirection.LEFT) ? 1: -1;
 

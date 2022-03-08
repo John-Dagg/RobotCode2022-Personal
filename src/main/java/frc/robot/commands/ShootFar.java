@@ -9,25 +9,39 @@ public class ShootFar extends CommandBase {
     private Shooter mShooter;
     private Indexer mIndexer;
 
-    public ShootFar(Shooter subsystemA, Indexer subsystemB){
+    double start, time, elapsedTime;
+
+    public ShootFar(Shooter subsystemA, Indexer subsystemB, double time){
         mShooter = subsystemA;
         mIndexer = subsystemB;
+        this.time = time * 1000;
         addRequirements(mShooter, mIndexer);
+    }
+
+    public ShootFar(Shooter subsystemA, Indexer subsystemB){
+        this(subsystemA, subsystemB, 1000000000);
     }
 
     @Override
     public void initialize(){
+        start = System.currentTimeMillis();
         mShooter.setAnglerHigh();
         mShooter.setShooterFar();
     }
 
     @Override
     public void execute(){
+        elapsedTime = System.currentTimeMillis() - start;
         mShooter.setShooterFar();
         if (mShooter.getShooterVel() > mShooter.getShooterFarVel()){
             mIndexer.feedIndexer();
         }
 
+    }
+
+    @Override
+    public boolean isFinished(){
+        return elapsedTime > time;
     }
 
     @Override

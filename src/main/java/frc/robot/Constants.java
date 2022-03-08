@@ -46,7 +46,7 @@ public final class Constants {
         public static final int rightFollowerAPort = 6;
         public static final int rightFollowerBPort = 7;
 
-        public static final int[] shifterPorts = {5, 11}; //blue because
+        public static final int[] shifterPorts = {5, 11};
 
         public static final double deadband = 0.05;
 
@@ -117,9 +117,12 @@ public final class Constants {
         public static final double cameraHeight = 9.5; //in
         public static final double cameraAngle = 22; //in
 
-        public enum TurnDirection {LEFT, RIGHT};
+        public enum TurnDirection {LEFT, RIGHT}
 
-        public enum TurnMode {TELEOP, AUTON};
+        public enum TurnMode {TELEOP, AUTON}
+
+        public enum DistanceGoal {CLOSE, FAR}
+
     }
 
 
