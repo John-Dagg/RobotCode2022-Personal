@@ -126,13 +126,13 @@ public class RobotContainer {
 //    Waiting for Build lol
 //    Intake
 
-//    new JoystickButton(Constants.driverController, Button.ButtonID.RIGHT_BUMPER.getID())
-//            .whenPressed(new ConditionalCommand(
-//                    new InstantCommand(mIntake::retractIntake),
-//                    new InstantCommand(mIntake::extendIntake),
-//                    mIntake::getFourBarState));
+    new JoystickButton(Constants.driverController, Button.ButtonID.RIGHT_BUMPER.getID())
+            .whenPressed(new ConditionalCommand(
+                    new InstantCommand(mIntake::retractIntake),
+                    new InstantCommand(mIntake::extendIntake),
+                    mIntake::getFourBarState));
 
-    /*  Another option for intake control to add more buttons hopefully
+    //  Another option for intake control to add more buttons hopefully
 
     if (new Joystick(Axis.AxisID.LEFT_TRIGGER.getID()).getTriggerPressed())
             new StartEndCommand(mIntake::rollerIntake, mIntake::rollerStop);
@@ -140,13 +140,13 @@ public class RobotContainer {
     if (new Joystick(Axis.AxisID.RIGHT_TRIGGER.getID()).getTriggerPressed())
             new StartEndCommand(mIntake::rollerOuttake, mIntake::rollerStop);
 
-     */
 
-    new JoystickButton(Constants.driverController, Button.ButtonID.A.getID())
-            .whenHeld(new StartEndCommand(mIntake::rollerIntake, mIntake::rollerStop));
 
-    new JoystickButton(Constants.driverController, Button.ButtonID.B.getID())
-            .whenHeld(new StartEndCommand(mIntake::rollerOuttake, mIntake::rollerStop));
+//    new JoystickButton(Constants.driverController, Button.ButtonID.A.getID())
+//            .whenHeld(new StartEndCommand(mIntake::rollerIntake, mIntake::rollerStop));
+//
+//    new JoystickButton(Constants.driverController, Button.ButtonID.B.getID())
+//            .whenHeld(new StartEndCommand(mIntake::rollerOuttake, mIntake::rollerStop));
 
 //    Shooter
 

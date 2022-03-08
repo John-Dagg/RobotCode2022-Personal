@@ -7,6 +7,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.utility.MotorControllerFactory;
 
+import static frc.robot.Constants.Intake.fourBarPorts;
+
 public class Intake extends SubsystemBase {
     //Waiting for Design/Build/Electrical to test
 
@@ -18,7 +20,7 @@ public class Intake extends SubsystemBase {
 
         rollerBar = MotorControllerFactory.makeSparkMax(Constants.Intake.intakeMotorPort);
 //        staticRoller = MotorControllerFactory.makeSparkMax(Constants.Intake.intakeStaticMotorPort);
-        fourBar = new DoubleSolenoid(30, PneumaticsModuleType.REVPH, Constants.Intake.fourBarPorts[0], Constants.Intake.fourBarPorts[1]);
+        fourBar = new DoubleSolenoid(fourBarPorts[0], PneumaticsModuleType.CTREPCM, fourBarPorts[1], fourBarPorts[2]);
 
     }
 

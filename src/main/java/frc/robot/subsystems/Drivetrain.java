@@ -27,6 +27,7 @@ import frc.robot.Constants.*;
 import frc.robot.Constants.DriveTrain.*;
 
 import static frc.robot.Constants.DriveTrain.defaultState;
+import static frc.robot.Constants.DriveTrain.shifterPorts;
 
 
 public class Drivetrain extends SubsystemBase {
@@ -104,7 +105,7 @@ public class Drivetrain extends SubsystemBase {
     mDrive = new DifferentialDrive(mLeftMotors, mRightMotors);
     mOdometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(mPigeon.getYaw()));
 
-    mShifter = new DoubleSolenoid(30, PneumaticsModuleType.REVPH, DriveTrain.shifterPorts[0], DriveTrain.shifterPorts[1]);
+    mShifter = new DoubleSolenoid(shifterPorts[0], PneumaticsModuleType.CTREPCM, shifterPorts[1], shifterPorts[2]);
 
     lastThrottle = lastTurn = 0.;
 

@@ -16,6 +16,8 @@ import frc.robot.Constants;
 import frc.robot.io.Axis;
 import frc.robot.utility.MotorControllerFactory;
 
+import static frc.robot.Constants.Shooter.anglerPorts;
+
 public class Shooter extends SubsystemBase {
 
     //Waiting for Build/Electrical to test
@@ -36,7 +38,7 @@ public class Shooter extends SubsystemBase {
         shooterMotorLeader = MotorControllerFactory.makeTalonFX(Constants.Shooter.shooterAPort);
         shooterMotorFollower = MotorControllerFactory.makeTalonFX(Constants.Shooter.shooterBPort);
 
-        angler = new DoubleSolenoid(30, PneumaticsModuleType.REVPH, Constants.Shooter.anglerPorts[0], Constants.Shooter.anglerPorts[1]);
+        angler = new DoubleSolenoid(anglerPorts[0], PneumaticsModuleType.CTREPCM, anglerPorts[1], anglerPorts[2]);
 
         shooterMotorFollower.setInverted(true);
         shooterMotorFollower.follow(shooterMotorLeader);

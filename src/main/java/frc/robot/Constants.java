@@ -46,7 +46,7 @@ public final class Constants {
         public static final int rightFollowerAPort = 6;
         public static final int rightFollowerBPort = 7;
 
-        public static final int[] shifterPorts = {5, 11};
+        public static final int[] shifterPorts = {13, 4, 5};
 
         public static final double deadband = 0.05;
 
@@ -68,7 +68,7 @@ public final class Constants {
 
         public static final int intakeMotorPort = 4;
 
-        public static final int[] fourBarPorts = {6, 14};
+        public static final int[] fourBarPorts = {0, 6, 7};
     }
 
     public static final class Indexer {
@@ -81,15 +81,15 @@ public final class Constants {
         public static final int shooterAPort = 9;
         public static final int shooterBPort = 10;
 
-        public static final int[] anglerPorts = {4, 7};
+        public static final int[] anglerPorts = {13, 6, 7};
     }
 
     public static final class Climber{
 
 //        public static final int climberPortA = 11;
 //        public static final int climberPortB = 12;
-//        public static final int[] solenoidPorts = {6, 7};
-//        public static final int brakePort = 8;
+//        public static final int[] solenoidPorts = {13, 0, 1};
+//        public static final int[] brakePorts = {13, 2, 3};
     }
 
     public static final class PhotonVision{
