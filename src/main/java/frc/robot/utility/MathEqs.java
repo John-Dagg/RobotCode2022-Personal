@@ -1,12 +1,10 @@
 package frc.robot.utility;
 
-import frc.robot.Constants;
-
 public class MathEqs {
 
-    public static float targetLinear(float baseline, float offset, float upperBound, float lowerBound) {
-        return ((baseline * Math.abs(offset)) / (upperBound - lowerBound)
-                + (baseline * lowerBound) / (lowerBound - upperBound));
+    public static double targetLinear(double offset, double baseline, double upperBound, double lowerBound) {
+        return (offset < upperBound) ? ((baseline * offset) / (upperBound - lowerBound)
+                + (baseline * lowerBound) / (lowerBound - upperBound)) : upperBound;
     }
 
 }

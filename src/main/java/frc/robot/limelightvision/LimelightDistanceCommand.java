@@ -48,12 +48,14 @@ public class LimelightDistanceCommand extends CommandBase {
         mLeftEncoder.setPosition(0);
         mRightEncoder.setPosition(0);
 
+        goalDistance = close ? distanceClose : distanceFar;
+
 //        mLeftPIDController = mLeftLeader.getPIDController();
 //        mRightPIDController = mRightLeader.getPIDController();
 
 //        PIDConfig.setPID(mLeftPIDController, mRightPIDController, 0, 0, 0); //Needs Tuning
 
-        mAlign = new LimelightAlignLeftCommand(mDrivetrain, mVision);
+        mAlign = new LimelightAlignLeftCommand(mDrivetrain, mVision, true);
     }
 
     @Override
@@ -127,6 +129,8 @@ public class LimelightDistanceCommand extends CommandBase {
         double finalSpeed = speed < 0.5 ? 0.5 : calcSpeed;
         return finalSpeed;
     }
+
+
 
     public double lowBand(double targetDistance){
         return targetDistance - 24;

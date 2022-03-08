@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.io.Axis;
+import frc.robot.limelightvision.VPLimelight;
 import frc.robot.utility.MotorControllerFactory;
 import frc.robot.Constants;
 import frc.robot.Constants.*;
@@ -48,9 +49,13 @@ public class Drivetrain extends SubsystemBase {
 
   private double lastThrottle, lastTurn;
 
-  private DriveState mState;
+  public DriveState mState;
 
-  public Drivetrain() {
+  private VPLimelight mLimelight;
+
+  public Drivetrain(VPLimelight subsystemA) {
+
+    mLimelight = subsystemA;
 
     mLeftLeader = MotorControllerFactory.makeSparkMax(DriveTrain.leftLeaderPort);
     mLeftFollowerA = MotorControllerFactory.makeSparkMax(DriveTrain.leftFollowerAPort);
@@ -85,8 +90,7 @@ public class Drivetrain extends SubsystemBase {
     mPigeon = new Pigeon2(0);
     resetYaw();
 
-    mDrive = new DifferentialDrive(mLeftMotors, mRightMotors);
-    mOdometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(mPigeon.getYaw()));
+
 
     //Creates two encoder objects for their respective motors
     mLeftEncoder = mLeftLeader.getAlternateEncoder(SparkMaxAlternateEncoder.Type.kQuadrature, 4096);
@@ -95,7 +99,8 @@ public class Drivetrain extends SubsystemBase {
     mRightEncoder.setInverted(true);
     resetEncoders();
 
-
+    mDrive = new DifferentialDrive(mLeftMotors, mRightMotors);
+    mOdometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(mPigeon.getYaw()));
 
     mShifter = new DoubleSolenoid(30, PneumaticsModuleType.REVPH, DriveTrain.shifterPorts[0], DriveTrain.shifterPorts[1]);
 
@@ -183,6 +188,7 @@ public class Drivetrain extends SubsystemBase {
         arcadeDrive();
         break;
       case TELE_LIMELIGHT:
+        limelightDrive();
         break;
       case AUTO_DRIVE:
         break;
@@ -224,6 +230,11 @@ public class Drivetrain extends SubsystemBase {
 
     mDrive.feed();
 //    printVelocity();
+  }
+
+  public void limelightDrive(){
+    double[] values = mLimelight.getValues();
+    mDrive.arcadeDrive(values[0], values[1]);
   }
 
   public void tankDrive(){

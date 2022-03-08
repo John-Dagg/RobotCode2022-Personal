@@ -4,15 +4,14 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxPIDController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
-import frc.robot.Constants.DriveTrain.*;
-import frc.robot.Constants.LimelightVision;
+import frc.robot.Constants.DriveTrain.DriveState;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.utility.MathEqs;
+import frc.robot.Constants.LimelightVision.*;
 
 import static frc.robot.Constants.LimelightVision.*;
 
-public class LimelightAlignLeftCommand extends CommandBase {
+public class LimelightAlignCommand extends CommandBase {
 
     private final Drivetrain mDrivetrain;
     private final VPLimelight mVision;
@@ -27,7 +26,9 @@ public class LimelightAlignLeftCommand extends CommandBase {
 
     private DriveState limelightMode;
 
-    public LimelightAlignLeftCommand(Drivetrain subsystemA, VPLimelight subsystemB, boolean teleop){
+    private double searchDirection = 1;
+
+    public LimelightAlignCommand(Drivetrain subsystemA, VPLimelight subsystemB, TurnDirection turn, TurnMode mode){
 
         mDrivetrain = subsystemA;
         mVision = subsystemB;
@@ -40,7 +41,9 @@ public class LimelightAlignLeftCommand extends CommandBase {
         mLeftMotors = mDrivetrain.getLeftMotors();
         mRightMotors = mDrivetrain.getRightMotors();
 
-        limelightMode = teleop ? DriveState.TELE_LIMELIGHT : DriveState.AUTO_LIMELIGHT;
+        searchDirection = (turn == TurnDirection.LEFT) ? 1: -1;
+
+        limelightMode = (mode == TurnMode.TELEOP) ? DriveState.TELE_LIMELIGHT : DriveState.AUTO_LIMELIGHT;
 
     }
 
@@ -99,7 +102,7 @@ public class LimelightAlignLeftCommand extends CommandBase {
     }
 
     public void findTarget(){
-        mVision.setValues(0, 0.5);
+        mVision.setValues(0, searchDirection*maxTurn);
     }
 
     public double calcTurn(double x){

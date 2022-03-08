@@ -14,27 +14,30 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.*;
 import frc.robot.io.Button;
 import frc.robot.limelightvision.*;
 import frc.robot.subsystems.*;
+import frc.robot.Constants.LimelightVision.*;
 
 import java.io.IOException;
 import java.nio.file.Path;
 
 public class RobotContainer {
 
+  private final VPLimelight mLimelightVision = new VPLimelight();
   //Subsystems
-  private final Drivetrain mDrivetrain = new Drivetrain();
+  private final Drivetrain mDrivetrain = new Drivetrain(mLimelightVision);
   private final Intake mIntake = new Intake();
   private final Shooter mShooter = new Shooter();
   private final Indexer mIndexer = new Indexer();
 //  private final Climber mClimber = new Climber();
 
   //Limelight Vision
-  private final VPLimelight mLimelightVision = new VPLimelight();
-  private final LimelightAlignLeftCommand mAlignTarget = new LimelightAlignLeftCommand(mDrivetrain, mLimelightVision);
-//  private final LimelightDistanceCommand mDistanceTarget = new LimelightDistanceCommand(mDrivetrain, mLimelightVision);
+
+  private final LimelightAlignCommand mAlignTarget = new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.LEFT,TurnMode.TELEOP);
+  private final LimelightDistanceCommand mDistanceTarget = new LimelightDistanceCommand(mDrivetrain, mLimelightVision, true);
 //  private final LimelightAlignLeftCommand mLeftAlign = new LimelightAlignLeftCommand(mDrivetrain, mLimelightVision);
 //  private final LimelightAlignRightCommand mRightAlign = new LimelightAlignRightCommand(mDrivetrain, mLimelightVision);
 //  private final LimelightDistanceCommand mSoloDistanceTarget = new LimelightDistanceCommand(mDrivetrain, mLimelightVision);
@@ -55,18 +58,16 @@ public class RobotContainer {
   private Path soloTrajectoryPath;
   private Trajectory soloTrajectory;
 
-  private String pathing1 = "5BallPath1"; //Change this to change trajectory
-  private String pathing2 = "5BallPath2";
-  private String pathing3 = "5BallPath3";
+  private final String pathing1 = "5BallPath1"; //Change this to change trajectory
+  private final String pathing2 = "5BallPath2";
+  private final String pathing3 = "5BallPath3";
 
   private final String pathingTest = "test1";
 
 
-  private String trajectoryFile1 = "output/"+pathing1+".wpilib.json";
-  private String trajectoryFile2 = "output/"+pathing2+".wpilib.json";
-  private String trajectoryFile3 = "output/"+pathing3+".wpilib.json";
-
-  private final String trajectoryFileTest = "output/"+pathingTest+".wpilib.json";
+  private final String trajectoryFile1 = "output/"+pathing1+".wpilib.json";
+  private final String trajectoryFile2 = "output/"+pathing2+".wpilib.json";
+  private final String trajectoryFile3 = "output/"+pathing3+".wpilib.json";
 
   private Path trajectoryPath1;
   private Path trajectoryPath2;
@@ -79,7 +80,7 @@ public class RobotContainer {
 
   private Trajectory fullTrajectory;
   private RamseteCommand autonCommandA;
-  private LimelightAlignLeftCommand autonCommandB = new LimelightAlignLeftCommand(mDrivetrain, mLimelightVision);
+  private LimelightAlignLeftCommand autonCommandB = new LimelightAlignLeftCommand(mDrivetrain, mLimelightVision, false);
   private ShootClose autonCommandC = new ShootClose(mShooter, mIndexer);
 
   public RobotContainer() {
@@ -121,7 +122,7 @@ public class RobotContainer {
      */
 
 
-    new JoystickButton(Constants.driverController, Button.ButtonID.X.getID())
+    new POVButton(Constants.driverController, 90)
             .whenHeld(mAlignTarget);
 
 //    new JoystickButton(Constants.driverController, Button.ButtonID.B.getID())
@@ -211,6 +212,7 @@ public class RobotContainer {
       soloTrajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(soloTrajectoryFile);
       soloTrajectory = TrajectoryUtil.fromPathweaverJson(soloTrajectoryPath);
 
+      String trajectoryFileTest = "output/" + pathingTest + ".wpilib.json";
       trajectoryPathTest = Filesystem.getDeployDirectory().toPath().resolve(trajectoryFileTest);
       trajectoryTest = TrajectoryUtil.fromPathweaverJson(trajectoryPathTest);
 

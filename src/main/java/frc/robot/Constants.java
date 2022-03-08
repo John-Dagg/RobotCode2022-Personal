@@ -108,12 +108,18 @@ public final class Constants {
 
         public static final double goalAngleP = 1;
         public static final double goalAngleN = -1;
+        public static final double deadbandAngle = 1.5;
         public static final double deccelAngle = 30;
+        public static final double maxTurn = 0.5;
 
 
         public static final double targetHeight = 104; //in
         public static final double cameraHeight = 9.5; //in
         public static final double cameraAngle = 22; //in
+
+        public enum TurnDirection {LEFT, RIGHT};
+
+        public enum TurnMode {TELEOP, AUTON};
     }
 
 

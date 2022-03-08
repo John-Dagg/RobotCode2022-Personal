@@ -13,6 +13,8 @@ public class VPLimelight extends SubsystemBase {
     private NetworkTableEntry vpTargets, vpxOffset, vpyOffset, vpTargetArea, vpTargetSkew;
     private double targets, xOffset, yOffset, targetArea, targetSkew;
 
+    public double throttleValue, turnValue;
+
     public VPLimelight(){
         mNetworkTable = NetworkTableInstance.getDefault().getTable("limelight");
 
@@ -68,6 +70,14 @@ public class VPLimelight extends SubsystemBase {
 
     }
 
+    public void setValues(double throttle, double turn) {
+        throttleValue = throttle;
+        turnValue = turn;
+    }
+
+    public double[] getValues() {
+        return new double[] {throttleValue, turnValue};
+    }
 
 
 }
