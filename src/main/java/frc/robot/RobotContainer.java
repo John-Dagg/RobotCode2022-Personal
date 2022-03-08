@@ -193,7 +193,7 @@ public class RobotContainer {
   //Global auton execution called here
   public Command getAutonomousCommand() {
 
-    ramseteCommands = autonGenerator.getAutonCommands(mFiveBallAuton);
+    ramseteCommands = autonGenerator.getAutonCommands(mFiveBallAuton, mDrivetrain);
 
     mDrivetrain.resetOdometry(autonGenerator.getFirstTrajectory().getInitialPose());
 

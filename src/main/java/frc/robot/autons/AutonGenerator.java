@@ -20,7 +20,7 @@ import static frc.robot.Constants.Auton.*;
 
 public class AutonGenerator {
 
-    Drivetrain mDrivetrain = new Drivetrain(new VPLimelight()); //hmm
+    Drivetrain mDrivetrain; //hmm
     RamseteController mRamseteController = new RamseteController(Constants.Auton.ramseteB, Constants.Auton.ramseteZeta);
     SimpleMotorFeedforward mFeedForward = new SimpleMotorFeedforward(ks, kv, ka);
     PIDController leftPID = new PIDController(Constants.Auton.kP, 0, 0);
@@ -45,9 +45,10 @@ public class AutonGenerator {
     }
 
     //Fills an array with Ramsete commands based on a String array of paths and returns it
-    public ArrayList<RamseteCommand> getAutonCommands(String[] pathing){
+    public ArrayList<RamseteCommand> getAutonCommands(String[] pathing, Drivetrain subsystem){
         ArrayList<RamseteCommand> commands= new ArrayList<>();
         mRamseteController.setEnabled(true);
+        mDrivetrain = subsystem;
 
         for (int i = 0; i < pathing.length; i++){
             commands.add(
