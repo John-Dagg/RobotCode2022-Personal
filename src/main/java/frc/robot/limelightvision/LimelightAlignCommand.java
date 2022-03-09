@@ -33,7 +33,8 @@ public class LimelightAlignCommand extends CommandBase {
         mDrivetrain = subsystemA;
         mVision = subsystemB;
 
-        addRequirements(mDrivetrain, mVision);
+//        addRequirements(mDrivetrain, mVision);
+        addRequirements(mVision);
 
 //        mLeftLeader = mDrivetrain.getLeftLeader();
 //        mRightLeader = mDrivetrain.getRightLeader();
@@ -41,7 +42,7 @@ public class LimelightAlignCommand extends CommandBase {
 //        mLeftMotors = mDrivetrain.getLeftMotors();
 //        mRightMotors = mDrivetrain.getRightMotors();
 
-        searchDirection = (turn == TurnDirection.LEFT) ? 1: -1;
+        searchDirection = (turn == TurnDirection.LEFT) ? -1: 1;
 
         limelightMode = (mode == TurnMode.TELEOP) ? DriveState.TELE_LIMELIGHT : DriveState.AUTO_LIMELIGHT;
 
@@ -58,7 +59,7 @@ public class LimelightAlignCommand extends CommandBase {
     @Override
     public void execute(){
         mVision.updateTargets();
-        if(mVision.getTargets() >= 10) {
+        if(mVision.getTargets() >= 1) {
             mVision.steadyArray();
             aimTarget();
         } else {
@@ -66,7 +67,8 @@ public class LimelightAlignCommand extends CommandBase {
             mDrivetrain.printMotors();
             findTarget();
         }
-        System.out.println(mVision.getyOffset());
+//        System.out.println(mVision.getyOffset());
+
     }
 
     @Override
@@ -75,6 +77,7 @@ public class LimelightAlignCommand extends CommandBase {
         if(stopFlag){
             System.out.println("Ending Command 1");
         }
+        System.out.println("ENDING");
         mDrivetrain.mState = DriveState.TELE_DRIVE;
     }
 
@@ -96,7 +99,7 @@ public class LimelightAlignCommand extends CommandBase {
             end(true);
             System.out.println("Please work");
         }
-
+        System.out.println(turn);
         mVision.setValues(0, turn);
 
     }

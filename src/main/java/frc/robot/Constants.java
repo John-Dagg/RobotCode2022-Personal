@@ -29,7 +29,7 @@ public final class Constants {
 
         public static final double kP = 1.6; //Proportional Gain
 
-        public static final double robotWidth = Units.inchesToMeters(25.5);
+        public static final double robotWidth = Units.inchesToMeters(24.0);
         public static final DifferentialDriveKinematics driveKinematics = new DifferentialDriveKinematics(robotWidth);
 
         //Constants for using the ramsete controller
@@ -86,10 +86,10 @@ public final class Constants {
 
     public static final class Climber{
 
-//        public static final int climberPortA = 11;
-//        public static final int climberPortB = 12;
-//        public static final int[] solenoidPorts = {13, 0, 1};
-//        public static final int[] brakePorts = {13, 2, 3};
+        public static final int climberPortA = 11;
+        public static final int climberPortB = 12;
+        public static final int[] solenoidPorts = {13, 0, 1};
+        public static final int[] brakePorts = {13, 2, 3};
     }
 
     public static final class PhotonVision{
@@ -108,14 +108,14 @@ public final class Constants {
 
         public static final double goalAngleP = 1;
         public static final double goalAngleN = -1;
-        public static final double deadbandAngle = 1.5;
+        public static final double deadbandAngle = 0.75;
         public static final double deccelAngle = 30;
         public static final double maxTurn = 0.5;
 
 
         public static final double targetHeight = 104; //in
         public static final double cameraHeight = 9.5; //in
-        public static final double cameraAngle = 22; //in
+        public static final double cameraAngle = 30.0; //degrees
 
         public enum TurnDirection {LEFT, RIGHT}
 

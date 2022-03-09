@@ -109,7 +109,7 @@ public class Drivetrain extends SubsystemBase {
 
     lastThrottle = lastTurn = 0.;
 
-    mState = defaultState;
+    mState = DriveState.TELE_DRIVE;
 
 
   }
@@ -200,6 +200,7 @@ public class Drivetrain extends SubsystemBase {
       default:
         break;
     }
+//    System.out.println(mState);
   }
 
   public void arcadeDrive(){
@@ -208,7 +209,7 @@ public class Drivetrain extends SubsystemBase {
 
     throttle = (throttle == 0) ? 0 : Math.abs(throttle)*throttle;
     turn = (turn == 0) ? 0 : turn/Math.abs(turn)*Math.sqrt(Math.abs(turn));
-    turn = ((lastTurn == turn && Math.abs(turn) < 0.33) || turn == 0) ? 0 : turn;
+//    turn = ((lastTurn == turn && Math.abs(turn) < 0.33) || turn == 0) ? 0 : turn;
     lastThrottle = (throttle == 0) ? lastThrottle : throttle;
     lastTurn = (turn == 0) ? lastTurn : turn;
 
@@ -233,6 +234,7 @@ public class Drivetrain extends SubsystemBase {
 
     mDrive.feed();
 //    printVelocity();
+//    System.out.println("WORKING ARCADE");
   }
 
   public void limelightDrive(){

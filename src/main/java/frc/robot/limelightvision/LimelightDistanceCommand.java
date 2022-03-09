@@ -35,11 +35,11 @@ public class LimelightDistanceCommand extends CommandBase {
         mDrivetrain = subsystemA;
         mVision = subsystemB;
 
-        addRequirements(mDrivetrain, mVision);
+        addRequirements(mVision);
 
         mLeftLeader = mDrivetrain.getLeftLeader();
         mRightLeader = mDrivetrain.getRightLeader();
-
+//
         mLeftMotors = mDrivetrain.getLeftMotors();
         mRightMotors = mDrivetrain.getRightMotors();
 
@@ -55,7 +55,9 @@ public class LimelightDistanceCommand extends CommandBase {
 
 //        PIDConfig.setPID(mLeftPIDController, mRightPIDController, 0, 0, 0); //Needs Tuning
 
-        mAlign = new LimelightAlignLeftCommand(mDrivetrain, mVision, true);
+//        mAlign = new LimelightAlignLeftCommand(mDrivetrain, mVision, true);
+
+        mDrivetrain.mState = Constants.DriveTrain.DriveState.TELE_LIMELIGHT;
     }
 
     @Override
@@ -84,36 +86,45 @@ public class LimelightDistanceCommand extends CommandBase {
         actualTravel = ((mLeftEncoder.getPosition() + mRightEncoder.getPosition()) / 2) * conversion;
 //        System.out.println(mRightEncoder.getPosition());
         speed = calcSpeed();
-        System.out.println(speed);
-
-        if (mVision.getTargets() >= 1) {
-            if (actualTravel < (goalTravel - buffer)){
-                mLeftMotors.set(speed);
-                mRightMotors.set(speed);
+        System.out.println("SPEED: "+speed+" | LE: "+mLeftEncoder.getPosition()+ " | RE: "+mRightEncoder.getPosition());
+            if (Math.abs(actualTravel) < (goalTravel - buffer)){
+//                mLeftMotors.set(speed);
+//                mRightMotors.set(speed);
+                mVision.setValues(-speed, 0);
             } else if(actualTravel > (goalTravel + buffer)){
-                mLeftMotors.set(-speed);
-                mRightMotors.set(-speed);
+//                mLeftMotors.set(-speed);
+//                mRightMotors.set(-speed);
+                mVision.setValues(speed, 0);
             } else {
-                mLeftMotors.set(0);
-                mRightMotors.set(0);
+//                mLeftMotors.set(0);
+//                mRightMotors.set(0);
+                mVision.setValues(0, 0);
                 if (!distanceCompleted) {
                     distanceCompleted = true;
                     System.out.println("Distance Traveled: " + actualTravel);
+                    end(true);
                 }
                 stopFlag = true;
+
             }
-        } else {
-//            mAlign.findTarget();
-        }
+
 
 
 //        System.out.println(initDistance);
 //        System.out.println(goalTravel - actualTravel);
     }
 
+
     @Override
     public boolean isFinished(){
         return stopFlag;
+    }
+
+    @Override
+    public void end(boolean isFinished) {
+        mVision.setValues(0,0);
+        mDrivetrain.mState = Constants.DriveTrain.DriveState.TELE_DRIVE;
+
     }
 
     public double calcDistance(){

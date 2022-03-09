@@ -1,9 +1,6 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
-import com.ctre.phoenix.motorcontrol.TalonSRXFeedbackDevice;
+import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -18,20 +15,20 @@ public class Climber extends SubsystemBase {
     //Waiting on Design/Build/Electrical for testing
 
     //Motors subject to change
-//    private TalonSRX climberLeader, climberFollower;
-//    private DoubleSolenoid climberSolenoid;
-//    private Solenoid brake;
-/*
+    private TalonSRX climberLeader, climberFollower;
+    private DoubleSolenoid climberSolenoid;
+    private DoubleSolenoid brake;
+
     public Climber() {
 
-//        climberLeader = MotorControllerFactory.makeTalonSRX(Constants.Climber.climberPortA);
-//        climberFollower = MotorControllerFactory.makeTalonSRX(Constants.Climber.climberPortB);
+        climberLeader = MotorControllerFactory.makeTalonSRX(Constants.Climber.climberPortA);
+        climberFollower = MotorControllerFactory.makeTalonSRX(Constants.Climber.climberPortB);
 
         //Pneumatics module subject to change
-//        climberSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Constants.Climber.solenoidPorts[0], Constants.Climber.solenoidPorts[1]);
-        brake = new Solenoid(PneumaticsModuleType.CTREPCM, Constants.Climber.brakePort);
+        climberSolenoid = new DoubleSolenoid(Constants.Climber.solenoidPorts[0], PneumaticsModuleType.CTREPCM, Constants.Climber.solenoidPorts[1], Constants.Climber.solenoidPorts[2]);
+        brake = new DoubleSolenoid(Constants.Climber.brakePorts[0], PneumaticsModuleType.CTREPCM, Constants.Climber.brakePorts[1], Constants.Climber.brakePorts[2]);
 
-        climberLeader.follow(climberFollower);
+        climberFollower.follow(climberLeader);
         climberLeader.setNeutralMode(NeutralMode.Brake); //So the winch doesn't uncoil when the motor isn't being powered
         climberFollower.setNeutralMode(NeutralMode.Brake);
     }
@@ -45,7 +42,10 @@ public class Climber extends SubsystemBase {
     }
 
     public void brake(){
-        brake.set(true);
+        System.out.println("BRAKE STATE (IN): "+brake.get());
+        if (brake.get() != DoubleSolenoid.Value.kForward || brake.get() == DoubleSolenoid.Value.kOff) brake.set(DoubleSolenoid.Value.kForward);
+        else if (brake.get() != DoubleSolenoid.Value.kReverse) brake.set(DoubleSolenoid.Value.kReverse);
+        System.out.println("BRAKE STATE (OUT): "+brake.get());
     }
 
     public void angleA(){
@@ -54,6 +54,10 @@ public class Climber extends SubsystemBase {
 
     public void angleB(){
         climberSolenoid.set(DoubleSolenoid.Value.kForward);
+    }
+
+    public void winchStop(){
+        climberLeader.set(ControlMode.PercentOutput, 0.0);
     }
 
     public boolean getAngle(){
@@ -66,6 +70,6 @@ public class Climber extends SubsystemBase {
         }
     }
 
- */
+
 
 }

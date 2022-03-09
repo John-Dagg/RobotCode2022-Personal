@@ -36,7 +36,7 @@ public class RobotContainer {
   private final Intake mIntake = new Intake();
   private final Shooter mShooter = new Shooter();
   private final Indexer mIndexer = new Indexer();
-//  private final Climber mClimber = new Climber();
+  private final Climber mClimber = new Climber();
 
   //Limelight Vision
 
@@ -62,7 +62,7 @@ public class RobotContainer {
   public RobotContainer() {
 
     configureButtonBindings();
-
+    mDrivetrain.mState = Constants.DriveTrain.DriveState.TELE_DRIVE;
     mDrivetrain.setDefaultCommand(new RunCommand(mDrivetrain::masterDrive, mDrivetrain));
 //    mIndexer.setDefaultCommand(new RunCommand(mIndexer::indexerTest, mIndexer));
 //    mShooter.setDefaultCommand(new RunCommand(mShooter::shooterTest, mShooter));
@@ -100,15 +100,14 @@ public class RobotContainer {
 
 //    new POVButton(Constants.driverController, 90)
 //            .whenHeld(mRightAlign);
-
 //    new POVButton(Constants.driverController, 270)
 //            .whenHeld(mLeftAlign);
 
-//    new JoystickButton(Constants.driverController, Button.ButtonID.B.getID())
-//            .whenHeld(mRightAlign);
+    new JoystickButton(Constants.driverController, Button.ButtonID.X.getID())
+            .whenHeld(mRightAlign);
 
-//    new JoystickButton(Constants.driverController, Button.ButtonID.Y.getID())
-//            .whenHeld(mSoloDistanceTarget);
+    new JoystickButton(Constants.driverController, Button.ButtonID.Y.getID())
+            .whenHeld(mDistanceTarget);
 
 //    new JoystickButton(Constants.driverController, Button.ButtonID.Y.getID())
 //            .whenHeld(mAlignTarget.andThen(new WaitCommand(1)).andThen(mDistance));
@@ -134,19 +133,17 @@ public class RobotContainer {
 
     //  Another option for intake control to add more buttons hopefully
 
-    if (new Joystick(Axis.AxisID.LEFT_TRIGGER.getID()).getTriggerPressed())
-            new StartEndCommand(mIntake::rollerIntake, mIntake::rollerStop);
-
-    if (new Joystick(Axis.AxisID.RIGHT_TRIGGER.getID()).getTriggerPressed())
-            new StartEndCommand(mIntake::rollerOuttake, mIntake::rollerStop);
-
-
-
-//    new JoystickButton(Constants.driverController, Button.ButtonID.A.getID())
-//            .whenHeld(new StartEndCommand(mIntake::rollerIntake, mIntake::rollerStop));
+//    if (new Joystick(Axis.AxisID.LEFT_TRIGGER.getID()).getTriggerPressed())
+//            new StartEndCommand(mIntake::rollerIntake, mIntake::rollerStop);
 //
-//    new JoystickButton(Constants.driverController, Button.ButtonID.B.getID())
-//            .whenHeld(new StartEndCommand(mIntake::rollerOuttake, mIntake::rollerStop));
+//    if (new Joystick(Axis.AxisID.RIGHT_TRIGGER.getID()).getTriggerPressed())
+//            new StartEndCommand(mIntake::rollerOuttake, mIntake::rollerStop);
+
+    new JoystickButton(Constants.driverController, Button.ButtonID.A.getID())
+            .whenHeld(new StartEndCommand(mIntake::rollerIntake, mIntake::rollerStop));
+
+    new JoystickButton(Constants.driverController, Button.ButtonID.B.getID())
+            .whenHeld(new StartEndCommand(mIntake::rollerOuttake, mIntake::rollerStop));
 
 //    Shooter
 
@@ -170,23 +167,23 @@ public class RobotContainer {
 
 //    Climber
 
-/*
-    new JoystickButton(Constants.operatorController, Button.ButtonID.A.getID())
-            .whenPressed(new ConditionalCommand(
-                    new InstantCommand(mClimber::angleA),
-                    new InstantCommand(mClimber::angleB),
-                    mClimber::getAngle));
+
+//    new JoystickButton(Constants.operatorController, Button.ButtonID.A.getID())
+//            .whenPressed(new ConditionalCommand(
+//                    new InstantCommand(mClimber::angleA),
+//                    new InstantCommand(mClimber::angleB),
+//                    mClimber::getAngle));
 
     new JoystickButton(Constants.operatorController, Button.ButtonID.B.getID())
-            .whenPressed(new InstantCommand(mClimber::brake);
+            .whenPressed(new InstantCommand(mClimber::brake));
 
     new JoystickButton(Constants.operatorController, Button.ButtonID.LEFT_BUMPER.getID())
-            .whenHeld(new RunCommand(mClimber::winchUp));
+            .whenHeld(new StartEndCommand(mClimber::winchUp, mClimber::winchStop));
 
     new JoystickButton(Constants.operatorController, Button.ButtonID.RIGHT_BUMPER.getID())
-            .whenHeld(new RunCommand(mClimber::winchDown));
+            .whenHeld(new StartEndCommand(mClimber::winchDown, mClimber::winchStop));
 
- */
+
 
   }
 
@@ -212,15 +209,15 @@ public class RobotContainer {
     //TODO: Shooter won't stop I think
     SequentialCommandGroup auton = new SequentialCommandGroup(
             new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.RIGHT, TurnMode.AUTON),
-            new ShootClose(mShooter, mIndexer, 2000),
+            new ShootClose(mShooter, mIndexer, 2),
             new ParallelRaceGroup(ramseteCommands.get(0).andThen(ramseteCommands.get(1)), new IntakeCargo(mIntake)),
             new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.RIGHT, TurnMode.AUTON),
-            new ShootClose(mShooter, mIndexer, 4000),
+            new ShootClose(mShooter, mIndexer, 4),
             new ParallelRaceGroup(ramseteCommands.get(2), new IntakeCargo(mIntake)),
             ramseteCommands.get(3),
             new LimelightDistanceCommand(mDrivetrain, mLimelightVision, false),
             new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.RIGHT, TurnMode.AUTON),
-            new ShootFar(mShooter, mIndexer, 4000),
+            new ShootFar(mShooter, mIndexer, 4),
             new InstantCommand(mDrivetrain::stopDrive));
 
 //  return auton;
