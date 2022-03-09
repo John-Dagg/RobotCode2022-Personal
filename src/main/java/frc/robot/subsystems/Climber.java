@@ -43,17 +43,22 @@ public class Climber extends SubsystemBase {
 
     public void brake(){
         System.out.println("BRAKE STATE (IN): "+brake.get());
-        if (brake.get() != DoubleSolenoid.Value.kForward || brake.get() == DoubleSolenoid.Value.kOff) brake.set(DoubleSolenoid.Value.kForward);
-        else if (brake.get() != DoubleSolenoid.Value.kReverse) brake.set(DoubleSolenoid.Value.kReverse);
+        if (brake.get() != DoubleSolenoid.Value.kForward || brake.get() == DoubleSolenoid.Value.kOff) {
+            brake.set(DoubleSolenoid.Value.kForward);
+            System.out.println("Brake Engaged");
+        } else if (brake.get() != DoubleSolenoid.Value.kReverse) {
+            brake.set(DoubleSolenoid.Value.kReverse);
+            System.out.println("Brake Disengaged");
+        }
         System.out.println("BRAKE STATE (OUT): "+brake.get());
     }
 
     public void angleA(){
-        climberSolenoid.set(DoubleSolenoid.Value.kReverse);
+        climberSolenoid.set(DoubleSolenoid.Value.kForward);
     }
 
     public void angleB(){
-        climberSolenoid.set(DoubleSolenoid.Value.kForward);
+        climberSolenoid.set(DoubleSolenoid.Value.kReverse);
     }
 
     public void winchStop(){

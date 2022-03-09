@@ -39,8 +39,10 @@ public class Intake extends SubsystemBase {
     public void triggerRollerIntake(){
         if (Constants.driverController.getRawAxis(Axis.AxisID.RIGHT_TRIGGER.getID()) > 0.25){
             rollerBar.set(intakeSpeed);
+            System.out.println("intaking");
         } else if (Constants.driverController.getRawAxis(Axis.AxisID.LEFT_TRIGGER.getID()) > 0.25){
             rollerBar.set(-intakeSpeed);
+            System.out.println("outtaking");
         } else {
             rollerStop();
         }

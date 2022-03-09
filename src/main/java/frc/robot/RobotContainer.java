@@ -67,7 +67,7 @@ public class RobotContainer {
     configureButtonBindings();
     mDrivetrain.mState = Constants.DriveTrain.DriveState.TELE_DRIVE;
     mDrivetrain.setDefaultCommand(new RunCommand(mDrivetrain::arcadeDrive, mDrivetrain));
-    mIntake.setDefaultCommand(new RunCommand(mIntake::triggerRollerIntake, mIntake));
+//    mIntake.setDefaultCommand(new RunCommand(mIntake::triggerRollerIntake, mIntake));
 //    mIndexer.setDefaultCommand(new RunCommand(mIndexer::indexerTest, mIndexer));
 //    mShooter.setDefaultCommand(new RunCommand(mShooter::shooterTest, mShooter));
 //    mLimelightVision.setDefaultCommand(new RunCommand(mLimelightVision::printNetworkTables, mLimelightVision));
@@ -90,9 +90,9 @@ public class RobotContainer {
      * Right Trigger - Intake                           TODO: Get build to add Bumpers so it works / Test
      * Left Trigger - Outtake                           TODO: ^^^
      * X - Align Target Angle + Default Turn Left       TODO: Tune - Why is the pipeline unstable?
-     * Y - Align Target Distance + Default Turn Right   TODO: Tune ^
-     * A - Align Distance Close (Disabled)              TODO: Find appropriate distance and tune calcDistance() {@link LimelightDistanceCommand}
-     * B - Align Distance Far   (Disabled)              TODO: ^^^
+     * B - Align Target Angle + Default Turn Right      TODO: Tune ^
+     * Y - Align Distance Close (Disabled)              TODO: Find appropriate distance and tune calcDistance() {@link LimelightDistanceCommand}
+     * A - Align Distance Far   (Disabled)              TODO: ^^^
      *
      * Operator Controller
      * X - Shoot Far                                    Sequential Command Group with subsystem dependencies 1st Try!
@@ -115,11 +115,11 @@ public class RobotContainer {
 //    new POVButton(Constants.driverController, 270)
 //            .whenHeld(mLeftAlign);
 
-    new JoystickButton(driverController, Button.ButtonID.X.getID())
-            .whenHeld(mLeftAlign);
+//    new JoystickButton(driverController, Button.ButtonID.X.getID())
+//            .whenHeld(mLeftAlign);
 
-    new JoystickButton(driverController, Button.ButtonID.B.getID())
-            .whenHeld(mRightAlign);
+//    new JoystickButton(driverController, Button.ButtonID.B.getID())
+//            .whenHeld(mRightAlign);
 
 //    new JoystickButton(driverController, Button.ButtonID.Y.getID())
 //            .whenHeld(mDistanceTarget);

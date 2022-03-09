@@ -207,9 +207,9 @@ public class Drivetrain extends SubsystemBase {
     double throttle = deadband(Constants.driverController.getRawAxis(Axis.AxisID.LEFT_Y.getID()));
     double turn = deadband(Constants.driverController.getRawAxis(Axis.AxisID.RIGHT_X.getID()));
 
-    throttle = (throttle == 0) ? 0 : Math.abs(throttle)*throttle;
-    turn = (turn == 0) ? 0 : turn/Math.abs(turn)*Math.sqrt(Math.abs(turn));
-    turn = ((lastTurn == turn && Math.abs(turn) < 0.33) || turn == 0) ? 0 : turn;
+//    throttle = (throttle == 0) ? 0 : Math.abs(throttle)*throttle;
+//    turn = (turn == 0) ? 0 : turn/Math.abs(turn)*Math.sqrt(Math.abs(turn));
+//    turn = ((lastTurn == turn && Math.abs(turn) < 0.33) || turn == 0) ? 0 : turn;
 
     if (!mDrive.isAlive()){
       System.out.println("Motor timeout!");
@@ -217,7 +217,7 @@ public class Drivetrain extends SubsystemBase {
     }
 
     if (mLeftLeader.getBusVoltage() <= 7){
-      System.out.println("Motor Voltage Below 7. Brownout");
+      System.out.println("Motor Voltage Below 7 - Brownout! " + mLeftLeader.getBusVoltage() + " Volts");
     }
 
 

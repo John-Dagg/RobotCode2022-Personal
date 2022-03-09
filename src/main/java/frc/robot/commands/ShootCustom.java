@@ -10,14 +10,16 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.limelightvision.VPLimelight;
 
 public class ShootCustom extends CommandBase {
-/*
+
     private Shooter mShooter;
     private Indexer mIndexer;
     private VPLimelight mVision;
 
     private TalonFX mFalcon;
 
-    private double pitch;
+    private double maxVel = 6000;
+    private double hoodAngle = 65;
+    private double pitch, dist, vel, percentOutput;
 
     public ShootCustom(Shooter subsystemA, Indexer subsystemB, VPLimelight subsystemC){
         mShooter = subsystemA;
@@ -39,11 +41,11 @@ public class ShootCustom extends CommandBase {
     public double calcSpeed(){
         //Equation to find the required initial velocity of a projectile
         //Assumes the ball will reach the same speed as the wheels which is inaccurate sadly
-        double dist = calcDistance();
-        double velocitySquared = ((dist * dist) * 9.8)
-        / (dist * Math.sin(2 * 65) - (2 * (Constants.LimelightVision.targetHeight
-                - Constants.LimelightVision.targetHeight) * Math.cos(65) * Math.cos(65)));
-        double vel = Math.sqrt(velocitySquared);
+        dist = calcDistance();
+        vel = Math.sqrt(((dist * dist) * 9.8)
+                / (dist * Math.sin(2 * hoodAngle) - (2 * (Constants.LimelightVision.targetHeight
+                - Constants.LimelightVision.cameraHeight) * Math.cos(hoodAngle) * Math.cos(hoodAngle))));
+        percentOutput = ((vel / (6 * Math.PI)) / 100 * 4096) / maxVel;
         return vel < 0 ? Math.max(vel, -1.0) : Math.min(vel, 1.0);
     }
 
@@ -76,7 +78,7 @@ public class ShootCustom extends CommandBase {
         mShooter.setShooterIdle();
     }
 
- */
+
 
 }
 
