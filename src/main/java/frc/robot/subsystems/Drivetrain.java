@@ -211,7 +211,7 @@ public class Drivetrain extends SubsystemBase {
     turn = (turn == 0) ? 0 : turn/Math.abs(turn)*Math.sqrt(Math.abs(turn));
     turn = ((lastTurn == turn && Math.abs(turn) < 0.33) || turn == 0) ? 0 : turn;
 
-    if (mDrive.isAlive()){
+    if (!mDrive.isAlive()){
       System.out.println("Motor timeout!");
       System.out.println("Motor Expiration Timer: " + mDrive.getExpiration());
     }
@@ -239,7 +239,6 @@ public class Drivetrain extends SubsystemBase {
     mDrive.arcadeDrive(-throttle, turn);
     lastThrottle = (throttle == 0) ? lastThrottle : throttle;
     lastTurn = (turn == 0) ? lastTurn : turn;
-
     mDrive.feed();
 //    printVelocity();
 //    System.out.println(mLeftEncoder.getVelocity() * velocityConversion);

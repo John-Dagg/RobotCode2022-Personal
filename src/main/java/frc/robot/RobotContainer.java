@@ -28,6 +28,9 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
+import static frc.robot.Constants.driverController;
+import static frc.robot.Constants.operatorController;
+
 public class RobotContainer {
 
   private final VPLimelight mLimelightVision = new VPLimelight();
@@ -64,6 +67,7 @@ public class RobotContainer {
     configureButtonBindings();
     mDrivetrain.mState = Constants.DriveTrain.DriveState.TELE_DRIVE;
     mDrivetrain.setDefaultCommand(new RunCommand(mDrivetrain::arcadeDrive, mDrivetrain));
+    mIntake.setDefaultCommand(new RunCommand(mIntake::triggerRollerIntake, mIntake));
 //    mIndexer.setDefaultCommand(new RunCommand(mIndexer::indexerTest, mIndexer));
 //    mShooter.setDefaultCommand(new RunCommand(mShooter::shooterTest, mShooter));
 //    mLimelightVision.setDefaultCommand(new RunCommand(mLimelightVision::printNetworkTables, mLimelightVision));
@@ -80,21 +84,29 @@ public class RobotContainer {
 
     /***
      * Driver Controller
-     * Left X and Right Y - Arcade Drive
-     * Left Bumper - Shifts Gears
-     * Right Bumper - Extend/Retract Intake
-     * A - Intake
-     * B - Outtake
-     * X - Align Target Angle
-     * Y - Align Target Distance
+     * Left X and Right Y - Arcade Drive                TODO: Fix stuttering -> "Differential Drive not updated often enough" /Brownout?
+     * Left Bumper - Shifts Gears (Toggle)
+     * Right Bumper - Extend/Retract Intake (Toggle)    TODO: Toggle or Hold?
+     * Right Trigger - Intake                           TODO: Get build to add Bumpers so it works / Test
+     * Left Trigger - Outtake                           TODO: ^^^
+     * X - Align Target Angle + Default Turn Left       TODO: Tune - Why is the pipeline unstable?
+     * Y - Align Target Distance + Default Turn Right   TODO: Tune ^
+     * A - Align Distance Close (Disabled)              TODO: Find appropriate distance and tune calcDistance() {@link LimelightDistanceCommand}
+     * B - Align Distance Far   (Disabled)              TODO: ^^^
      *
      * Operator Controller
-     * X - Shoot Far
+     * X - Shoot Far                                    Sequential Command Group with subsystem dependencies 1st Try!
      * Y - Shoot Close
-     * A - Change Climber Angle
-     * B - Engage Brake
-     * Left Bumper - Winch Up
-     * Right Bumper - Winch Down
+     * A - Change Climber Angle (Disabled)
+     * B - Engage Brake                                 TODO: Change climb to better binds
+     * Left Bumper - Winch Up                           TODO: Test and change to joystick + hold button
+     * Right Bumper - Winch Down                        TODO: ^^^
+     *
+     * Auton                                            TODO: AutonGenerator is returning a nullPointer? Not filling array correctly?
+     *                                                        Tune PID constants and ka, kv, ks
+     *                                                        Check encoders
+     *                                                        Add timer to shoot close/far commands so they actually end in auton
+     *                                                        Test Sequential Command Groups and Parallel Race Groups in auton
      */
 
 
@@ -103,11 +115,14 @@ public class RobotContainer {
 //    new POVButton(Constants.driverController, 270)
 //            .whenHeld(mLeftAlign);
 
-    new JoystickButton(Constants.driverController, Button.ButtonID.X.getID())
+    new JoystickButton(driverController, Button.ButtonID.X.getID())
+            .whenHeld(mLeftAlign);
+
+    new JoystickButton(driverController, Button.ButtonID.B.getID())
             .whenHeld(mRightAlign);
 
-    new JoystickButton(Constants.driverController, Button.ButtonID.Y.getID())
-            .whenHeld(mDistanceTarget);
+//    new JoystickButton(driverController, Button.ButtonID.Y.getID())
+//            .whenHeld(mDistanceTarget);
 
 //    new JoystickButton(Constants.driverController, Button.ButtonID.Y.getID())
 //            .whenHeld(mAlignTarget.andThen(new WaitCommand(1)).andThen(mDistance));
@@ -116,7 +131,7 @@ public class RobotContainer {
 
     //If the left bumper is pressed and the drivetrain is in low gear perform the first command
     //If the left bumper is pressed and the drivetrain is in high gear perform the second command
-    new JoystickButton(Constants.driverController, Button.ButtonID.LEFT_BUMPER.getID())
+    new JoystickButton(driverController, Button.ButtonID.LEFT_BUMPER.getID())
             .whenPressed(new ConditionalCommand(
                     new InstantCommand(mDrivetrain::highGear),
                     new InstantCommand(mDrivetrain::lowGear),
@@ -125,7 +140,7 @@ public class RobotContainer {
 //    Waiting for Build lol
 //    Intake
 
-    new JoystickButton(Constants.driverController, Button.ButtonID.RIGHT_BUMPER.getID())
+    new JoystickButton(driverController, Button.ButtonID.RIGHT_BUMPER.getID())
             .whenPressed(new ConditionalCommand(
                     new InstantCommand(mIntake::retractIntake),
                     new InstantCommand(mIntake::extendIntake),
@@ -135,34 +150,34 @@ public class RobotContainer {
 
 //    if (new Joystick(Axis.AxisID.LEFT_TRIGGER.getID()).getTriggerPressed())
 //            new StartEndCommand(mIntake::rollerIntake, mIntake::rollerStop);
-//
+
 //    if (new Joystick(Axis.AxisID.RIGHT_TRIGGER.getID()).getTriggerPressed())
 //            new StartEndCommand(mIntake::rollerOuttake, mIntake::rollerStop);
 
-    new JoystickButton(Constants.driverController, Button.ButtonID.A.getID())
+    new JoystickButton(driverController, Button.ButtonID.A.getID())
             .whenHeld(new StartEndCommand(mIntake::rollerIntake, mIntake::rollerStop));
 
-    new JoystickButton(Constants.driverController, Button.ButtonID.B.getID())
+    new JoystickButton(driverController, Button.ButtonID.B.getID())
             .whenHeld(new StartEndCommand(mIntake::rollerOuttake, mIntake::rollerStop));
 
 //    Shooter
 
-    new JoystickButton(Constants.operatorController, Button.ButtonID.X.getID())
+    new JoystickButton(operatorController, Button.ButtonID.X.getID())
             .whenHeld(mShootFar);
 
-    new JoystickButton(Constants.operatorController, Button.ButtonID.X.getID())
+    new JoystickButton(operatorController, Button.ButtonID.X.getID())
             .whenInactive(mShooter::setShooterIdle);
 
-    new JoystickButton(Constants.operatorController, Button.ButtonID.X.getID())
+    new JoystickButton(operatorController, Button.ButtonID.X.getID())
             .whenInactive(mIndexer::setIndexerIdle);
 
-    new JoystickButton(Constants.operatorController, Button.ButtonID.Y.getID())
+    new JoystickButton(operatorController, Button.ButtonID.Y.getID())
             .whenHeld(mShootClose);
 
-    new JoystickButton(Constants.operatorController, Button.ButtonID.Y.getID())
+    new JoystickButton(operatorController, Button.ButtonID.Y.getID())
             .whenInactive(mShooter::setShooterIdle);
 
-    new JoystickButton(Constants.operatorController, Button.ButtonID.Y.getID())
+    new JoystickButton(operatorController, Button.ButtonID.Y.getID())
             .whenInactive(mIndexer::setIndexerIdle);
 
 //    Climber
@@ -174,13 +189,13 @@ public class RobotContainer {
 //                    new InstantCommand(mClimber::angleB),
 //                    mClimber::getAngle));
 
-    new JoystickButton(Constants.operatorController, Button.ButtonID.B.getID())
+    new JoystickButton(operatorController, Button.ButtonID.B.getID())
             .whenPressed(new InstantCommand(mClimber::brake));
 
-    new JoystickButton(Constants.operatorController, Button.ButtonID.LEFT_BUMPER.getID())
+    new JoystickButton(operatorController, Button.ButtonID.LEFT_BUMPER.getID())
             .whenHeld(new StartEndCommand(mClimber::winchUp, mClimber::winchStop));
 
-    new JoystickButton(Constants.operatorController, Button.ButtonID.RIGHT_BUMPER.getID())
+    new JoystickButton(operatorController, Button.ButtonID.RIGHT_BUMPER.getID())
             .whenHeld(new StartEndCommand(mClimber::winchDown, mClimber::winchStop));
 
 
@@ -219,6 +234,7 @@ public class RobotContainer {
             new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.RIGHT, TurnMode.AUTON),
             new ShootFar(mShooter, mIndexer, 4),
             new InstantCommand(mDrivetrain::stopDrive));
+
   return ramseteCommands.get(0).andThen(new InstantCommand(mDrivetrain::stopDrive));
 //  return auton;
 //  return null;

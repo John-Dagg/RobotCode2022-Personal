@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.io.Axis;
 import frc.robot.utility.MotorControllerFactory;
 
 import static frc.robot.Constants.Intake.fourBarPorts;
@@ -14,7 +15,7 @@ public class Intake extends SubsystemBase {
 
     private CANSparkMax rollerBar, staticRoller;
     private DoubleSolenoid fourBar;
-    private final double intakeSpeed = 0.8;
+    private final double intakeSpeed = -0.8;
 
     public Intake(){
 
@@ -25,15 +26,26 @@ public class Intake extends SubsystemBase {
     }
 
     public void rollerIntake(){
-        rollerBar.set(-intakeSpeed);
+        rollerBar.set(intakeSpeed);
 //        staticRoller.set(1);
     }
 
     public void rollerOuttake(){
-        rollerBar.set(intakeSpeed);
+        rollerBar.set(-intakeSpeed);
 //        staticRoller.set(-1);
 
     }
+
+    public void triggerRollerIntake(){
+        if (Constants.driverController.getRawAxis(Axis.AxisID.RIGHT_TRIGGER.getID()) > 0.25){
+            rollerBar.set(intakeSpeed);
+        } else if (Constants.driverController.getRawAxis(Axis.AxisID.LEFT_TRIGGER.getID()) > 0.25){
+            rollerBar.set(-intakeSpeed);
+        } else {
+            rollerStop();
+        }
+    }
+
 
     public void rollerStop(){
         rollerBar.set(0);
