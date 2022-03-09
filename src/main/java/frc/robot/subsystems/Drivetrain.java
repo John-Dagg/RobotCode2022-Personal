@@ -209,9 +209,15 @@ public class Drivetrain extends SubsystemBase {
     throttle = (throttle == 0) ? 0 : Math.abs(throttle)*throttle;
     turn = (turn == 0) ? 0 : turn/Math.abs(turn)*Math.sqrt(Math.abs(turn));
     turn = ((lastTurn == turn && Math.abs(turn) < 0.33) || turn == 0) ? 0 : turn;
-    lastThrottle = (throttle == 0) ? lastThrottle : throttle;
-    lastTurn = (turn == 0) ? lastTurn : turn;
 
+    if (mDrive.isAlive()){
+      System.out.println("Motor timeout!");
+      System.out.println("Motor Expiration Timer: " + mDrive.getExpiration());
+    }
+
+    if (mLeftLeader.getBusVoltage() <= 7){
+      System.out.println("Motor Voltage Below 7. Brownout");
+    }
 
 
 
@@ -230,6 +236,8 @@ public class Drivetrain extends SubsystemBase {
 
 //    System.out.println(throttle + " | " + turn);
     mDrive.arcadeDrive(-throttle, turn);
+    lastThrottle = (throttle == 0) ? lastThrottle : throttle;
+    lastTurn = (turn == 0) ? lastTurn : turn;
 
     mDrive.feed();
 //    printVelocity();
@@ -252,8 +260,8 @@ public class Drivetrain extends SubsystemBase {
     double leftOutput = left < 0 ? Math.max(left, -1) : Math.min(left, 1);
     double rightOutput = right < 0 ? Math.max(right, -1) : Math.min(right, 1);
 
-    mLeftLeader.set(leftOutput * 0.5);
-    mRightLeader.set(rightOutput * 0.5);
+//    mLeftLeader.set(leftOutput * 0.5);
+//    mRightLeader.set(rightOutput * 0.5);
 
 
     mDrive.tankDrive(left, right);
