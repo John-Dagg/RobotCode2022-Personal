@@ -66,7 +66,7 @@ public final class Constants {
 
     public static final class Intake {
 
-        public static final int intakeMotorPort = 4;
+        public static final int intakeMotorPort = 8;
 
         public static final int[] fourBarPorts = {0, 6, 7};
     }
