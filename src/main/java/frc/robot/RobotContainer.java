@@ -63,7 +63,7 @@ public class RobotContainer {
 
     configureButtonBindings();
     mDrivetrain.mState = Constants.DriveTrain.DriveState.TELE_DRIVE;
-    mDrivetrain.setDefaultCommand(new RunCommand(mDrivetrain::masterDrive, mDrivetrain));
+    mDrivetrain.setDefaultCommand(new RunCommand(mDrivetrain::arcadeDrive, mDrivetrain));
 //    mIndexer.setDefaultCommand(new RunCommand(mIndexer::indexerTest, mIndexer));
 //    mShooter.setDefaultCommand(new RunCommand(mShooter::shooterTest, mShooter));
 //    mLimelightVision.setDefaultCommand(new RunCommand(mLimelightVision::printNetworkTables, mLimelightVision));
@@ -219,9 +219,9 @@ public class RobotContainer {
             new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.RIGHT, TurnMode.AUTON),
             new ShootFar(mShooter, mIndexer, 4),
             new InstantCommand(mDrivetrain::stopDrive));
-
+  return ramseteCommands.get(0).andThen(new InstantCommand(mDrivetrain::stopDrive));
 //  return auton;
-  return null;
+//  return null;
   }
 
 }

@@ -234,7 +234,7 @@ public class Drivetrain extends SubsystemBase {
 
     mDrive.feed();
 //    printVelocity();
-    System.out.println(mLeftEncoder.getVelocity() * velocityConversion);
+//    System.out.println(mLeftEncoder.getVelocity() * velocityConversion);
   }
 
   public void limelightDrive(){
