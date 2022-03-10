@@ -40,21 +40,22 @@ public class HardCodeAuton extends CommandBase {
         System.out.println("Left Wheels Distance: " + mDrivetrain.leftWheelsPosition());
         System.out.println("Right Wheels Distance: " + mDrivetrain.rightWheelsPosition());
 
-        if (mDrivetrain.leftWheelsPosition() < 2 && mDrivetrain.rightWheelsPosition() < 2){;
+        if (mDrivetrain.leftWheelsPosition() < 2 && mDrivetrain.rightWheelsPosition() < 2){
             mDrivetrain.autonDrive(0.1, 0);
-            mIntake.extendIntake(); //Internal logic that only actuates the solenoid if the solenoid is in the opposite state
-            mIntake.rollerIntake();
-            mShooter.setAnglerLow();
+//            mIntake.extendIntake(); //Internal logic that only actuates the solenoid if the solenoid is in the opposite state
+//            mIntake.rollerIntake();
+//            mShooter.setAnglerLow();
         }
         if (mDrivetrain.leftWheelsPosition() >= 2 || mDrivetrain.rightWheelsPosition() >= 2){
-            mIntake.rollerStop();
-            mIntake.retractIntake();
-            mShooter.setShooterClose();
-            if(mShooter.getShooterVel() > mShooter.getShooterCloseVel()){
-                mIndexer.feedIndexer();
+            mDrivetrain.stopDrive();
+//            mIntake.rollerStop();
+//            mIntake.retractIntake();
+//            mShooter.setShooterClose();
+//            if(mShooter.getShooterVel() > mShooter.getShooterCloseVel()){
+//                mIndexer.feedIndexer();
             }
-            end(true);
-        }
+
+
         /***
          * No sensors to determine the balls state so a time-based failsafe is necessary.
          * Also calls end() as another layer of security
@@ -66,6 +67,7 @@ public class HardCodeAuton extends CommandBase {
             mIntake.rollerStop();
             mShooter.setShooterIdle();
             mIndexer.setIndexerIdle();
+            end(true);
         }
     }
 
