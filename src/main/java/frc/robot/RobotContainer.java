@@ -224,7 +224,7 @@ public class RobotContainer {
 
     ramseteCommands = autonGenerator.getAutonCommands(mTest, mDrivetrain);
 
-    mDrivetrain.resetOdometry(autonGenerator.getTrajectory(mTest).get(0).getInitialPose());
+    mDrivetrain.resetOdometry(autonGenerator.getTrajectory(mTest, 0).getInitialPose());
 
     //TODO: Find a better way to do this
     /*
@@ -244,12 +244,12 @@ public class RobotContainer {
             new ShootClose(mShooter, mIndexer, 2),
             new ParallelRaceGroup(ramseteCommands.get(0).andThen(ramseteCommands.get(1)), new IntakeCargo(mIntake)),
             new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.RIGHT, TurnMode.AUTON),
-            new ShootClose(mShooter, mIndexer, 4),
+            new ShootClose(mShooter, mIndexer, 2),
             new ParallelRaceGroup(ramseteCommands.get(2), new IntakeCargo(mIntake)),
             ramseteCommands.get(3),
             new LimelightDistanceCommand(mDrivetrain, mLimelightVision, false),
             new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.RIGHT, TurnMode.AUTON),
-            new ShootFar(mShooter, mIndexer, 4),
+            new ShootFar(mShooter, mIndexer, 2),
             new InstantCommand(mDrivetrain::stopDrive));
 
   //Hard Coding ):
