@@ -55,18 +55,18 @@ public class Intake extends SubsystemBase {
     }
 
     public void extendIntake(){
-        if (fourBar.get() != DoubleSolenoid.Value.kForward) fourBar.set(DoubleSolenoid.Value.kForward);
+        if (fourBar.get() != DoubleSolenoid.Value.kReverse) fourBar.set(DoubleSolenoid.Value.kReverse);
     }
 
     public void retractIntake(){
-        if (fourBar.get() != DoubleSolenoid.Value.kReverse) fourBar.set(DoubleSolenoid.Value.kReverse);
+        if (fourBar.get() != DoubleSolenoid.Value.kForward) fourBar.set(DoubleSolenoid.Value.kForward);
     }
 
     public boolean getFourBarState(){
         boolean state = true;
-        if(fourBar.get() == DoubleSolenoid.Value.kForward){
+        if(fourBar.get() == DoubleSolenoid.Value.kReverse){
             state = true;
-        } else if (fourBar.get() == DoubleSolenoid.Value.kReverse){
+        } else if (fourBar.get() == DoubleSolenoid.Value.kForward){
             state = false;
         }
         return state;

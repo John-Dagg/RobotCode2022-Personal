@@ -4,10 +4,9 @@ import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.io.Axis;
 import frc.robot.utility.MotorControllerFactory;
 
 public class Climber extends SubsystemBase {
@@ -18,6 +17,8 @@ public class Climber extends SubsystemBase {
     private TalonSRX climberLeader, climberFollower;
     private DoubleSolenoid climberSolenoid;
     private DoubleSolenoid brake;
+
+    private double winchVel;
 
     public Climber() {
 
@@ -33,24 +34,39 @@ public class Climber extends SubsystemBase {
         climberFollower.setNeutralMode(NeutralMode.Brake);
     }
 
+    public void winchRawControl(){
+        winchVel = Constants.operatorController.getRawAxis(Axis.AxisID.LEFT_Y.getID());
+        double turnDirection = (Constants.operatorController.getRawAxis(Axis.AxisID.LEFT_Y.getID()) > 0) ? 1 : -1;
+        winchVel =  Math.abs(winchVel) > Constants.Climber.deadband ? 0.1 : 0;
+
+        double winch = winchVel * turnDirection;
+        climberLeader.set(TalonSRXControlMode.PercentOutput, winch);
+    }
+
     public void winchUp(){
-        climberLeader.set(TalonSRXControlMode.PercentOutput, -1.0); //Uncertain about direction
+        climberLeader.set(TalonSRXControlMode.PercentOutput, -0.5); //Down
     }
 
     public void winchDown(){
-        climberLeader.set(TalonSRXControlMode.PercentOutput, 1.0); //Uncertain about direction
+        climberLeader.set(TalonSRXControlMode.PercentOutput, 0.5); //Up
     }
 
     public void brake(){
-        System.out.println("BRAKE STATE (IN): "+brake.get());
-        if (brake.get() != DoubleSolenoid.Value.kForward || brake.get() == DoubleSolenoid.Value.kOff) {
-            brake.set(DoubleSolenoid.Value.kForward);
-            System.out.println("Brake Engaged");
-        } else if (brake.get() != DoubleSolenoid.Value.kReverse) {
+        if (brake.get() != DoubleSolenoid.Value.kReverse) {
             brake.set(DoubleSolenoid.Value.kReverse);
+            System.out.println("Brake Engaged");
+        } else if (brake.get() != DoubleSolenoid.Value.kForward) {
+            brake.set(DoubleSolenoid.Value.kForward);
             System.out.println("Brake Disengaged");
         }
-        System.out.println("BRAKE STATE (OUT): "+brake.get());
+    }
+
+    public void engageBrake(){
+        brake.set(DoubleSolenoid.Value.kReverse);
+    }
+
+    public void disengageBrake(){
+        brake.set(DoubleSolenoid.Value.kForward);
     }
 
     public void angleA(){

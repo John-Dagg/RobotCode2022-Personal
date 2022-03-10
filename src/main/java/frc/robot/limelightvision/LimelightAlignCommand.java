@@ -54,6 +54,7 @@ public class LimelightAlignCommand extends CommandBase {
         mDrivetrain.mState = limelightMode;
         stopFlag = false;
         speed = 0.5;
+            System.out.println("Starting Alignment");
     }
 
     @Override
@@ -62,10 +63,12 @@ public class LimelightAlignCommand extends CommandBase {
         if(mVision.getTargets() >= 1) {
             mVision.steadyArray();
             aimTarget();
+            System.out.println("Aiming at Targets");
         } else {
 //            mVision.flashArray();
             mDrivetrain.printMotors();
             findTarget();
+            System.out.println("Finding Targets");
         }
 //        System.out.println(mVision.getyOffset());
 
@@ -75,7 +78,7 @@ public class LimelightAlignCommand extends CommandBase {
     public void end(boolean isFinished){
         mVision.steadyArray();
         if(stopFlag){
-            System.out.println("Ending Command 1");
+            System.out.println("Ending Alignment");
         }
         System.out.println("ENDING");
         mDrivetrain.mState = DriveState.TELE_DRIVE;
@@ -93,7 +96,9 @@ public class LimelightAlignCommand extends CommandBase {
 //            mLeftMotors.set(calcTurn());
 //            mRightMotors.set(-calcTurn());
 //            turn = Math.signum(yaw)*calcTurn(yaw);
+//            turn = Math.signum(yaw) * 0.2;
             turn = Math.signum(yaw)*MathEqs.targetLinear(Math.abs(yaw), maxTurn, deccelAngle, deadbandAngle);
+            turn = turn < 0.2 ? 0.2 : turn;
         } else {
             stopFlag = true;
             end(true);

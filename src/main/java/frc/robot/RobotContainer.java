@@ -56,18 +56,20 @@ public class RobotContainer {
   private final ShootFar mShootFar = new ShootFar(mShooter, mIndexer);
   private final ShootClose mShootClose = new ShootClose(mShooter, mIndexer);
   private final IntakeCargo mIntakeCargo = new IntakeCargo(mIntake);
+  private final ClimberControl mClimberControl = new ClimberControl(mClimber);
 
   //Auton
   private AutonGenerator autonGenerator = new AutonGenerator();
   private ArrayList<RamseteCommand> ramseteCommands;
   private String[] mFiveBallAuton = {"FiveBallA", "FiveBallB", "FiveBallC", "FiveBallD"};
+  private String[] mTest = {"test"};
 
   public RobotContainer() {
 
     configureButtonBindings();
     mDrivetrain.mState = Constants.DriveTrain.DriveState.TELE_DRIVE;
-    mDrivetrain.setDefaultCommand(new RunCommand(mDrivetrain::arcadeDrive, mDrivetrain));
-//    mIntake.setDefaultCommand(new RunCommand(mIntake::triggerRollerIntake, mIntake));
+    mDrivetrain.setDefaultCommand(new RunCommand(mDrivetrain::masterDrive, mDrivetrain));
+    mIntake.setDefaultCommand(new RunCommand(mIntake::triggerRollerIntake, mIntake));
 //    mIndexer.setDefaultCommand(new RunCommand(mIndexer::indexerTest, mIndexer));
 //    mShooter.setDefaultCommand(new RunCommand(mShooter::shooterTest, mShooter));
 //    mLimelightVision.setDefaultCommand(new RunCommand(mLimelightVision::printNetworkTables, mLimelightVision));
@@ -84,23 +86,23 @@ public class RobotContainer {
 
     /***
      * Driver Controller
-     * Left X and Right Y - Arcade Drive                TODO: Fix stuttering -> "Differential Drive not updated often enough" /Brownout?
+     * Left X and Right Y - Arcade Drive
      * Left Bumper - Shifts Gears (Toggle)
-     * Right Bumper - Extend/Retract Intake (Toggle)    TODO: Toggle or Hold?
+     * Right Bumper - Extend/Retract Intake (Hold)
      * Right Trigger - Intake                           TODO: Get build to add Bumpers so it works / Test
      * Left Trigger - Outtake                           TODO: ^^^
      * X - Align Target Angle + Default Turn Left       TODO: Tune - Why is the pipeline unstable?
      * B - Align Target Angle + Default Turn Right      TODO: Tune ^
      * Y - Align Distance Close (Disabled)              TODO: Find appropriate distance and tune calcDistance() {@link LimelightDistanceCommand}
-     * A - Align Distance Far   (Disabled)              TODO: ^^^
+     * A - Extend Intake and Spin Rollers               TODO:
      *
      * Operator Controller
-     * X - Shoot Far                                    Sequential Command Group with subsystem dependencies 1st Try!
+     * X - Shoot Far
      * Y - Shoot Close
-     * A - Change Climber Angle (Disabled)
-     * B - Engage Brake                                 TODO: Change climb to better binds
-     * Left Bumper - Winch Up                           TODO: Test and change to joystick + hold button
-     * Right Bumper - Winch Down                        TODO: ^^^
+     * B - Change Climber Angle (Disabled)
+     * A - Disengages brake + enables winch (Hold)
+     * B - Toggle Brake
+     * Left X - Raw Winch Control (Requires A to be held)
      *
      * Auton                                            TODO: AutonGenerator is returning a nullPointer? Not filling array correctly?
      *                                                        Tune PID constants and ka, kv, ks
@@ -115,11 +117,11 @@ public class RobotContainer {
 //    new POVButton(Constants.driverController, 270)
 //            .whenHeld(mLeftAlign);
 
-//    new JoystickButton(driverController, Button.ButtonID.X.getID())
-//            .whenHeld(mLeftAlign);
+    new JoystickButton(driverController, Button.ButtonID.X.getID())
+            .whenHeld(mLeftAlign);
 
-//    new JoystickButton(driverController, Button.ButtonID.B.getID())
-//            .whenHeld(mRightAlign);
+    new JoystickButton(driverController, Button.ButtonID.B.getID())
+            .whenHeld(mRightAlign);
 
 //    new JoystickButton(driverController, Button.ButtonID.Y.getID())
 //            .whenHeld(mDistanceTarget);
@@ -140,13 +142,20 @@ public class RobotContainer {
 //    Waiting for Build lol
 //    Intake
 
+//    new JoystickButton(driverController, Button.ButtonID.RIGHT_BUMPER.getID())
+//            .whenPressed(new ConditionalCommand(
+//                    new InstantCommand(mIntake::retractIntake),
+//                    new InstantCommand(mIntake::extendIntake),
+//                    mIntake::getFourBarState));
+
     new JoystickButton(driverController, Button.ButtonID.RIGHT_BUMPER.getID())
-            .whenPressed(new ConditionalCommand(
-                    new InstantCommand(mIntake::retractIntake),
-                    new InstantCommand(mIntake::extendIntake),
-                    mIntake::getFourBarState));
+            .whenHeld(new StartEndCommand(mIntake::extendIntake, mIntake::retractIntake));
+
+    new JoystickButton(driverController, Button.ButtonID.A.getID())
+            .whenHeld(mIntakeCargo);
 
     //  Another option for intake control to add more buttons hopefully
+    //  Leaving this here for now. Using default command
 
 //    if (new Joystick(Axis.AxisID.LEFT_TRIGGER.getID()).getTriggerPressed())
 //            new StartEndCommand(mIntake::rollerIntake, mIntake::rollerStop);
@@ -154,11 +163,11 @@ public class RobotContainer {
 //    if (new Joystick(Axis.AxisID.RIGHT_TRIGGER.getID()).getTriggerPressed())
 //            new StartEndCommand(mIntake::rollerOuttake, mIntake::rollerStop);
 
-    new JoystickButton(driverController, Button.ButtonID.A.getID())
-            .whenHeld(new StartEndCommand(mIntake::rollerIntake, mIntake::rollerStop));
+//    new JoystickButton(driverController, Button.ButtonID.A.getID())
+//            .whenHeld(new StartEndCommand(mIntake::rollerIntake, mIntake::rollerStop));
 
-    new JoystickButton(driverController, Button.ButtonID.B.getID())
-            .whenHeld(new StartEndCommand(mIntake::rollerOuttake, mIntake::rollerStop));
+//    new JoystickButton(driverController, Button.ButtonID.B.getID())
+//            .whenHeld(new StartEndCommand(mIntake::rollerOuttake, mIntake::rollerStop));
 
 //    Shooter
 
@@ -182,6 +191,11 @@ public class RobotContainer {
 
 //    Climber
 
+//    new JoystickButton(operatorController, Button.ButtonID.A.getID())
+//            .whenHeld(mClimberControl);
+
+//    new JoystickButton(operatorController, Button.ButtonID.B.getID())
+//            .whenPressed(mClimber::brake);
 
 //    new JoystickButton(Constants.operatorController, Button.ButtonID.A.getID())
 //            .whenPressed(new ConditionalCommand(
@@ -189,14 +203,14 @@ public class RobotContainer {
 //                    new InstantCommand(mClimber::angleB),
 //                    mClimber::getAngle));
 
-    new JoystickButton(operatorController, Button.ButtonID.B.getID())
-            .whenPressed(new InstantCommand(mClimber::brake));
+//    new JoystickButton(operatorController, Button.ButtonID.B.getID())
+//            .whenPressed(new InstantCommand(mClimber::brake));
 
-    new JoystickButton(operatorController, Button.ButtonID.LEFT_BUMPER.getID())
-            .whenHeld(new StartEndCommand(mClimber::winchUp, mClimber::winchStop));
+//    new JoystickButton(operatorController, Button.ButtonID.LEFT_BUMPER.getID())
+//            .whenHeld(new StartEndCommand(mClimber::winchUp, mClimber::winchStop));
 
-    new JoystickButton(operatorController, Button.ButtonID.RIGHT_BUMPER.getID())
-            .whenHeld(new StartEndCommand(mClimber::winchDown, mClimber::winchStop));
+//    new JoystickButton(operatorController, Button.ButtonID.RIGHT_BUMPER.getID())
+//            .whenHeld(new StartEndCommand(mClimber::winchDown, mClimber::winchStop));
 
 
 
@@ -205,9 +219,9 @@ public class RobotContainer {
   //Global auton execution called here
   public Command getAutonomousCommand() {
 
-    ramseteCommands = autonGenerator.getAutonCommands(mFiveBallAuton, mDrivetrain);
+    ramseteCommands = autonGenerator.getAutonCommands(mTest, mDrivetrain);
 
-    mDrivetrain.resetOdometry(autonGenerator.getFirstTrajectory().getInitialPose());
+    mDrivetrain.resetOdometry(autonGenerator.getTrajectory(mTest).get(0).getInitialPose());
 
     //TODO: Find a better way to do this
     /*
@@ -234,8 +248,8 @@ public class RobotContainer {
             new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.RIGHT, TurnMode.AUTON),
             new ShootFar(mShooter, mIndexer, 4),
             new InstantCommand(mDrivetrain::stopDrive));
-
-  return ramseteCommands.get(0).andThen(new InstantCommand(mDrivetrain::stopDrive));
+  return null;
+//  return ramseteCommands.get(0).andThen(new InstantCommand(mDrivetrain::stopDrive));
 //  return auton;
 //  return null;
   }

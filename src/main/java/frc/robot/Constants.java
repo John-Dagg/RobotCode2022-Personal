@@ -90,6 +90,8 @@ public final class Constants {
         public static final int climberPortB = 12;
         public static final int[] solenoidPorts = {13, 0, 1};
         public static final int[] brakePorts = {13, 2, 3};
+
+        public static final double deadband = 0.1;
     }
 
     public static final class PhotonVision{
@@ -106,9 +108,9 @@ public final class Constants {
 
     public static final class LimelightVision{
 
-        public static final double goalAngleP = 1;
+        public static final double goalAngleP = 0.5;
         public static final double goalAngleN = -1;
-        public static final double deadbandAngle = 0.75;
+        public static final double deadbandAngle = 0.05;
         public static final double deccelAngle = 30;
         public static final double maxTurn = 0.5;
 

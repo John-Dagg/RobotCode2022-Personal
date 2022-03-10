@@ -55,7 +55,7 @@ public class LimelightAlignLeftCommand extends CommandBase {
     @Override
     public void execute(){
         mVision.updateTargets();
-        if(mVision.getTargets() >= 10) {
+        if(mVision.getTargets() >= 1) {
             mVision.steadyArray();
             aimTarget();
         } else {
@@ -70,7 +70,7 @@ public class LimelightAlignLeftCommand extends CommandBase {
     public void end(boolean isFinished){
         mVision.steadyArray();
         if(stopFlag){
-            System.out.println("Ending Command 1");
+            System.out.println("Ending Alignment");
         }
         mDrivetrain.mState = DriveState.TELE_DRIVE;
     }
