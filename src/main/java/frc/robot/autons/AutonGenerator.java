@@ -78,6 +78,7 @@ public class AutonGenerator {
 //    public Trajectory getFirstTrajectory(){
 //        return trajectory;
 //    }
+
     //TODO: Create a method that concatenates a trajectory based on the order of the parameters (Would have to take a variable number of parameters?)
 
     //Fills an array with trajectories based on a String array of the paths and returns it

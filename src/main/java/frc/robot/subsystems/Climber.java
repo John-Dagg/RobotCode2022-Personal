@@ -17,7 +17,7 @@ public class Climber extends SubsystemBase {
     private DoubleSolenoid climberSolenoid;
     private DoubleSolenoid brake;
 
-    private double winchVel;
+    private double winchVel, speed;
 
     public Climber() {
 
@@ -31,12 +31,15 @@ public class Climber extends SubsystemBase {
         climberFollower.follow(climberLeader);
         climberLeader.setNeutralMode(NeutralMode.Brake); //So the winch doesn't uncoil when the motor isn't being powered
         climberFollower.setNeutralMode(NeutralMode.Brake);
+
+        //Change this to change power to climber
+        speed = 0.1;
     }
 
     public void winchRawControl(){
         winchVel = Constants.operatorController.getRawAxis(Axis.AxisID.LEFT_Y.getID());
         double turnDirection = (Constants.operatorController.getRawAxis(Axis.AxisID.LEFT_Y.getID()) > 0) ? 1 : -1;
-        winchVel =  Math.abs(winchVel) > Constants.Climber.deadband ? 0.1 : 0;
+        winchVel =  Math.abs(winchVel) > Constants.Climber.deadband ? speed : 0;
 
         double winch = winchVel * turnDirection;
         climberLeader.set(TalonSRXControlMode.PercentOutput, winch);

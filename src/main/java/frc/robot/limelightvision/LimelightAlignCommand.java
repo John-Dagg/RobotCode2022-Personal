@@ -93,6 +93,12 @@ public class LimelightAlignCommand extends CommandBase {
         double turn = 0;
         double yaw = mVision.getxOffset();
         if (deadbandAngle < Math.abs(yaw)) {
+
+            //deadband angle is the acceptable offset from what is supposed to be the center of the target
+            //deccel angle is the angle the robot starts decelerating at
+            //max turn is the highest speed the robot will turn at
+            //yaw is the angle the robot is away from the center of the target
+
 //            mLeftMotors.set(calcTurn());
 //            mRightMotors.set(-calcTurn());
 //            turn = Math.signum(yaw)*calcTurn(yaw);
@@ -100,9 +106,10 @@ public class LimelightAlignCommand extends CommandBase {
             turn = Math.signum(yaw)*MathEqs.targetLinear(Math.abs(yaw), maxTurn, deccelAngle, deadbandAngle);
             turn = turn < 0.2 ? 0.2 : turn;
         } else {
+            System.out.println("Please work");
+            System.out.println("STOPPING ALIGNMENT");
             stopFlag = true;
             end(true);
-            System.out.println("Please work");
         }
         System.out.println(turn);
         mVision.setValues(0, turn);
