@@ -47,12 +47,12 @@ public class Shooter extends SubsystemBase {
     }
 
     public void setAnglerLow(){
-        System.out.println(angler.get());
+//        System.out.println(angler.get());
         if (angler.get() != DoubleSolenoid.Value.kReverse) angler.set(DoubleSolenoid.Value.kReverse);
     }
 
     public void setAnglerHigh(){
-        System.out.println(angler.get());
+//        System.out.println(angler.get());
         if (angler.get() != DoubleSolenoid.Value.kForward) angler.set(DoubleSolenoid.Value.kForward);
     }
 

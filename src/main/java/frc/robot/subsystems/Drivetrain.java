@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.autons.HardCodeAuton;
 import frc.robot.io.Axis;
 import frc.robot.limelightvision.VPLimelight;
 import frc.robot.utility.MotorControllerFactory;
@@ -222,8 +223,6 @@ public class Drivetrain extends SubsystemBase {
       System.out.println("Motor Voltage Below 7 - Brownout! " + mLeftLeader.getBusVoltage() + " Volts");
     }
 
-
-
 //    double left = throttle - turn;
 //    double right = throttle + turn;
 
@@ -249,6 +248,11 @@ public class Drivetrain extends SubsystemBase {
   public void limelightDrive(){
     double[] values = mLimelight.getValues();
     mDrive.arcadeDrive(values[0], values[1]);
+    mDrive.feed();
+  }
+
+  public void autonDrive(double thottle, double turn){
+    mDrive.arcadeDrive(-thottle, turn);
     mDrive.feed();
   }
 
@@ -303,6 +307,24 @@ public class Drivetrain extends SubsystemBase {
   @Override
   public void periodic(){
     mOdometry.update(Rotation2d.fromDegrees(mPigeon.getYaw()) , mLeftEncoder.getPosition() * positionConversion, mRightEncoder.getPosition() * positionConversion);
+  }
+
+  /***
+   * Returns the position of the left wheels in meters
+   * @return Meters
+   */
+
+  public double leftWheelsPosition(){
+    return mLeftEncoder.getPosition() * positionConversion;
+  }
+
+  /***
+   * Returns the position of the right wheels in meters
+   * @return Meters
+   */
+
+  public double rightWheelsPosition(){
+    return mRightEncoder.getPosition() * positionConversion;
   }
 
   public Pose2d getPose(){

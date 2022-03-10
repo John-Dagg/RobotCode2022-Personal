@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.autons.AutonGenerator;
+import frc.robot.autons.HardCodeAuton;
 import frc.robot.commands.*;
 import frc.robot.io.Axis;
 import frc.robot.io.Button;
@@ -33,8 +34,8 @@ import static frc.robot.Constants.operatorController;
 
 public class RobotContainer {
 
-  private final VPLimelight mLimelightVision = new VPLimelight();
   //Subsystems
+  private final VPLimelight mLimelightVision = new VPLimelight();
   private final Drivetrain mDrivetrain = new Drivetrain(mLimelightVision);
   private final Intake mIntake = new Intake();
   private final Shooter mShooter = new Shooter();
@@ -42,7 +43,6 @@ public class RobotContainer {
   private final Climber mClimber = new Climber();
 
   //Limelight Vision
-
   private final LimelightAlignCommand mLeftAlign = new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.LEFT, TurnMode.TELEOP);
   private final LimelightAlignCommand mRightAlign = new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.RIGHT, TurnMode.TELEOP);
   private final LimelightDistanceCommand mDistanceTarget = new LimelightDistanceCommand(mDrivetrain, mLimelightVision, true);
@@ -63,6 +63,9 @@ public class RobotContainer {
   private ArrayList<RamseteCommand> ramseteCommands;
   private String[] mFiveBallAuton = {"FiveBallA", "FiveBallB", "FiveBallC", "FiveBallD"};
   private String[] mTest = {"test"};
+
+  //Hardcode
+  private final HardCodeAuton mAuton = new HardCodeAuton(mDrivetrain, mIntake, mIndexer, mShooter);
 
   public RobotContainer() {
 
@@ -248,7 +251,10 @@ public class RobotContainer {
             new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.RIGHT, TurnMode.AUTON),
             new ShootFar(mShooter, mIndexer, 4),
             new InstantCommand(mDrivetrain::stopDrive));
-  return null;
+
+  //Hard Coding ):
+  return mAuton;
+
 //  return ramseteCommands.get(0).andThen(new InstantCommand(mDrivetrain::stopDrive));
 //  return auton;
 //  return null;

@@ -40,7 +40,7 @@ public class AutonGenerator {
                 return null;
             }
         }
-        trajectory = trajectories.get(0);
+//        trajectory = trajectories.get(0);
         if (trajectories.get(0) != null){
             System.out.println("Retrieved first trajectory");
         }
@@ -52,10 +52,10 @@ public class AutonGenerator {
         ArrayList<RamseteCommand> commands= new ArrayList<>();
         mRamseteController.setEnabled(true);
         mDrivetrain = subsystem;
+        ArrayList<Trajectory> trajectories = getTrajectory(pathing);
 
         for (int i = 0; i < pathing.length; i++){
             System.out.println("Adding trajectory " + i + " ...Hopefully");
-            ArrayList<Trajectory> trajectories = getTrajectory(pathing);
             if (trajectories == null){
                 System.out.println("Trajectory " + i + " not found");
             }
