@@ -24,7 +24,7 @@ public class AutonGenerator {
     SimpleMotorFeedforward mFeedForward = new SimpleMotorFeedforward(ks, kv, ka);
     PIDController leftPID = new PIDController(Constants.Auton.kP, 0, 0);
     PIDController rightPID = new PIDController(Constants.Auton.kP, 0, 0);
-    Trajectory trajectory;
+//    Trajectory trajectory;
 /*
     //Fills an array with trajectories based on a String array of the paths and returns it
     public ArrayList<Trajectory> getTrajectory(String[] pathing){
@@ -75,9 +75,9 @@ public class AutonGenerator {
         return commands;
     }
 */
-    public Trajectory getFirstTrajectory(){
-        return trajectory;
-    }
+//    public Trajectory getFirstTrajectory(){
+//        return trajectory;
+//    }
     //TODO: Create a method that concatenates a trajectory based on the order of the parameters (Would have to take a variable number of parameters?)
 
     //Fills an array with trajectories based on a String array of the paths and returns it
