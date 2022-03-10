@@ -11,7 +11,6 @@ import frc.robot.utility.MotorControllerFactory;
 
 public class Climber extends SubsystemBase {
 
-    //Waiting on Design/Build/Electrical for testing
 
     //Motors subject to change
     private TalonSRX climberLeader, climberFollower;
@@ -70,11 +69,11 @@ public class Climber extends SubsystemBase {
     }
 
     public void angleA(){
-        climberSolenoid.set(DoubleSolenoid.Value.kForward);
+        if (climberSolenoid.get() != DoubleSolenoid.Value.kForward) climberSolenoid.set(DoubleSolenoid.Value.kForward);
     }
 
     public void angleB(){
-        climberSolenoid.set(DoubleSolenoid.Value.kReverse);
+        if (climberSolenoid.get() != DoubleSolenoid.Value.kReverse) climberSolenoid.set(DoubleSolenoid.Value.kReverse);
     }
 
     public void winchStop(){

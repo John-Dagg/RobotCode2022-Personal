@@ -224,7 +224,7 @@ public class RobotContainer {
 
     ramseteCommands = autonGenerator.getAutonCommands(mTest, mDrivetrain);
 
-    mDrivetrain.resetOdometry(autonGenerator.getTrajectory(mTest, 0).getInitialPose());
+    mDrivetrain.resetOdometry(autonGenerator.getTrajectory(mTest[0]).getInitialPose());
 
     //TODO: Find a better way to do this
     /*

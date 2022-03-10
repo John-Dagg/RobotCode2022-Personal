@@ -81,13 +81,13 @@ public class AutonGenerator {
     //TODO: Create a method that concatenates a trajectory based on the order of the parameters (Would have to take a variable number of parameters?)
 
     //Fills an array with trajectories based on a String array of the paths and returns it
-    public Trajectory getTrajectory(String[] pathing, int i){
+    public Trajectory getTrajectory(String pathing){
 //        ArrayList<Trajectory> trajectories = new ArrayList<>();
         Trajectory trajectory;
         try {
-            Path path = Filesystem.getDeployDirectory().toPath().resolve("output/" + pathing[i] + ".wpilib.json");
+            Path path = Filesystem.getDeployDirectory().toPath().resolve("output/" + pathing + ".wpilib.json");
             trajectory = (TrajectoryUtil.fromPathweaverJson(path));
-            System.out.println("Added trajectory " + i + " to array");
+            System.out.println("Added trajectory " + " to array");
         } catch (IOException e){
             System.out.println("Couldn't find trajectory path");
             e.printStackTrace();
@@ -109,7 +109,7 @@ public class AutonGenerator {
 
         for (int i = 0; i < pathing.length; i++){
             System.out.println("Adding trajectory " + i + " ...Hopefully");
-            Trajectory trajectory = getTrajectory(pathing, i);
+            Trajectory trajectory = getTrajectory(pathing[i]);
             if (trajectory == null){
                 System.out.println("Trajectory " + i + " not found");
             }
