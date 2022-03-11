@@ -18,16 +18,14 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.autons.HardCodeAuton;
 import frc.robot.io.Axis;
 import frc.robot.limelightvision.VPLimelight;
 import frc.robot.utility.MotorControllerFactory;
 import frc.robot.Constants;
 import frc.robot.Constants.*;
 import frc.robot.Constants.DriveTrain.*;
-
-import java.util.ArrayList;
 
 import static frc.robot.Constants.DriveTrain.defaultState;
 import static frc.robot.Constants.DriveTrain.shifterPorts;
@@ -300,6 +298,16 @@ public class Drivetrain extends SubsystemBase {
     mDrive.feed();
 //    printVelocity();
 //    System.out.println(mLeftEncoder.getVelocity() * velocityConversion);
+
+    double xOffset = mLimelight.getxOffset();
+    if (xOffset > 0){
+      System.out.println(xOffset + " degrees to the RIGHT(?)");
+      SmartDashboard.putNumber("Degrees to the RIGHT", xOffset);
+    } else {
+      System.out.println(xOffset + " degrees to the LEFT(?)");
+      SmartDashboard.putNumber("Degrees to the LEFT", xOffset);
+    }
+
   }
 
   public void teleLimelight(){
