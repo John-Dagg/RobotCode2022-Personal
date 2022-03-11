@@ -195,8 +195,11 @@ public class Drivetrain extends SubsystemBase {
 
   public void masterDrive() {
     switch (mState) {
-      case TELE_DRIVE:
-        arcadeDrive();
+      case TELE_DRIVE_INTAKE:
+        arcadeDriveIntake();
+        break;
+      case TELE_DRIVE_SHOOTER:
+        arcadeDriveShooter();
         break;
       case TELE_LIMELIGHT:
         teleLimelight();
@@ -226,8 +229,8 @@ public class Drivetrain extends SubsystemBase {
     if (mState != DriveState.LIMELIGHT_DRIVE) {
       mState = DriveState.LIMELIGHT_DRIVE;
     }
-    if (mState != DriveState.TELE_DRIVE) {
-      mState = DriveState.TELE_DRIVE;
+    if (mState != DriveState.TELE_DRIVE_INTAKE) {
+      mState = DriveState.TELE_DRIVE_INTAKE;
     }
 
   }
@@ -253,7 +256,60 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
-  public void arcadeDrive(){
+  public void toggleArcadeStyle(){
+    if (mState != DriveState.TELE_DRIVE_INTAKE){
+      mState = DriveState.TELE_DRIVE_INTAKE;
+      System.out.println("Intake Arcade Drive");
+    }
+    if (mState != DriveState.TELE_DRIVE_SHOOTER){
+      mState = DriveState.TELE_DRIVE_SHOOTER;
+      System.out.println("Shooter Tele Drive");
+    }
+  }
+
+  public void arcadeDriveShooter(){
+    double throttle = deadband(Constants.driverController.getRawAxis(Axis.AxisID.LEFT_Y.getID()));
+    double turn = deadband(Constants.driverController.getRawAxis(Axis.AxisID.RIGHT_X.getID()));
+
+//    throttle = (throttle == 0) ? 0 : Math.abs(throttle)*throttle;
+//    turn = (turn == 0) ? 0 : turn/Math.abs(turn)*Math.sqrt(Math.abs(turn));
+//    turn = ((lastTurn == turn && Math.abs(turn) < 0.33) || turn == 0) ? 0 : turn;
+
+    if (!mDrive.isAlive()){
+      System.out.println("Motor timeout!");
+      System.out.println("Motor Expiration Timer: " + mDrive.getExpiration());
+    }
+
+    if (mLeftLeader.getBusVoltage() <= 7){
+      System.out.println("Motor Voltage Below 7 - Brownout! " + mLeftLeader.getBusVoltage() + " Volts");
+    }
+
+    if (mLimelight.calcDistance() > distanceClose - band && mLimelight.calcDistance() < distanceClose + band){
+      System.out.println("In close shooter range +- 40 inches");
+    }
+
+    if (mLimelight.calcDistance() > distanceFar - band && mLimelight.calcDistance() < distanceFar + band){
+      System.out.println("In far shooter range +- 40 inches");
+    }
+
+    mDrive.arcadeDrive(throttle, turn);
+    lastThrottle = (throttle == 0) ? lastThrottle : throttle;
+    lastTurn = (turn == 0) ? lastTurn : turn;
+    mDrive.feed();
+
+    double xOffset = mLimelight.getxOffset();
+    if (xOffset > 0){
+      System.out.println(xOffset + " degrees to the RIGHT(?)");
+      SmartDashboard.putNumber("Degrees to the RIGHT", xOffset);
+    } else {
+      System.out.println(xOffset + " degrees to the LEFT(?)");
+      SmartDashboard.putNumber("Degrees to the LEFT", xOffset);
+    }
+
+  }
+
+
+  public void arcadeDriveIntake(){
     double throttle = deadband(Constants.driverController.getRawAxis(Axis.AxisID.LEFT_Y.getID()));
     double turn = deadband(Constants.driverController.getRawAxis(Axis.AxisID.RIGHT_X.getID()));
 

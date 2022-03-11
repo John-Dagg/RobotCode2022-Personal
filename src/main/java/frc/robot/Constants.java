@@ -58,9 +58,9 @@ public final class Constants {
         public static final double iprHighGear = 1.0; // Inches per rotation for high gear. Currently placeholder
         public static final double iprLowGear = 1.0; // Inches per rotation for low gear. Currently placeholder
 
-        public enum DriveState { TELE_DRIVE, TELE_LIMELIGHT, LIMELIGHT_DRIVE, AUTO_DRIVE, AUTO_LIMELIGHT; }
+        public enum DriveState { TELE_DRIVE_INTAKE, TELE_DRIVE_SHOOTER, TELE_LIMELIGHT, LIMELIGHT_DRIVE, AUTO_DRIVE, AUTO_LIMELIGHT; }
 
-        public static final DriveState defaultState = DriveState.TELE_DRIVE;
+        public static final DriveState defaultState = DriveState.TELE_DRIVE_INTAKE;
 
     }
 

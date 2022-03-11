@@ -70,7 +70,7 @@ public class RobotContainer {
   public RobotContainer() {
 
     configureButtonBindings();
-    mDrivetrain.mState = Constants.DriveTrain.DriveState.TELE_DRIVE;
+    mDrivetrain.mState = Constants.DriveTrain.DriveState.TELE_DRIVE_INTAKE;
     mDrivetrain.setDefaultCommand(new RunCommand(mDrivetrain::masterDrive, mDrivetrain));
     mIntake.setDefaultCommand(new RunCommand(mIntake::triggerRollerIntake, mIntake));
 //    mIndexer.setDefaultCommand(new RunCommand(mIndexer::indexerTest, mIndexer));
@@ -96,7 +96,7 @@ public class RobotContainer {
      * Left Trigger - Outtake
      * X - Align Target Angle + Default Turn Left       TODO: Tune - Why is the pipeline unstable?
      * B - Align Target Angle + Default Turn Right      TODO: Tune ^
-     * Y - Limelight Toggle                             TODO: Find appropriate distance and tune calcDistance() {@link LimelightDistanceCommand}
+     * Y - Drivetrain Toggle                            TODO: Limelight - Find appropriate distance and tune calcDistance() {@link LimelightDistanceCommand}
      * A - Extend Intake and Spin Rollers               TODO:
      *
      * Operator Controller
@@ -131,6 +131,9 @@ public class RobotContainer {
                     new InstantCommand(mDrivetrain::highGear),
                     new InstantCommand(mDrivetrain::lowGear),
                     mDrivetrain::getLowGear));
+
+    new JoystickButton(driverController, Button.ButtonID.Y.getID())
+            .whenPressed(new InstantCommand(mDrivetrain::toggleArcadeStyle));
 
 
 
