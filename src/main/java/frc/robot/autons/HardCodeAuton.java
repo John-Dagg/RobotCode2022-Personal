@@ -51,6 +51,7 @@ public class HardCodeAuton extends CommandBase {
             }
             mIntake.rollerIntake();
             mShooter.setAnglerLow();
+            mShooter.setShooterClose();
         }
 
         if (mDrivetrain.leftWheelsPosition() >= 1.15 || mDrivetrain.rightWheelsPosition() >= 1.15) {

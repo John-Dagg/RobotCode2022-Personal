@@ -30,7 +30,7 @@ public class Shooter extends SubsystemBase {
 
     //Needs testing
     private final double closeVel = -0.67;
-    private final double farVel = -1;
+    private final double farVel = -0.92;
     private final double idleVel = 0.00;
 
     public Shooter(){
@@ -62,6 +62,9 @@ public class Shooter extends SubsystemBase {
 
     public void setShooterFar(){
         shooterMotorLeader.set(TalonFXControlMode.PercentOutput, farVel);
+        double ticks = shooterMotorLeader.getSelectedSensorVelocity();
+        double RPM = (ticks / integratedTicks) * 10 * 60;
+        System.out.println(RPM);
     }
 
     public void setShooterIdle(){

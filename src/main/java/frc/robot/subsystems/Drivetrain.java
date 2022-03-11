@@ -63,7 +63,7 @@ public class Drivetrain extends SubsystemBase {
 
   private final double distanceClose = 62; //inches
   private final double distanceFar = 178; //inches
-  private final double band = 20;
+  private final double band = 10;
 
 
   public Drivetrain(VPLimelight subsystemA) {

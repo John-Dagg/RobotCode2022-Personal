@@ -32,8 +32,9 @@ public class ShootFar extends CommandBase {
     @Override
     public void execute(){
         elapsedTime = System.currentTimeMillis() - start;
+        elapsedTime = elapsedTime / 1000;
         mShooter.setShooterFar();
-        if (mShooter.getShooterVel() > mShooter.getShooterFarVel()){
+        if (elapsedTime > 1){
             mIndexer.feedIndexer();
         }
 

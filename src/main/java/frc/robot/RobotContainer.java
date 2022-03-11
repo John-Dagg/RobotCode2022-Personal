@@ -91,17 +91,17 @@ public class RobotContainer {
      * Driver Controller
      * Left X and Right Y - Arcade Drive
      * Left Bumper - Shifts Gears (Toggle)
-     * Right Bumper - Extend/Retract Intake (Hold)
-     * Right Trigger - Intake                           TODO: Get build to add Bumpers so it works / Test
-     * Left Trigger - Outtake                           TODO: ^^^
+     * Right Bumper - Extends + Intakes (Hold)
+     * Right Trigger - Intake
+     * Left Trigger - Outtake
      * X - Align Target Angle + Default Turn Left       TODO: Tune - Why is the pipeline unstable?
      * B - Align Target Angle + Default Turn Right      TODO: Tune ^
-     * Y - Align Distance Close (Disabled)              TODO: Find appropriate distance and tune calcDistance() {@link LimelightDistanceCommand}
+     * Y - Limelight Toggle                             TODO: Find appropriate distance and tune calcDistance() {@link LimelightDistanceCommand}
      * A - Extend Intake and Spin Rollers               TODO:
      *
      * Operator Controller
-     * X - Shoot Far
-     * Y - Shoot Close
+     * Y - Shoot Far
+     * X - Shoot Close
      * B - Change Climber Angle (Disabled)
      * A - Disengages brake + enables winch (Hold)
      * B - Toggle Brake
@@ -116,11 +116,11 @@ public class RobotContainer {
 
     //Limelight
 
-    new JoystickButton(driverController, Button.ButtonID.X.getID())
-            .whenHeld(mLeftAlign);
-
-    new JoystickButton(driverController, Button.ButtonID.B.getID())
-            .whenHeld(mRightAlign);
+//    new JoystickButton(driverController, Button.ButtonID.X.getID())
+//            .whenHeld(mLeftAlign);
+//
+//    new JoystickButton(driverController, Button.ButtonID.B.getID())
+//            .whenHeld(mRightAlign);
 
     //Drivetrain
 
