@@ -82,7 +82,7 @@ public class Indexer extends SubsystemBase {
 
     //Feeds the balls into the shooter
     public void feedIndexer(){
-        indexerMotor.set(TalonSRXControlMode.PercentOutput, -0.8);
+        indexerMotor.set(TalonSRXControlMode.PercentOutput, -1);
     }
 
     public void indexerTest() {

@@ -81,7 +81,7 @@ public class LimelightAlignCommand extends CommandBase {
             System.out.println("Ending Alignment");
         }
         System.out.println("ENDING");
-        mDrivetrain.mState = DriveState.TELE_DRIVE;
+        mDrivetrain.mState = DriveState.TELE_DRIVE_INTAKE;
     }
 
     @Override

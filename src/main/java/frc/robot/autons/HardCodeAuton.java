@@ -14,6 +14,8 @@ public class HardCodeAuton extends CommandBase {
     private Indexer mIndexer;
     private Shooter mShooter;
 
+    private double speed;
+
     private double start, currentTime, elapseTime;
     private double throttleValue, turnValue;
     private boolean stopFlag;
@@ -31,6 +33,8 @@ public class HardCodeAuton extends CommandBase {
         stopFlag = false;
         mDrivetrain.mState = Constants.DriveTrain.DriveState.AUTO_DRIVE;
         mDrivetrain.resetEncoders();
+
+        speed = 0.75;
     }
 
     @Override
@@ -46,15 +50,14 @@ public class HardCodeAuton extends CommandBase {
             System.out.println("Running phase 1");
             mDrivetrain.autonDrive(0.5, 0);
             mIntake.extendIntake(); //Internal logic that only actuates the solenoid if the solenoid is in the opposite state
-            if (elapseTime > 0.75){
+            if (elapseTime > 0.5){
                 mIntake.rollerIntake();
             }
-            mIntake.rollerIntake();
             mShooter.setAnglerLow();
-            mShooter.setShooterClose();
+            mShooter.setShooterVel(-speed);
         }
 
-        if (mDrivetrain.leftWheelsPosition() >= 1.15 || mDrivetrain.rightWheelsPosition() >= 1.15) {
+        if (mDrivetrain.leftWheelsPosition() >= 1.15 || mDrivetrain.rightWheelsPosition() >= 1.15 && elapseTime < 10) {
             System.out.println("Running phase 2");
             mDrivetrain.stopDrive();
             if (elapseTime < 3) {
@@ -63,12 +66,12 @@ public class HardCodeAuton extends CommandBase {
                 mIntake.rollerStop();
                 mIntake.retractIntake();
             }
-            mShooter.setShooterClose();
-            if (mShooter.getShooterVel() > mShooter.getShooterCloseVel()) {
+            mShooter.setShooterVel(-speed);
+            if (elapseTime > 4.5) {
                 mIndexer.feedIndexer();
             }
         }
-        if (elapseTime > 8){
+        if (elapseTime > 10){
             mIndexer.setIndexerIdle();
             mShooter.setShooterIdle();
         }
@@ -97,7 +100,7 @@ public class HardCodeAuton extends CommandBase {
         mDrivetrain.stopDrive();
         mIndexer.setIndexerIdle();
         mShooter.setShooterIdle();
-        mDrivetrain.mState = Constants.DriveTrain.DriveState.TELE_DRIVE;
+        mDrivetrain.mState = Constants.DriveTrain.DriveState.TELE_DRIVE_INTAKE;
         System.out.println("Ending Auton");
     }
 

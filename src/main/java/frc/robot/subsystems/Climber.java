@@ -39,7 +39,8 @@ public class Climber extends SubsystemBase {
     public void winchRawControl(){
         winchVel = Constants.operatorController.getRawAxis(Axis.AxisID.LEFT_Y.getID());
         double turnDirection = (Constants.operatorController.getRawAxis(Axis.AxisID.LEFT_Y.getID()) > 0) ? -1 : 1;
-        winchVel =  Math.abs(winchVel) > Constants.Climber.deadband ? speed : 0;
+        double climberVel = (Constants.operatorController.getRawAxis(Axis.AxisID.LEFT_Y.getID()) / 1.5);
+        winchVel =  Math.abs(winchVel) > Constants.Climber.deadband ? Math.abs(climberVel) : 0;
 
         double winch = winchVel * turnDirection;
         climberLeader.set(TalonSRXControlMode.PercentOutput, winch);

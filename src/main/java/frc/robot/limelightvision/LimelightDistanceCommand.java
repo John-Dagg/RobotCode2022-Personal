@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.utility.MathEqs.*;
 
 public class LimelightDistanceCommand extends CommandBase {
 
@@ -124,7 +123,7 @@ public class LimelightDistanceCommand extends CommandBase {
     @Override
     public void end(boolean isFinished) {
         mVision.setValues(0,0);
-        mDrivetrain.mState = Constants.DriveTrain.DriveState.TELE_DRIVE;
+        mDrivetrain.mState = Constants.DriveTrain.DriveState.TELE_DRIVE_INTAKE;
 
     }
 

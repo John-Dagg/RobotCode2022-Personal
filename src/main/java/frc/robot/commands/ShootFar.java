@@ -34,7 +34,7 @@ public class ShootFar extends CommandBase {
         elapsedTime = System.currentTimeMillis() - start;
         elapsedTime = elapsedTime / 1000;
         mShooter.setShooterFar();
-        if (elapsedTime > 1){
+        if (elapsedTime > 0.7){
             mIndexer.feedIndexer();
         }
 

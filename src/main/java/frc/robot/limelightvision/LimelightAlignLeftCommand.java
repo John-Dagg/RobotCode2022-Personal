@@ -72,7 +72,7 @@ public class LimelightAlignLeftCommand extends CommandBase {
         if(stopFlag){
             System.out.println("Ending Alignment");
         }
-        mDrivetrain.mState = DriveState.TELE_DRIVE;
+        mDrivetrain.mState = DriveState.TELE_DRIVE_INTAKE;
     }
 
     @Override

@@ -367,7 +367,8 @@ public class Drivetrain extends SubsystemBase {
     if (xOffset > 0){
       System.out.println(xOffset + " degrees to the RIGHT(?)");
       SmartDashboard.putNumber("Degrees to the RIGHT", xOffset);
-    } else {
+    }
+    if (xOffset < 0){
       System.out.println(xOffset + " degrees to the LEFT(?)");
       SmartDashboard.putNumber("Degrees to the LEFT", xOffset);
     }

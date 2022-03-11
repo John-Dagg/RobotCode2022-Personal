@@ -15,7 +15,7 @@ public class Intake extends SubsystemBase {
 
     private CANSparkMax rollerBar, staticRoller;
     private DoubleSolenoid fourBar;
-    private final double intakeSpeed = -0.725;
+    private final double intakeSpeed = -0.8;
 
     public Intake(){
 

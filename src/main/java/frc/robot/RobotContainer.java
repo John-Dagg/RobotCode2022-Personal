@@ -97,15 +97,16 @@ public class RobotContainer {
      * Left Trigger - Outtake
      * X - Shooter Arcade Drive Toggle                  TODO: Limelight - Find appropriate distance and tune calcDistance() {@link LimelightDistanceCommand}
      * B - Intake Arcade Drive Toggle
-     * A - Extend Intake and Spin Rollers
+     * A - Toggle Four-Bar
      *
      * Operator Controller
      * Left Bumper - Shoot Far
      * Right Bumper - Shoot Close
      * Y - Shoot Low (In Theory)
      * A - Disengages brake + enables winch (Hold)
+     *
      * B - Toggle Brake
-     * Left X - Raw Winch Control (Requires A to be held)
+     * Left Y - Raw Winch Control (Requires A to be held)
      *
      * Auton                                            TODO: AutonGenerator is returning a nullPointer? Not filling array correctly?
      *                                                        Tune PID constants and ka, kv, ks
@@ -202,11 +203,11 @@ public class RobotContainer {
     new JoystickButton(operatorController, Button.ButtonID.B.getID())
             .whenPressed(new InstantCommand(mClimber::brake));
 
-    new JoystickButton(operatorController, Button.ButtonID.LEFT_BUMPER.getID())
-            .whenHeld(new StartEndCommand(mClimber::winchUp, mClimber::winchStop));
+//    new JoystickButton(operatorController, Button.ButtonID.LEFT_BUMPER.getID())
+//            .whenHeld(new StartEndCommand(mClimber::winchUp, mClimber::winchStop));
 
-    new JoystickButton(operatorController, Button.ButtonID.RIGHT_BUMPER.getID())
-            .whenHeld(new StartEndCommand(mClimber::winchDown, mClimber::winchStop));
+//    new JoystickButton(operatorController, Button.ButtonID.RIGHT_BUMPER.getID())
+//            .whenHeld(new StartEndCommand(mClimber::winchDown, mClimber::winchStop));
 
 
 

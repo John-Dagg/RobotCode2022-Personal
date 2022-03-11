@@ -35,7 +35,7 @@ public class ShootClose extends CommandBase {
     public void execute(){
         elapsedTime = System.currentTimeMillis() - start;
         mShooter.setShooterClose();
-        if(mShooter.getShooterVel() > mShooter.getShooterCloseVel()){
+        if(elapsedTime > 0.5){
             mIndexer.feedIndexer();
         }
     }

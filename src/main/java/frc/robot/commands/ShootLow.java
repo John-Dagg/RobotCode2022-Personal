@@ -18,7 +18,7 @@ public class ShootLow extends CommandBase {
         mIndexer = subsystemB;
         addRequirements(mShooter, mIndexer);
 
-        speed = 0.3;
+        speed = -0.3;
     }
 
     @Override
