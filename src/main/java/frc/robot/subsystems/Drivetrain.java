@@ -221,6 +221,14 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
+  public void setShooterDrive(){
+    setState(DriveState.TELE_DRIVE_SHOOTER);
+  }
+
+  public void setIntakeDrive(){
+    setState(DriveState.TELE_DRIVE_INTAKE);
+  }
+
   public void defaultState(){
     mState = defaultState;
   }

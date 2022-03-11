@@ -55,6 +55,7 @@ public class RobotContainer {
   //Complex Commands (that can't be inlined)
   private final ShootFar mShootFar = new ShootFar(mShooter, mIndexer);
   private final ShootClose mShootClose = new ShootClose(mShooter, mIndexer);
+  private final ShootLow mShootLow = new ShootLow(mShooter, mIndexer);
   private final IntakeCargo mIntakeCargo = new IntakeCargo(mIntake);
   private final ClimberControl mClimberControl = new ClimberControl(mClimber);
 
@@ -94,15 +95,14 @@ public class RobotContainer {
      * Right Bumper - Extends + Intakes (Hold)
      * Right Trigger - Intake
      * Left Trigger - Outtake
-     * X - Align Target Angle + Default Turn Left       TODO: Tune - Why is the pipeline unstable?
-     * B - Align Target Angle + Default Turn Right      TODO: Tune ^
-     * Y - Drivetrain Toggle                            TODO: Limelight - Find appropriate distance and tune calcDistance() {@link LimelightDistanceCommand}
-     * A - Extend Intake and Spin Rollers               TODO:
+     * X - Shooter Arcade Drive Toggle                  TODO: Limelight - Find appropriate distance and tune calcDistance() {@link LimelightDistanceCommand}
+     * B - Intake Arcade Drive Toggle
+     * A - Extend Intake and Spin Rollers
      *
      * Operator Controller
-     * Y - Shoot Far
-     * X - Shoot Close
-     * B - Change Climber Angle (Disabled)
+     * Left Bumper - Shoot Far
+     * Right Bumper - Shoot Close
+     * Y - Shoot Low (In Theory)
      * A - Disengages brake + enables winch (Hold)
      * B - Toggle Brake
      * Left X - Raw Winch Control (Requires A to be held)
@@ -112,6 +112,12 @@ public class RobotContainer {
      *                                                        Check encoders
      *                                                        Add timer to shoot close/far commands so they actually end in auton
      *                                                        Test Sequential Command Groups and Parallel Race Groups in auton
+     *
+     *     (Disabled)
+     * X - Align Target Angle + Default Turn Left       TODO: Tune - Why is the pipeline unstable?
+     * B - Align Target Angle + Default Turn Right      TODO: Tune ^
+     * B - Change Climber Angle
+     *
      */
 
     //Limelight
@@ -132,10 +138,11 @@ public class RobotContainer {
                     new InstantCommand(mDrivetrain::lowGear),
                     mDrivetrain::getLowGear));
 
-    new JoystickButton(driverController, Button.ButtonID.Y.getID())
-            .whenPressed(new InstantCommand(mDrivetrain::toggleArcadeStyle));
+    new JoystickButton(driverController, Button.ButtonID.X.getID())
+            .whenPressed(new InstantCommand(mDrivetrain::setShooterDrive));
 
-
+    new JoystickButton(driverController, Button.ButtonID.B.getID())
+            .whenPressed(new InstantCommand(mDrivetrain::setIntakeDrive));
 
 
 //    Intake
@@ -160,23 +167,26 @@ public class RobotContainer {
 
 //    Shooter
 
-    new JoystickButton(operatorController, Button.ButtonID.Y.getID())
+    new JoystickButton(operatorController, Button.ButtonID.LEFT_BUMPER.getID())
             .whenHeld(mShootFar);
 
-    new JoystickButton(operatorController, Button.ButtonID.Y.getID())
+    new JoystickButton(operatorController, Button.ButtonID.LEFT_BUMPER.getID())
             .whenInactive(mShooter::setShooterIdle);
 
-    new JoystickButton(operatorController, Button.ButtonID.Y.getID())
+    new JoystickButton(operatorController, Button.ButtonID.LEFT_BUMPER.getID())
             .whenInactive(mIndexer::setIndexerIdle);
 
-    new JoystickButton(operatorController, Button.ButtonID.X.getID())
+    new JoystickButton(operatorController, Button.ButtonID.RIGHT_BUMPER.getID())
             .whenHeld(mShootClose);
 
-    new JoystickButton(operatorController, Button.ButtonID.X.getID())
+    new JoystickButton(operatorController, Button.ButtonID.RIGHT_BUMPER.getID())
             .whenInactive(mShooter::setShooterIdle);
 
-    new JoystickButton(operatorController, Button.ButtonID.X.getID())
+    new JoystickButton(operatorController, Button.ButtonID.RIGHT_BUMPER.getID())
             .whenInactive(mIndexer::setIndexerIdle);
+
+    new JoystickButton(operatorController, Button.ButtonID.Y.getID())
+            .whenHeld(mShootLow);
 
 //    Climber
 

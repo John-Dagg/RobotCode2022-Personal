@@ -64,7 +64,11 @@ public class Shooter extends SubsystemBase {
         shooterMotorLeader.set(TalonFXControlMode.PercentOutput, farVel);
         double ticks = shooterMotorLeader.getSelectedSensorVelocity();
         double RPM = (ticks / integratedTicks) * 10 * 60;
-        System.out.println(RPM);
+//        System.out.println(RPM);
+    }
+
+    public void setShooterVel(double speed){
+        shooterMotorLeader.set(TalonFXControlMode.PercentOutput, speed);
     }
 
     public void setShooterIdle(){
