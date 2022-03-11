@@ -38,7 +38,7 @@ public class Climber extends SubsystemBase {
 
     public void winchRawControl(){
         winchVel = Constants.operatorController.getRawAxis(Axis.AxisID.LEFT_Y.getID());
-        double turnDirection = (Constants.operatorController.getRawAxis(Axis.AxisID.LEFT_Y.getID()) > 0) ? 1 : -1;
+        double turnDirection = (Constants.operatorController.getRawAxis(Axis.AxisID.LEFT_Y.getID()) > 0) ? -1 : 1;
         winchVel =  Math.abs(winchVel) > Constants.Climber.deadband ? speed : 0;
 
         double winch = winchVel * turnDirection;

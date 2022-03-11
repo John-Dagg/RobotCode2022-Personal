@@ -1,10 +1,12 @@
 package frc.robot.limelightvision;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class VPLimelight extends SubsystemBase {
 
@@ -79,5 +81,10 @@ public class VPLimelight extends SubsystemBase {
         return new double[] {throttleValue, turnValue};
     }
 
+    public double calcDistance(){
+        yOffset = getyOffset();
+        return (Constants.LimelightVision.targetHeight - Constants.LimelightVision.cameraHeight)
+                / Math.tan(Units.degreesToRadians(Constants.LimelightVision.cameraAngle + yOffset));
+    }
 
 }

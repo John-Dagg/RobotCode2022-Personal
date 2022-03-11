@@ -49,7 +49,7 @@ public class LimelightAlignCommand extends CommandBase {
     }
 
 
-        @Override
+    @Override
     public void initialize(){
         mDrivetrain.mState = limelightMode;
         stopFlag = false;
@@ -111,7 +111,7 @@ public class LimelightAlignCommand extends CommandBase {
             stopFlag = true;
             end(true);
         }
-        System.out.println(turn);
+        System.out.println(yaw);
         mVision.setValues(0, turn);
 
     }

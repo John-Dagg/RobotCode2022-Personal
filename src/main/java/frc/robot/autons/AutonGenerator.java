@@ -124,8 +124,7 @@ public class AutonGenerator {
                             mDrivetrain::getWheelSpeeds,
                             leftPID, rightPID,
                             (leftVolts, rightVolts) -> {mDrivetrain.tankDriveVolts(leftVolts, rightVolts);},
-                            mDrivetrain)
-            );
+                            mDrivetrain));
         }
         return commands;
     }

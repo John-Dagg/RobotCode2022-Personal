@@ -30,30 +30,49 @@ public class HardCodeAuton extends CommandBase {
         start = System.currentTimeMillis();
         stopFlag = false;
         mDrivetrain.mState = Constants.DriveTrain.DriveState.AUTO_DRIVE;
+        mDrivetrain.resetEncoders();
     }
 
     @Override
     public void execute(){
         currentTime = System.currentTimeMillis();
-        elapseTime = (currentTime - elapseTime) * 1000; //Seconds
+        elapseTime = (currentTime - start) / 1000; //Seconds
+        System.out.println("Elapsed Time: " + elapseTime);
 
         System.out.println("Left Wheels Distance: " + mDrivetrain.leftWheelsPosition());
         System.out.println("Right Wheels Distance: " + mDrivetrain.rightWheelsPosition());
 
-        if (mDrivetrain.leftWheelsPosition() < 2 && mDrivetrain.rightWheelsPosition() < 2){
-            mDrivetrain.autonDrive(0.1, 0);
-//            mIntake.extendIntake(); //Internal logic that only actuates the solenoid if the solenoid is in the opposite state
-//            mIntake.rollerIntake();
-//            mShooter.setAnglerLow();
-        }
-        if (mDrivetrain.leftWheelsPosition() >= 2 || mDrivetrain.rightWheelsPosition() >= 2){
-            mDrivetrain.stopDrive();
-//            mIntake.rollerStop();
-//            mIntake.retractIntake();
-//            mShooter.setShooterClose();
-//            if(mShooter.getShooterVel() > mShooter.getShooterCloseVel()){
-//                mIndexer.feedIndexer();
+        if (mDrivetrain.leftWheelsPosition() < 1.15 && mDrivetrain.rightWheelsPosition() < 1.15){
+            System.out.println("Running phase 1");
+            mDrivetrain.autonDrive(0.5, 0);
+            mIntake.extendIntake(); //Internal logic that only actuates the solenoid if the solenoid is in the opposite state
+            if (elapseTime > 0.75){
+                mIntake.rollerIntake();
             }
+            mIntake.rollerIntake();
+            mShooter.setAnglerLow();
+        }
+
+        if (mDrivetrain.leftWheelsPosition() >= 1.15 || mDrivetrain.rightWheelsPosition() >= 1.15) {
+            System.out.println("Running phase 2");
+            mDrivetrain.stopDrive();
+            if (elapseTime < 3) {
+                mIntake.rollerIntake();
+            } else {
+                mIntake.rollerStop();
+                mIntake.retractIntake();
+            }
+            mShooter.setShooterClose();
+            if (mShooter.getShooterVel() > mShooter.getShooterCloseVel()) {
+                mIndexer.feedIndexer();
+            }
+        }
+        if (elapseTime > 8){
+            mIndexer.setIndexerIdle();
+            mShooter.setShooterIdle();
+        }
+
+
 
 
         /***
@@ -61,7 +80,8 @@ public class HardCodeAuton extends CommandBase {
          * Also calls end() as another layer of security
          */
 
-        if(elapseTime > 5){
+        if(elapseTime > 15){
+            System.out.println("Stopping");
             mDrivetrain.stopDrive();
             mIntake.retractIntake();
             mIntake.rollerStop();
@@ -74,7 +94,10 @@ public class HardCodeAuton extends CommandBase {
     @Override
     public void end(boolean isFinished){
         mDrivetrain.stopDrive();
+        mIndexer.setIndexerIdle();
+        mShooter.setShooterIdle();
         mDrivetrain.mState = Constants.DriveTrain.DriveState.TELE_DRIVE;
+        System.out.println("Ending Auton");
     }
 
     @Override

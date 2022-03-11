@@ -114,23 +114,13 @@ public class RobotContainer {
      *                                                        Test Sequential Command Groups and Parallel Race Groups in auton
      */
 
-
-//    new POVButton(Constants.driverController, 90)
-//            .whenHeld(mRightAlign);
-//    new POVButton(Constants.driverController, 270)
-//            .whenHeld(mLeftAlign);
+    //Limelight
 
     new JoystickButton(driverController, Button.ButtonID.X.getID())
             .whenHeld(mLeftAlign);
 
     new JoystickButton(driverController, Button.ButtonID.B.getID())
             .whenHeld(mRightAlign);
-
-//    new JoystickButton(driverController, Button.ButtonID.Y.getID())
-//            .whenHeld(mDistanceTarget);
-
-//    new JoystickButton(Constants.driverController, Button.ButtonID.Y.getID())
-//            .whenHeld(mAlignTarget.andThen(new WaitCommand(1)).andThen(mDistance));
 
     //Drivetrain
 
@@ -142,63 +132,50 @@ public class RobotContainer {
                     new InstantCommand(mDrivetrain::lowGear),
                     mDrivetrain::getLowGear));
 
-//    Waiting for Build lol
+
+
+
 //    Intake
 
-//    new JoystickButton(driverController, Button.ButtonID.RIGHT_BUMPER.getID())
-//            .whenPressed(new ConditionalCommand(
-//                    new InstantCommand(mIntake::retractIntake),
-//                    new InstantCommand(mIntake::extendIntake),
-//                    mIntake::getFourBarState));
+    new JoystickButton(driverController, Button.ButtonID.A.getID())
+            .whenPressed(new ConditionalCommand(
+                    new InstantCommand(mIntake::retractIntake),
+                    new InstantCommand(mIntake::extendIntake),
+                    mIntake::getFourBarState));
 
     new JoystickButton(driverController, Button.ButtonID.RIGHT_BUMPER.getID())
-            .whenHeld(new StartEndCommand(mIntake::extendIntake, mIntake::retractIntake));
-
-    new JoystickButton(driverController, Button.ButtonID.A.getID())
             .whenHeld(mIntakeCargo);
 
     //  Another option for intake control to add more buttons hopefully
     //  Leaving this here for now. Using default command
 
-//    if (new Joystick(Axis.AxisID.LEFT_TRIGGER.getID()).getTriggerPressed())
-//            new StartEndCommand(mIntake::rollerIntake, mIntake::rollerStop);
+    if (new Joystick(Axis.AxisID.LEFT_TRIGGER.getID()).getTriggerPressed())
+            new StartEndCommand(mIntake::rollerIntake, mIntake::rollerStop);
 
-//    if (new Joystick(Axis.AxisID.RIGHT_TRIGGER.getID()).getTriggerPressed())
-//            new StartEndCommand(mIntake::rollerOuttake, mIntake::rollerStop);
-
-//    new JoystickButton(driverController, Button.ButtonID.A.getID())
-//            .whenHeld(new StartEndCommand(mIntake::rollerIntake, mIntake::rollerStop));
-
-//    new JoystickButton(driverController, Button.ButtonID.B.getID())
-//            .whenHeld(new StartEndCommand(mIntake::rollerOuttake, mIntake::rollerStop));
+    if (new Joystick(Axis.AxisID.RIGHT_TRIGGER.getID()).getTriggerPressed())
+            new StartEndCommand(mIntake::rollerOuttake, mIntake::rollerStop);
 
 //    Shooter
 
-    new JoystickButton(operatorController, Button.ButtonID.X.getID())
+    new JoystickButton(operatorController, Button.ButtonID.Y.getID())
             .whenHeld(mShootFar);
 
-    new JoystickButton(operatorController, Button.ButtonID.X.getID())
+    new JoystickButton(operatorController, Button.ButtonID.Y.getID())
             .whenInactive(mShooter::setShooterIdle);
 
-    new JoystickButton(operatorController, Button.ButtonID.X.getID())
+    new JoystickButton(operatorController, Button.ButtonID.Y.getID())
             .whenInactive(mIndexer::setIndexerIdle);
 
-    new JoystickButton(operatorController, Button.ButtonID.Y.getID())
+    new JoystickButton(operatorController, Button.ButtonID.X.getID())
             .whenHeld(mShootClose);
 
-    new JoystickButton(operatorController, Button.ButtonID.Y.getID())
+    new JoystickButton(operatorController, Button.ButtonID.X.getID())
             .whenInactive(mShooter::setShooterIdle);
 
-    new JoystickButton(operatorController, Button.ButtonID.Y.getID())
+    new JoystickButton(operatorController, Button.ButtonID.X.getID())
             .whenInactive(mIndexer::setIndexerIdle);
 
 //    Climber
-
-//    new JoystickButton(operatorController, Button.ButtonID.A.getID())
-//            .whenHeld(mClimberControl);
-
-//    new JoystickButton(operatorController, Button.ButtonID.B.getID())
-//            .whenPressed(mClimber::brake);
 
 //    new JoystickButton(Constants.operatorController, Button.ButtonID.A.getID())
 //            .whenPressed(new ConditionalCommand(
@@ -206,14 +183,17 @@ public class RobotContainer {
 //                    new InstantCommand(mClimber::angleB),
 //                    mClimber::getAngle));
 
-//    new JoystickButton(operatorController, Button.ButtonID.B.getID())
-//            .whenPressed(new InstantCommand(mClimber::brake));
+    new JoystickButton(operatorController, Button.ButtonID.A.getID())
+            .whenHeld(mClimberControl);
 
-//    new JoystickButton(operatorController, Button.ButtonID.LEFT_BUMPER.getID())
-//            .whenHeld(new StartEndCommand(mClimber::winchUp, mClimber::winchStop));
+    new JoystickButton(operatorController, Button.ButtonID.B.getID())
+            .whenPressed(new InstantCommand(mClimber::brake));
 
-//    new JoystickButton(operatorController, Button.ButtonID.RIGHT_BUMPER.getID())
-//            .whenHeld(new StartEndCommand(mClimber::winchDown, mClimber::winchStop));
+    new JoystickButton(operatorController, Button.ButtonID.LEFT_BUMPER.getID())
+            .whenHeld(new StartEndCommand(mClimber::winchUp, mClimber::winchStop));
+
+    new JoystickButton(operatorController, Button.ButtonID.RIGHT_BUMPER.getID())
+            .whenHeld(new StartEndCommand(mClimber::winchDown, mClimber::winchStop));
 
 
 
@@ -222,9 +202,9 @@ public class RobotContainer {
   //Global auton execution called here
   public Command getAutonomousCommand() {
 
-    ramseteCommands = autonGenerator.getAutonCommands(mTest, mDrivetrain);
+//    ramseteCommands = autonGenerator.getAutonCommands(mTest, mDrivetrain);
 
-    mDrivetrain.resetOdometry(autonGenerator.getTrajectory(mTest[0]).getInitialPose());
+//    mDrivetrain.resetOdometry(autonGenerator.getTrajectory(mTest[0]).getInitialPose());
 
     //TODO: Find a better way to do this
     /*
@@ -239,6 +219,7 @@ public class RobotContainer {
     */
 
     //TODO: Shooter won't stop I think
+    /*
     SequentialCommandGroup auton = new SequentialCommandGroup(
             new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.RIGHT, TurnMode.AUTON),
             new ShootClose(mShooter, mIndexer, 2),
@@ -251,6 +232,8 @@ public class RobotContainer {
             new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.RIGHT, TurnMode.AUTON),
             new ShootFar(mShooter, mIndexer, 2),
             new InstantCommand(mDrivetrain::stopDrive));
+
+     */
 
   //Hard Coding ):
   return mAuton;

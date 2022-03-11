@@ -28,7 +28,8 @@ public class LimelightDistanceCommand extends CommandBase {
     private boolean stopFlag;
 
     private final double distanceClose = 62; //inches
-    private final double distanceFar = 250; //inches
+    private final double distanceFar = 178; //inches
+    private final double band = 20;
 
 
     public LimelightDistanceCommand(Drivetrain subsystemA, VPLimelight subsystemB, boolean close){

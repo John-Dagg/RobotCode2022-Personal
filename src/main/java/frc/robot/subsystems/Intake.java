@@ -15,7 +15,7 @@ public class Intake extends SubsystemBase {
 
     private CANSparkMax rollerBar, staticRoller;
     private DoubleSolenoid fourBar;
-    private final double intakeSpeed = -0.8;
+    private final double intakeSpeed = -0.725;
 
     public Intake(){
 
@@ -39,10 +39,10 @@ public class Intake extends SubsystemBase {
     public void triggerRollerIntake(){
         if (Constants.driverController.getRawAxis(Axis.AxisID.RIGHT_TRIGGER.getID()) > 0.25){
             rollerBar.set(intakeSpeed);
-            System.out.println("intaking");
+//            System.out.println("intaking");
         } else if (Constants.driverController.getRawAxis(Axis.AxisID.LEFT_TRIGGER.getID()) > 0.25){
             rollerBar.set(-intakeSpeed);
-            System.out.println("outtaking");
+//            System.out.println("outtaking");
         } else {
             rollerStop();
         }
@@ -55,18 +55,18 @@ public class Intake extends SubsystemBase {
     }
 
     public void extendIntake(){
-        if (fourBar.get() != DoubleSolenoid.Value.kReverse) fourBar.set(DoubleSolenoid.Value.kReverse);
+        if (fourBar.get() != DoubleSolenoid.Value.kForward) fourBar.set(DoubleSolenoid.Value.kForward);
     }
 
     public void retractIntake(){
-        if (fourBar.get() != DoubleSolenoid.Value.kForward) fourBar.set(DoubleSolenoid.Value.kForward);
+        if (fourBar.get() != DoubleSolenoid.Value.kReverse) fourBar.set(DoubleSolenoid.Value.kReverse);
     }
 
     public boolean getFourBarState(){
         boolean state = true;
-        if(fourBar.get() == DoubleSolenoid.Value.kReverse){
+        if(fourBar.get() == DoubleSolenoid.Value.kForward){
             state = true;
-        } else if (fourBar.get() == DoubleSolenoid.Value.kForward){
+        } else if (fourBar.get() == DoubleSolenoid.Value.kReverse){
             state = false;
         }
         return state;

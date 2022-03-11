@@ -53,11 +53,18 @@ public class Drivetrain extends SubsystemBase {
 
   private double mYaw, mLeftVolts, mRightVolts;
 
-  private double lastThrottle, lastTurn;
+  private double lastThrottle, lastTurn, limelightThrottle, limelightTurn, limelightRawTurn;
+  private double yaw;
+  private double limelightGain;
 
   public DriveState mState;
 
   private VPLimelight mLimelight;
+
+  private final double distanceClose = 62; //inches
+  private final double distanceFar = 178; //inches
+  private final double band = 20;
+
 
   public Drivetrain(VPLimelight subsystemA) {
 
@@ -194,8 +201,10 @@ public class Drivetrain extends SubsystemBase {
         arcadeDrive();
         break;
       case TELE_LIMELIGHT:
-        limelightDrive();
+        teleLimelight();
         break;
+      case LIMELIGHT_DRIVE:
+        limelightDrive();
       case AUTO_DRIVE:
         break;
       case AUTO_LIMELIGHT:
@@ -204,6 +213,46 @@ public class Drivetrain extends SubsystemBase {
         break;
     }
 //    System.out.println(mState);
+  }
+
+  public void setState(DriveState state){
+    mState = state;
+
+  }
+
+  public void defaultState(){
+    mState = defaultState;
+  }
+
+  public void toggleDriveState(){
+    if (mState != DriveState.LIMELIGHT_DRIVE) {
+      mState = DriveState.LIMELIGHT_DRIVE;
+    }
+    if (mState != DriveState.TELE_DRIVE) {
+      mState = DriveState.TELE_DRIVE;
+    }
+
+  }
+
+  public void limelightDrive(){
+    //Needs Work First
+    mYaw = mLimelight.getxOffset();
+    if (mYaw > 0.5) {
+      limelightGain = 0.2;
+    }
+    if (mYaw < -0.5) {
+      limelightGain = -0.2;
+    }
+
+
+    limelightThrottle = deadband(Constants.driverController.getRawAxis(Axis.AxisID.LEFT_Y.getID()));
+    limelightRawTurn = deadband(Constants.driverController.getRawAxis(Axis.AxisID.RIGHT_X.getID()));
+
+    limelightTurn = limelightRawTurn + limelightGain;
+    limelightTurn = limelightRawTurn == 0 ? 0 : limelightTurn;
+
+    mDrive.arcadeDrive(limelightThrottle, limelightTurn);
+
   }
 
   public void arcadeDrive(){
@@ -221,6 +270,14 @@ public class Drivetrain extends SubsystemBase {
 
     if (mLeftLeader.getBusVoltage() <= 7){
       System.out.println("Motor Voltage Below 7 - Brownout! " + mLeftLeader.getBusVoltage() + " Volts");
+    }
+
+    if (mLimelight.calcDistance() > distanceClose - band && mLimelight.calcDistance() < distanceClose + band){
+      System.out.println("In close shooter range +- 40 inches");
+    }
+
+    if (mLimelight.calcDistance() > distanceFar - band && mLimelight.calcDistance() < distanceFar + band){
+      System.out.println("In far shooter range +- 40 inches");
     }
 
 //    double left = throttle - turn;
@@ -245,14 +302,14 @@ public class Drivetrain extends SubsystemBase {
 //    System.out.println(mLeftEncoder.getVelocity() * velocityConversion);
   }
 
-  public void limelightDrive(){
+  public void teleLimelight(){
     double[] values = mLimelight.getValues();
     mDrive.arcadeDrive(values[0], values[1]);
     mDrive.feed();
   }
 
   public void autonDrive(double thottle, double turn){
-    mDrive.arcadeDrive(-thottle, turn);
+    mDrive.arcadeDrive(thottle, turn);
     mDrive.feed();
   }
 
