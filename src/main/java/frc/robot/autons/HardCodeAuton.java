@@ -46,9 +46,9 @@ public class HardCodeAuton extends CommandBase {
         System.out.println("Left Wheels Distance: " + mDrivetrain.leftWheelsPosition());
         System.out.println("Right Wheels Distance: " + mDrivetrain.rightWheelsPosition());
 
-        if (mDrivetrain.leftWheelsPosition() < 1.15 && mDrivetrain.rightWheelsPosition() < 1.15){
+        if (mDrivetrain.leftWheelsPosition() < 0.8 && mDrivetrain.rightWheelsPosition() < 0.8){
             System.out.println("Running phase 1");
-            mDrivetrain.autonDrive(0.5, 0);
+            mDrivetrain.autonDrive(0.4, 0);
             mIntake.extendIntake(); //Internal logic that only actuates the solenoid if the solenoid is in the opposite state
             if (elapseTime > 0.5){
                 mIntake.rollerIntake();

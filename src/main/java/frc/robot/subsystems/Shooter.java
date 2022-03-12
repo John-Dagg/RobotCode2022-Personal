@@ -38,6 +38,8 @@ public class Shooter extends SubsystemBase {
         shooterMotorLeader = MotorControllerFactory.makeTalonFX(Constants.Shooter.shooterAPort);
         shooterMotorFollower = MotorControllerFactory.makeTalonFX(Constants.Shooter.shooterBPort);
 
+
+
         angler = new DoubleSolenoid(anglerPorts[0], PneumaticsModuleType.CTREPCM, anglerPorts[1], anglerPorts[2]);
 
         shooterMotorFollower.setInverted(true);
