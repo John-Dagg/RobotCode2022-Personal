@@ -46,12 +46,10 @@ public class RobotContainer {
   //Limelight Vision
   private final LimelightAlignCommand mLeftAlign = new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.LEFT, TurnMode.TELEOP);
   private final LimelightAlignCommand mRightAlign = new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.RIGHT, TurnMode.TELEOP);
+  private final LimelightAlignCommand mAutonLeftAlign = new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.LEFT, TurnMode.AUTON);
+  private final LimelightAlignCommand mAutonRightAlign = new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.RIGHT, TurnMode.AUTON);
+
   private final LimelightDistanceCommand mDistanceTarget = new LimelightDistanceCommand(mDrivetrain, mLimelightVision, true);
-//  private final LimelightAlignLeftCommand mLeftAlign = new LimelightAlignLeftCommand(mDrivetrain, mLimelightVision);
-//  private final LimelightAlignRightCommand mRightAlign = new LimelightAlignRightCommand(mDrivetrain, mLimelightVision);
-//  private final LimelightDistanceCommand mSoloDistanceTarget = new LimelightDistanceCommand(mDrivetrain, mLimelightVision);
-//  private final LimelightDistanceCommand mDistance = new LimelightDistanceCommand(mDrivetrain, mLimelightVision);
-//  private final LimelightCompleteVisionCommand mCompleteVision = new LimelightCompleteVisionCommand(mAlignTarget, mDistanceTarget);
 
   //Complex Commands (that can't be inlined)
   private final ShootFar mShootFar = new ShootFar(mShooter, mIndexer);
@@ -117,22 +115,19 @@ public class RobotContainer {
      *                                                        Test Sequential Command Groups and Parallel Race Groups in auton
      *
      *     (Disabled)
-     * X - Align Target Angle + Default Turn Left       TODO: Tune - Why is the pipeline unstable?
-     * B - Align Target Angle + Default Turn Right      TODO: Tune ^
+     * X - Align Target Angle + Default Turn Left
+     * B - Align Target Angle + Default Turn Right
      * B - Change Climber Angle
      *
      */
 
     //Limelight
 
-//    new JoystickButton(driverController, Button.ButtonID.X.getID())
-//            .whenHeld(mLeftAlign);
+    new JoystickButton(driverController, Button.ButtonID.X.getID())
+            .whenHeld(mLeftAlign);
 
-    new POVButton(driverController,90,0).whenHeld(mRightAlign);
-    new POVButton(driverController,270,0).whenHeld(mLeftAlign);
-
-//    new JoystickButton(driverController, Button.ButtonID.B.getID())
-//            .whenHeld(mRightAlign);
+    new JoystickButton(driverController, Button.ButtonID.B.getID())
+            .whenHeld(mRightAlign);
 
     //Drivetrain
 
@@ -149,11 +144,11 @@ public class RobotContainer {
 //    new JoystickButton(driverController, Button.ButtonID.LEFT_BUMPER.getID())
 //            .whenHeld(new StartEndCommand(mDrivetrain::highGear, mDrivetrain::lowGear));
 
-    new JoystickButton(driverController, Button.ButtonID.X.getID())
-            .whenPressed(new InstantCommand(mDrivetrain::setShooterDrive));
+//    new JoystickButton(driverController, Button.ButtonID.X.getID())
+//            .whenPressed(new InstantCommand(mDrivetrain::setShooterDrive));
 
-    new JoystickButton(driverController, Button.ButtonID.B.getID())
-            .whenPressed(new InstantCommand(mDrivetrain::setIntakeDrive));
+//    new JoystickButton(driverController, Button.ButtonID.B.getID())
+//            .whenPressed(new InstantCommand(mDrivetrain::setIntakeDrive));
 
 
 //    Intake
@@ -230,20 +225,12 @@ public class RobotContainer {
 
     mDrivetrain.resetOdometry(autonGenerator.getTrajectory(mTest[0]).getInitialPose());
 
-    //TODO: Find a better way to do this
-    /*
-    SequentialCommandGroup auton = mLeftAlign.andThen(mShootClose).andThen(ramseteCommands.get(0))
-            .andThen(ramseteCommands.get(1)).andThen(mLeftAlign).andThen(mShootClose)
-            .andThen(ramseteCommands.get(2)).andThen(ramseteCommands.get(3)).andThen(mDistanceTarget)
-            .andThen(mShootFar).andThen(mDrivetrain::stopDrive);
-
-     */
     /***
     * Aim -> Shoot -> Drive and Collect -> Aim -> Shoot -> Drive and Collect -> Correct Distance -> Aim -> Shoot -> Stop
     */
 
-    //TODO: Shooter won't stop I think
-    /*
+    //TODO: Test line by line and make sure this actually works
+
     SequentialCommandGroup auton = new SequentialCommandGroup(
             new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.RIGHT, TurnMode.AUTON),
             new ShootClose(mShooter, mIndexer, 2),
@@ -257,7 +244,7 @@ public class RobotContainer {
             new ShootFar(mShooter, mIndexer, 2),
             new InstantCommand(mDrivetrain::stopDrive));
 
-     */
+
 
   //Hard Coding ):
 //  return mAuton;
