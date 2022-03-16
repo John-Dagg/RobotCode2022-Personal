@@ -43,8 +43,8 @@ public class LimelightAlignCommand extends CommandBase {
     public void initialize(){
         mDrivetrain.mState = limelightMode;
         stopFlag = false;
-        speed = 0.5;
-            System.out.println("Starting Alignment");
+//        speed = 0.5;
+        System.out.println("Starting Alignment");
     }
 
     @Override
@@ -112,11 +112,13 @@ public class LimelightAlignCommand extends CommandBase {
     public void findTarget(){
         mVision.setValues(0, searchDirection*maxTurn);
     }
-
+    /*
     public double calcTurn(double x){
         return (speed * Math.abs(x)) / (deccelAngle - goalAngleP)
                 + (speed * goalAngleP) / (goalAngleP - deccelAngle);
     }
+
+     */
 
 }
 
