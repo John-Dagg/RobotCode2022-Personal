@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.revrobotics.CANSparkMax;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.I2C;
@@ -13,9 +12,6 @@ import frc.robot.io.Axis;
 import frc.robot.utility.MotorControllerFactory;
 
 public class Indexer extends SubsystemBase {
-
-    //Waiting on Build/Electrical for testing
-    //RIP Color Sensor
 
     private TalonSRX indexerMotor;
 

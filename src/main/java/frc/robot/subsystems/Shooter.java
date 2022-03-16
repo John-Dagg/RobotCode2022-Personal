@@ -3,14 +3,8 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.ColorMatch;
-import com.revrobotics.ColorSensorV3;
-import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.io.Axis;
@@ -19,8 +13,6 @@ import frc.robot.utility.MotorControllerFactory;
 import static frc.robot.Constants.Shooter.anglerPorts;
 
 public class Shooter extends SubsystemBase {
-
-    //Waiting for Build/Electrical to test
 
     private TalonFX shooterMotorLeader, shooterMotorFollower;
     private DoubleSolenoid angler;

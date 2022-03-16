@@ -13,8 +13,6 @@ public class LimelightDistanceCommand extends CommandBase {
     private Drivetrain mDrivetrain;
     private VPLimelight mVision;
 
-    private LimelightAlignLeftCommand mAlign;
-
     private CANSparkMax mLeftLeader, mRightLeader;
     private MotorControllerGroup mLeftMotors, mRightMotors;
     private RelativeEncoder mLeftEncoder, mRightEncoder;

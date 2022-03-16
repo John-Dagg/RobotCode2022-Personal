@@ -144,13 +144,6 @@ public class RobotContainer {
 //    new JoystickButton(driverController, Button.ButtonID.LEFT_BUMPER.getID())
 //            .whenHeld(new StartEndCommand(mDrivetrain::highGear, mDrivetrain::lowGear));
 
-//    new JoystickButton(driverController, Button.ButtonID.X.getID())
-//            .whenPressed(new InstantCommand(mDrivetrain::setShooterDrive));
-
-//    new JoystickButton(driverController, Button.ButtonID.B.getID())
-//            .whenPressed(new InstantCommand(mDrivetrain::setIntakeDrive));
-
-
 //    Intake
 
     new JoystickButton(driverController, Button.ButtonID.A.getID())
@@ -208,14 +201,6 @@ public class RobotContainer {
     new JoystickButton(operatorController, Button.ButtonID.B.getID())
             .whenPressed(new InstantCommand(mClimber::brake));
 
-//    new JoystickButton(operatorController, Button.ButtonID.LEFT_BUMPER.getID())
-//            .whenHeld(new StartEndCommand(mClimber::winchUp, mClimber::winchStop));
-
-//    new JoystickButton(operatorController, Button.ButtonID.RIGHT_BUMPER.getID())
-//            .whenHeld(new StartEndCommand(mClimber::winchDown, mClimber::winchStop));
-
-
-
   }
 
   //Global auton execution called here
@@ -244,15 +229,15 @@ public class RobotContainer {
             new ShootFar(mShooter, mIndexer, 2),
             new InstantCommand(mDrivetrain::stopDrive));
 
-
-
-  //Hard Coding ):
+    //Hard Coding
 //  return mAuton;
 //  return mOneBallAuton;
 
-  return  ramseteCommands.get(0).andThen(new InstantCommand(mDrivetrain::stopDrive));
-
+    //Auton Generation
+    return ramseteCommands.get(0).andThen(new InstantCommand(mDrivetrain::stopDrive));
 //  return auton;
+
+    //Default
 //  return null;
   }
 
