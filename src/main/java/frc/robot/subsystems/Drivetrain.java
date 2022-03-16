@@ -325,14 +325,14 @@ public class Drivetrain extends SubsystemBase {
 //    turn = (turn == 0) ? 0 : turn/Math.abs(turn)*Math.sqrt(Math.abs(turn));
 //    turn = ((lastTurn == turn && Math.abs(turn) < 0.33) || turn == 0) ? 0 : turn;
 
-    if (!mDrive.isAlive()){
-      System.out.println("Motor timeout!");
-      System.out.println("Motor Expiration Timer: " + mDrive.getExpiration());
-    }
+//    if (!mDrive.isAlive()){
+//      System.out.println("Motor timeout!");
+//      System.out.println("Motor Expiration Timer: " + mDrive.getExpiration());
+//    }
 
-    if (mLeftLeader.getBusVoltage() <= 7){
-      System.out.println("Motor Voltage Below 7 - Brownout! " + mLeftLeader.getBusVoltage() + " Volts");
-    }
+//    if (mLeftLeader.getBusVoltage() <= 7){
+//      System.out.println("Motor Voltage Below 7 - Brownout! " + mLeftLeader.getBusVoltage() + " Volts");
+//    }
 
     if (mLimelight.calcDistance() > distanceClose - band && mLimelight.calcDistance() < distanceClose + band){
       System.out.println("In close shooter range +- 40 inches");

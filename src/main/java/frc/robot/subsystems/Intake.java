@@ -1,12 +1,15 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.io.Axis;
 import frc.robot.utility.MotorControllerFactory;
+
+import java.util.Timer;
 
 import static frc.robot.Constants.Intake.fourBarPorts;
 
@@ -15,23 +18,48 @@ public class Intake extends SubsystemBase {
 
     private CANSparkMax rollerBar, staticRoller;
     private DoubleSolenoid fourBar;
-    private final double intakeSpeed = -0.8;
+    private RelativeEncoder mEncoder;
+    private final double intakeSpeed = -1;
+
+    private double start, elapsedTime;
+    private int x = 0;
 
     public Intake(){
 
         rollerBar = MotorControllerFactory.makeSparkMax(Constants.Intake.intakeMotorPort);
 //        staticRoller = MotorControllerFactory.makeSparkMax(Constants.Intake.intakeStaticMotorPort);
         fourBar = new DoubleSolenoid(fourBarPorts[0], PneumaticsModuleType.CTREPCM, fourBarPorts[1], fourBarPorts[2]);
+        rollerBar.getEncoder();
+    }
 
+    public void stallFailsafe(){
+
+        if (rollerBar.getAppliedOutput() > 0.5 && mEncoder.getVelocity() > 0) x = 0;
+
+        //Current is an arbitrary value that just indicates if the motor is receiving current
+        //If the motor is receiving current and the encoder isn't reading turns the motor must be stalling
+
+        if (x < 1){
+            if ((rollerBar.getAppliedOutput() > 1.4) && (mEncoder.getVelocity() < 1)) {
+                start = System.currentTimeMillis();
+            }
+            x++;
+        }
+        if ((rollerBar.getAppliedOutput() > 1.4) && (mEncoder.getVelocity() < 1)){
+            elapsedTime = System.currentTimeMillis() - start;
+            if ((elapsedTime / 1000) > 1) rollerBar.set(0);
+        }
     }
 
     public void rollerIntake(){
         rollerBar.set(intakeSpeed);
+        stallFailsafe();
 //        staticRoller.set(1);
     }
 
     public void rollerOuttake(){
         rollerBar.set(-intakeSpeed);
+        stallFailsafe();
 //        staticRoller.set(-1);
 
     }

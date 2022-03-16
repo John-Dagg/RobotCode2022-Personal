@@ -7,7 +7,7 @@ import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 
-public class HardCodeAuton extends CommandBase {
+public class TaxiOneBallHardCode extends CommandBase {
 
     private Drivetrain mDrivetrain;
     private Intake mIntake;
@@ -20,7 +20,7 @@ public class HardCodeAuton extends CommandBase {
     private double throttleValue, turnValue;
     private boolean stopFlag;
 
-    public HardCodeAuton(Drivetrain subsystemA, Intake subsystemB, Indexer subsystemC, Shooter subsystemD){
+    public TaxiOneBallHardCode(Drivetrain subsystemA, Intake subsystemB, Indexer subsystemC, Shooter subsystemD){
 
         mDrivetrain = subsystemA; mIntake = subsystemB; mIndexer = subsystemC; mShooter = subsystemD;
         addRequirements(mDrivetrain, mIntake, mIndexer, mShooter);
@@ -34,7 +34,7 @@ public class HardCodeAuton extends CommandBase {
         mDrivetrain.mState = Constants.DriveTrain.DriveState.AUTO_DRIVE;
         mDrivetrain.resetEncoders();
 
-        speed = 0.7;
+        speed = 0.72;
     }
 
     @Override
@@ -46,32 +46,22 @@ public class HardCodeAuton extends CommandBase {
         System.out.println("Left Wheels Distance: " + mDrivetrain.leftWheelsPosition());
         System.out.println("Right Wheels Distance: " + mDrivetrain.rightWheelsPosition());
 
-        if (mDrivetrain.leftWheelsPosition() < 1 && mDrivetrain.rightWheelsPosition() < 1){
+        if (mDrivetrain.leftWheelsPosition() < 0.8 && mDrivetrain.rightWheelsPosition() < 0.8){
             System.out.println("Running phase 1");
             mDrivetrain.autonDrive(0.4, 0);
-            mIntake.extendIntake(); //Internal logic that only actuates the solenoid if the solenoid is in the opposite state
-            if (elapseTime > 0.5){
-                mIntake.rollerIntake();
-            }
             mShooter.setAnglerLow();
             mShooter.setShooterVel(-speed);
         }
 
-        if (mDrivetrain.leftWheelsPosition() >= 1 || mDrivetrain.rightWheelsPosition() >= 1 && elapseTime < 10) {
+        if (mDrivetrain.leftWheelsPosition() >= 0.8 || mDrivetrain.rightWheelsPosition() >= 0.8 && elapseTime < 14) {
             System.out.println("Running phase 2");
             mDrivetrain.stopDrive();
-            if (elapseTime < 3) {
-                mIntake.rollerIntake();
-            } else {
-                mIntake.rollerStop();
-                mIntake.retractIntake();
-            }
             mShooter.setShooterVel(-speed);
             if (elapseTime > 4.5) {
                 mIndexer.feedIndexer();
             }
         }
-        if (elapseTime > 10){
+        if (elapseTime > 14){
             mIndexer.setIndexerIdle();
             mShooter.setShooterIdle();
         }
@@ -114,3 +104,5 @@ public class HardCodeAuton extends CommandBase {
         return stopFlag;
     }
 }
+
+

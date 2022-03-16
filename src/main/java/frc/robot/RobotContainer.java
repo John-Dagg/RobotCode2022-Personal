@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.autons.AutonGenerator;
 import frc.robot.autons.HardCodeAuton;
+import frc.robot.autons.TaxiOneBallHardCode;
 import frc.robot.commands.*;
 import frc.robot.io.Axis;
 import frc.robot.io.Button;
@@ -67,6 +68,7 @@ public class RobotContainer {
 
   //Hardcode
   private final HardCodeAuton mAuton = new HardCodeAuton(mDrivetrain, mIntake, mIndexer, mShooter);
+  private final TaxiOneBallHardCode mOneBallAuton = new TaxiOneBallHardCode(mDrivetrain, mIntake, mIndexer, mShooter);
 
   public RobotContainer() {
 
@@ -133,11 +135,16 @@ public class RobotContainer {
 
     //If the left bumper is pressed and the drivetrain is in low gear perform the first command
     //If the left bumper is pressed and the drivetrain is in high gear perform the second command
+
     new JoystickButton(driverController, Button.ButtonID.LEFT_BUMPER.getID())
             .whenPressed(new ConditionalCommand(
                     new InstantCommand(mDrivetrain::highGear),
                     new InstantCommand(mDrivetrain::lowGear),
                     mDrivetrain::getLowGear));
+
+
+//    new JoystickButton(driverController, Button.ButtonID.LEFT_BUMPER.getID())
+//            .whenHeld(new StartEndCommand(mDrivetrain::highGear, mDrivetrain::lowGear));
 
     new JoystickButton(driverController, Button.ButtonID.X.getID())
             .whenPressed(new InstantCommand(mDrivetrain::setShooterDrive));
@@ -251,6 +258,7 @@ public class RobotContainer {
 
   //Hard Coding ):
   return mAuton;
+//  return mOneBallAuton;
 
 //  return ramseteCommands.get(0).andThen(new InstantCommand(mDrivetrain::stopDrive));
 //  return auton;
