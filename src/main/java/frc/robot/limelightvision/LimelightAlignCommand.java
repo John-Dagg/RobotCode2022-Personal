@@ -118,8 +118,6 @@ public class LimelightAlignCommand extends CommandBase {
                 + (speed * goalAngleP) / (goalAngleP - deccelAngle);
     }
 
-
-
 }
 
 
