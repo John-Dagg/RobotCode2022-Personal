@@ -82,7 +82,7 @@ public class LimelightAlignCommand extends CommandBase {
             System.out.println("Ending Alignment");
         }
         System.out.println("ENDING");
-        mDrivetrain.mState = DriveState.TELE_DRIVE_INTAKE;
+        mDrivetrain.mState = (limelightMode == DriveState.TELE_LIMELIGHT) ? DriveState.TELE_DRIVE_INTAKE : DriveState.AUTO_DRIVE;
     }
 
     @Override
@@ -109,9 +109,11 @@ public class LimelightAlignCommand extends CommandBase {
             System.out.println("Yaw: "+yaw+" Turn: "+turn);
         } else {
             System.out.println("Please work");
-//            System.out.println("STOPPING ALIGNMENT");
-//            stopFlag = true;
-//            end(true);
+            if (limelightMode == DriveState.AUTO_LIMELIGHT) {
+                System.out.println("STOPPING ALIGNMENT");
+                stopFlag = true;
+                end(true);
+            }
         }
         System.out.println(yaw);
         mVision.setValues(0, turn);
