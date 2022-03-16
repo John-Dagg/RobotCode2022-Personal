@@ -9,12 +9,9 @@ import frc.robot.Constants;
 import frc.robot.io.Axis;
 import frc.robot.utility.MotorControllerFactory;
 
-import java.util.Timer;
-
 import static frc.robot.Constants.Intake.fourBarPorts;
 
 public class Intake extends SubsystemBase {
-    //Waiting for Design/Build/Electrical to test
 
     private CANSparkMax rollerBar, staticRoller;
     private DoubleSolenoid fourBar;

@@ -16,10 +16,6 @@ public class LimelightAlignCommand extends CommandBase {
     private final Drivetrain mDrivetrain;
     private final VPLimelight mVision;
 
-//    private CANSparkMax mLeftLeader, mRightLeader;
-//    private SparkMaxPIDController mLeftPIDController, mRightPIDController;
-//    private MotorControllerGroup mLeftMotors, mRightMotors;
-
     private double speed;
 
     private boolean stopFlag;
@@ -28,7 +24,6 @@ public class LimelightAlignCommand extends CommandBase {
 
     private double searchDirection;
 
-    //TODO add variable to constructor to determine whether to end on align or not.
     public LimelightAlignCommand(Drivetrain subsystemA, VPLimelight subsystemB, TurnDirection turn, TurnMode mode){
 
         mDrivetrain = subsystemA;
@@ -36,12 +31,6 @@ public class LimelightAlignCommand extends CommandBase {
 
 //        addRequirements(mDrivetrain, mVision);
         addRequirements(mVision);
-
-//        mLeftLeader = mDrivetrain.getLeftLeader();
-//        mRightLeader = mDrivetrain.getRightLeader();
-
-//        mLeftMotors = mDrivetrain.getLeftMotors();
-//        mRightMotors = mDrivetrain.getRightMotors();
 
         searchDirection = (turn == TurnDirection.LEFT) ? -1: 1;
 
@@ -54,8 +43,8 @@ public class LimelightAlignCommand extends CommandBase {
     public void initialize(){
         mDrivetrain.mState = limelightMode;
         stopFlag = false;
-        speed = 0.5;
-            System.out.println("Starting Alignment");
+//        speed = 0.5;
+        System.out.println("Starting Alignment");
     }
 
     @Override
@@ -123,13 +112,13 @@ public class LimelightAlignCommand extends CommandBase {
     public void findTarget(){
         mVision.setValues(0, searchDirection*maxTurn);
     }
-
+    /*
     public double calcTurn(double x){
         return (speed * Math.abs(x)) / (deccelAngle - goalAngleP)
                 + (speed * goalAngleP) / (goalAngleP - deccelAngle);
     }
 
-
+     */
 
 }
 

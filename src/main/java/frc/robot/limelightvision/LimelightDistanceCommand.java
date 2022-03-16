@@ -13,8 +13,6 @@ public class LimelightDistanceCommand extends CommandBase {
     private Drivetrain mDrivetrain;
     private VPLimelight mVision;
 
-    private LimelightAlignLeftCommand mAlign;
-
     private CANSparkMax mLeftLeader, mRightLeader;
     private MotorControllerGroup mLeftMotors, mRightMotors;
     private RelativeEncoder mLeftEncoder, mRightEncoder;
@@ -28,7 +26,7 @@ public class LimelightDistanceCommand extends CommandBase {
 
     private final double distanceClose = 62; //inches
     private final double distanceFar = 178; //inches
-    private final double band = 20;
+    private final double band = 10;
 
 
     public LimelightDistanceCommand(Drivetrain subsystemA, VPLimelight subsystemB, boolean close){

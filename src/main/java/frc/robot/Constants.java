@@ -50,14 +50,6 @@ public final class Constants {
 
         public static final double deadband = 0.05;
 
-        public static final double kP = 0.01;
-        public static final double kI = 0.01;
-        public static final double kD = 0.01;
-        public static final double kF = 0;
-
-        public static final double iprHighGear = 1.0; // Inches per rotation for high gear. Currently placeholder
-        public static final double iprLowGear = 1.0; // Inches per rotation for low gear. Currently placeholder
-
         public enum DriveState { TELE_DRIVE_INTAKE, TELE_DRIVE_SHOOTER, TELE_LIMELIGHT, LIMELIGHT_DRIVE, AUTO_DRIVE, AUTO_LIMELIGHT; }
 
         public static final DriveState defaultState = DriveState.TELE_DRIVE_INTAKE;
