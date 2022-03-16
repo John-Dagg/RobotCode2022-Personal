@@ -127,7 +127,10 @@ public class RobotContainer {
 
 //    new JoystickButton(driverController, Button.ButtonID.X.getID())
 //            .whenHeld(mLeftAlign);
-//
+
+    new POVButton(driverController,90,0).whenHeld(mRightAlign);
+    new POVButton(driverController,270,0).whenHeld(mLeftAlign);
+
 //    new JoystickButton(driverController, Button.ButtonID.B.getID())
 //            .whenHeld(mRightAlign);
 
@@ -223,9 +226,9 @@ public class RobotContainer {
   //Global auton execution called here
   public Command getAutonomousCommand() {
 
-//    ramseteCommands = autonGenerator.getAutonCommands(mTest, mDrivetrain);
+    ramseteCommands = autonGenerator.getAutonCommands(mTest, mDrivetrain);
 
-//    mDrivetrain.resetOdometry(autonGenerator.getTrajectory(mTest[0]).getInitialPose());
+    mDrivetrain.resetOdometry(autonGenerator.getTrajectory(mTest[0]).getInitialPose());
 
     //TODO: Find a better way to do this
     /*
@@ -257,10 +260,11 @@ public class RobotContainer {
      */
 
   //Hard Coding ):
-  return mAuton;
+//  return mAuton;
 //  return mOneBallAuton;
 
-//  return ramseteCommands.get(0).andThen(new InstantCommand(mDrivetrain::stopDrive));
+  return  ramseteCommands.get(0).andThen(new InstantCommand(mDrivetrain::stopDrive));
+
 //  return auton;
 //  return null;
   }

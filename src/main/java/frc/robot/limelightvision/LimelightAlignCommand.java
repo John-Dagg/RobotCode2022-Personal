@@ -28,6 +28,7 @@ public class LimelightAlignCommand extends CommandBase {
 
     private double searchDirection;
 
+    //TODO add variable to constructor to determine whether to end on align or not.
     public LimelightAlignCommand(Drivetrain subsystemA, VPLimelight subsystemB, TurnDirection turn, TurnMode mode){
 
         mDrivetrain = subsystemA;
@@ -104,12 +105,13 @@ public class LimelightAlignCommand extends CommandBase {
 //            turn = Math.signum(yaw)*calcTurn(yaw);
 //            turn = Math.signum(yaw) * 0.2;
             turn = Math.signum(yaw)*MathEqs.targetLinear(Math.abs(yaw), maxTurn, deccelAngle, deadbandAngle);
-            turn = turn < 0.2 ? 0.2 : turn;
+//            turn = Math.max(turn, 0.2);
+            System.out.println("Yaw: "+yaw+" Turn: "+turn);
         } else {
             System.out.println("Please work");
-            System.out.println("STOPPING ALIGNMENT");
-            stopFlag = true;
-            end(true);
+//            System.out.println("STOPPING ALIGNMENT");
+//            stopFlag = true;
+//            end(true);
         }
         System.out.println(yaw);
         mVision.setValues(0, turn);

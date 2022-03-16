@@ -113,6 +113,7 @@ public class AutonGenerator {
             Trajectory trajectory = getTrajectory(pathing[i]);
             if (trajectory == null){
                 System.out.println("Trajectory " + i + " not found");
+                return null;
             }
             commands.add(
                     new RamseteCommand(

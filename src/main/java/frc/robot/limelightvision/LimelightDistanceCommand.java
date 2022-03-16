@@ -21,7 +21,7 @@ public class LimelightDistanceCommand extends CommandBase {
 
     private double yOffset, speed, goalDistance, initDistance, goalTravel, actualTravel, buffer;
 
-    private final double conversion = 0.1429 * 6 * Math.PI * 2; //Rotations to inches
+    private final double conversion = 1./7. * 6 * Math.PI * 2; //Rotations to inches
 
     private boolean distanceCompleted;
     private boolean stopFlag;

@@ -25,8 +25,7 @@ public class Shooter extends SubsystemBase {
     private TalonFX shooterMotorLeader, shooterMotorFollower;
     private DoubleSolenoid angler;
 
-    private double integratedTicks = 2048;
-    private double maxRPM = 6000;
+    private final double integratedTicks = 2048;
 
     //Needs testing
     private final double closeVel = -0.67;
@@ -81,6 +80,7 @@ public class Shooter extends SubsystemBase {
     public double getShooterVel(){
         double ticks = shooterMotorLeader.getSelectedSensorVelocity();
         double RPM = (ticks / integratedTicks) * 10 * 60;
+        double maxRPM = 6000;
         double percentOutput = RPM / maxRPM;
         return percentOutput;
     }

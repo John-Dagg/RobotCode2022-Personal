@@ -29,6 +29,7 @@ import frc.robot.Constants.DriveTrain.*;
 
 import static frc.robot.Constants.DriveTrain.defaultState;
 import static frc.robot.Constants.DriveTrain.shifterPorts;
+import static frc.robot.Constants.driverController;
 
 
 public class Drivetrain extends SubsystemBase {
@@ -46,8 +47,8 @@ public class Drivetrain extends SubsystemBase {
   private DifferentialDrive mDrive;
   private DifferentialDriveOdometry mOdometry;
 
-  private double positionConversion = Math.PI * Units.inchesToMeters(6) * (double)1/7; //Converts rotations to meters
-  private double velocityConversion = Math.PI * Units.inchesToMeters(6) * (double)1/7 / 60; //Converts rpms to meters per second
+  private final double positionConversion = Math.PI * Units.inchesToMeters(6) * (double)1/7; //Converts rotations to meters
+  private final double velocityConversion = Math.PI * Units.inchesToMeters(6) * (double)1/7 / 60; //Converts rpms to meters per second
 
   private double mYaw, mLeftVolts, mRightVolts;
 
@@ -213,7 +214,7 @@ public class Drivetrain extends SubsystemBase {
       default:
         break;
     }
-//    System.out.println(mState);
+//    System.out.println("POV: "+driverController.getPOV());
   }
 
   public void setState(DriveState state){
@@ -307,10 +308,10 @@ public class Drivetrain extends SubsystemBase {
 
     double xOffset = mLimelight.getxOffset();
     if (xOffset > 0){
-      System.out.println(xOffset + " degrees to the RIGHT(?)");
+//      System.out.println(xOffset + " degrees to the RIGHT(?)");
       SmartDashboard.putNumber("Degrees to the RIGHT", xOffset);
     } else {
-      System.out.println(xOffset + " degrees to the LEFT(?)");
+//      System.out.println(xOffset + " degrees to the LEFT(?)");
       SmartDashboard.putNumber("Degrees to the LEFT", xOffset);
     }
 
@@ -365,11 +366,11 @@ public class Drivetrain extends SubsystemBase {
 
     double xOffset = mLimelight.getxOffset();
     if (xOffset > 0){
-      System.out.println(xOffset + " degrees to the RIGHT(?)");
+//      System.out.println(xOffset + " degrees to the RIGHT(?)");
       SmartDashboard.putNumber("Degrees to the RIGHT", xOffset);
     }
     if (xOffset < 0){
-      System.out.println(xOffset + " degrees to the LEFT(?)");
+//      System.out.println(xOffset + " degrees to the LEFT(?)");
       SmartDashboard.putNumber("Degrees to the LEFT", xOffset);
     }
 
@@ -415,8 +416,10 @@ public class Drivetrain extends SubsystemBase {
     mLeftVolts = leftVolts;
     mRightVolts = rightVolts;
 
-    System.out.println("Left Volts: " + mLeftVolts);
-    System.out.println("Right Volts: " + mRightVolts);
+//    System.out.println("Left Volts: " + mLeftVolts);
+//    System.out.println("Right Volts: " + mRightVolts);
+
+    System.out.println("RIGHT POSITION:" + rightWheelsPosition());
 
     mLeftMotors.setVoltage(mLeftVolts);
     mRightMotors.setVoltage(mRightVolts);
@@ -454,6 +457,7 @@ public class Drivetrain extends SubsystemBase {
    */
 
   public double rightWheelsPosition(){
+    System.out.println("Right distance: "+mRightEncoder.getPosition() * positionConversion);
     return mRightEncoder.getPosition() * positionConversion;
   }
 
