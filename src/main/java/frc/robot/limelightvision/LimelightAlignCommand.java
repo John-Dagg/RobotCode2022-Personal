@@ -93,8 +93,9 @@ public class LimelightAlignCommand extends CommandBase {
 //            mRightMotors.set(-calcTurn());
 //            turn = Math.signum(yaw)*calcTurn(yaw);
 //            turn = Math.signum(yaw) * 0.2;
-            turn = Math.signum(yaw)*MathEqs.targetLinear(Math.abs(yaw), maxTurn, deccelAngle, deadbandAngle);
+//            turn = Math.signum(yaw)*MathEqs.targetLinear(Math.abs(yaw), maxTurn, deccelAngle, deadbandAngle);
 //            turn = Math.max(turn, 0.2);
+            turn = Math.signum(yaw)*MathEqs.targetLinear2(Math.abs(yaw), maxTurn, minturn, deccelAngle, deadbandAngle);
             System.out.println("Yaw: "+yaw+" Turn: "+turn);
         } else {
             System.out.println("Please work");

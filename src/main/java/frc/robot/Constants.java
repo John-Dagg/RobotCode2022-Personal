@@ -105,6 +105,7 @@ public final class Constants {
         public static final double deadbandAngle = 1.5;
         public static final double deccelAngle = 30;
         public static final double maxTurn = 0.6;
+        public static final double minturn = 0.15;
 
 
         public static final double targetHeight = 104; //in
