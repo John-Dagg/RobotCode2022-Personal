@@ -63,6 +63,8 @@ public class RobotContainer {
   private ArrayList<RamseteCommand> ramseteCommands;
   private String[] mFiveBallAuton = {"FiveBallA", "FiveBallB", "FiveBallC", "FiveBallD"};
   private String[] mTest = {"test"};
+  private String[] mCurve = {"Curve"};
+  private String[] mTurn = {"Turn"};
 
   //Hardcode
   private final HardCodeAuton mAuton = new HardCodeAuton(mDrivetrain, mIntake, mIndexer, mShooter);
@@ -206,9 +208,12 @@ public class RobotContainer {
   //Global auton execution called here
   public Command getAutonomousCommand() {
 
-    ramseteCommands = autonGenerator.getAutonCommands(mTest, mDrivetrain);
+//    mDrivetrain.mState = Constants.DriveTrain.DriveState.AUTO_DRIVE;
 
-    mDrivetrain.resetOdometry(autonGenerator.getTrajectory(mTest[0]).getInitialPose());
+    String[] commandsLocal = mTest;
+
+    ramseteCommands = autonGenerator.getAutonCommands(commandsLocal, mDrivetrain);
+    mDrivetrain.resetOdometry(autonGenerator.getTrajectory(commandsLocal[0]).getInitialPose());
 
     /***
     * Aim -> Shoot -> Drive and Collect -> Aim -> Shoot -> Drive and Collect -> Correct Distance -> Aim -> Shoot -> Stop
@@ -216,18 +221,18 @@ public class RobotContainer {
 
     //TODO: Test line by line and make sure this actually works
 
-    SequentialCommandGroup auton = new SequentialCommandGroup(
-            new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.RIGHT, TurnMode.AUTON),
-            new ShootClose(mShooter, mIndexer, 2),
-            new ParallelRaceGroup(ramseteCommands.get(0).andThen(ramseteCommands.get(1)), new IntakeCargo(mIntake)),
-            new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.RIGHT, TurnMode.AUTON),
-            new ShootClose(mShooter, mIndexer, 2),
-            new ParallelRaceGroup(ramseteCommands.get(2), new IntakeCargo(mIntake)),
-            ramseteCommands.get(3),
-            new LimelightDistanceCommand(mDrivetrain, mLimelightVision, false),
-            new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.RIGHT, TurnMode.AUTON),
-            new ShootFar(mShooter, mIndexer, 2),
-            new InstantCommand(mDrivetrain::stopDrive));
+//    SequentialCommandGroup auton = new SequentialCommandGroup(
+//            new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.RIGHT, TurnMode.AUTON),
+//            new ShootClose(mShooter, mIndexer, 2),
+//            new ParallelRaceGroup(ramseteCommands.get(0).andThen(ramseteCommands.get(1)), new IntakeCargo(mIntake)),
+//            new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.RIGHT, TurnMode.AUTON),
+//            new ShootClose(mShooter, mIndexer, 2),
+//            new ParallelRaceGroup(ramseteCommands.get(2), new IntakeCargo(mIntake)),
+//            ramseteCommands.get(3),
+//            new LimelightDistanceCommand(mDrivetrain, mLimelightVision, false),
+//            new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.RIGHT, TurnMode.AUTON),
+//            new ShootFar(mShooter, mIndexer, 2),
+//            new InstantCommand(mDrivetrain::stopDrive));
 
     //Hard Coding
 //  return mAuton;
@@ -235,10 +240,13 @@ public class RobotContainer {
 
     //Auton Generation
     return ramseteCommands.get(0).andThen(new InstantCommand(mDrivetrain::stopDrive));
-//  return auton;
 
     //Default
 //  return null;
+  }
+
+  public void activateTeleop() {
+    mDrivetrain.mState = Constants.DriveTrain.DriveState.TELE_DRIVE_INTAKE;
   }
 
 }

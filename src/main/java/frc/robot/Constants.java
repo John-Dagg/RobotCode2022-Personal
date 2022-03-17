@@ -27,7 +27,7 @@ public final class Constants {
         public static final double kv = 1.8784; //Volt seconds per meter
         public static final double ka = 0.10279 ; //Volt seconds squared per meter
 
-        public static final double kP = 1.797; //Proportional Gain
+        public static final double kP = 3.4; //Proportional Gain
 
         public static final double robotWidth = Units.inchesToMeters(24.0);
         public static final DifferentialDriveKinematics driveKinematics = new DifferentialDriveKinematics(robotWidth);
@@ -104,7 +104,7 @@ public final class Constants {
         public static final double goalAngleN = -1;
         public static final double deadbandAngle = 1.5;
         public static final double deccelAngle = 30;
-        public static final double maxTurn = 0.6;
+        public static final double maxTurn = 0.8;
         public static final double minturn = 0.15;
 
 

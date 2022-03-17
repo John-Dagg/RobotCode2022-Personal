@@ -13,6 +13,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -64,6 +65,8 @@ public class Drivetrain extends SubsystemBase {
   private final double distanceFar = 178; //inches
   private final double band = 10;
 
+  private double initOffset = 0;
+
 
   public Drivetrain(VPLimelight subsystemA) {
 
@@ -83,16 +86,6 @@ public class Drivetrain extends SubsystemBase {
     mLeftFollowerA.setIdleMode(CANSparkMax.IdleMode.kCoast);
     mLeftFollowerB.setIdleMode(CANSparkMax.IdleMode.kCoast);
 
-//    mRightLeader.setInverted(true);
-//    mRightFollowerA.setInverted(true);
-//    mRightFollowerB.setInverted(true);
-//
-//    mLeftFollowerA.follow(mLeftLeader);
-//    mLeftFollowerB.follow(mLeftLeader);
-//    mRightFollowerA.follow(mRightLeader);
-//    mRightFollowerB.follow(mRightLeader);
-
-
     mLeftMotors = new MotorControllerGroup(mLeftLeader, mLeftFollowerA, mLeftFollowerB);
     mRightMotors = new MotorControllerGroup(mRightLeader, mRightFollowerA, mRightFollowerB);
     mLeftMotors.setInverted(true);
@@ -101,7 +94,6 @@ public class Drivetrain extends SubsystemBase {
     //Creates an object for interacting with the Pigeon gyro
     mPigeon = new Pigeon2(0);
     resetYaw();
-
 
 
     //Creates two encoder objects for their respective motors
@@ -197,6 +189,7 @@ public class Drivetrain extends SubsystemBase {
   public void masterDrive() {
     switch (mState) {
       case TELE_DRIVE_INTAKE:
+//        coastMode();
         arcadeDriveIntake();
         break;
       case TELE_DRIVE_SHOOTER:
@@ -208,13 +201,31 @@ public class Drivetrain extends SubsystemBase {
       case LIMELIGHT_DRIVE:
         limelightDrive();
       case AUTO_DRIVE:
+//        brakeMode();
         break;
       case AUTO_LIMELIGHT:
         break;
       default:
         break;
     }
-//    System.out.println("POV: "+driverController.getPOV());
+  }
+
+  public void brakeMode(){
+    mRightLeader.setIdleMode(CANSparkMax.IdleMode.kBrake);
+    mRightFollowerA.setIdleMode(CANSparkMax.IdleMode.kBrake);
+    mRightFollowerB.setIdleMode(CANSparkMax.IdleMode.kBrake);
+    mLeftLeader.setIdleMode(CANSparkMax.IdleMode.kBrake);
+    mLeftFollowerA.setIdleMode(CANSparkMax.IdleMode.kBrake);
+    mLeftFollowerB.setIdleMode(CANSparkMax.IdleMode.kBrake);
+  }
+
+  public void coastMode(){
+    mRightLeader.setIdleMode(CANSparkMax.IdleMode.kCoast);
+    mRightFollowerA.setIdleMode(CANSparkMax.IdleMode.kCoast);
+    mRightFollowerB.setIdleMode(CANSparkMax.IdleMode.kCoast);
+    mLeftLeader.setIdleMode(CANSparkMax.IdleMode.kCoast);
+    mLeftFollowerA.setIdleMode(CANSparkMax.IdleMode.kCoast);
+    mLeftFollowerB.setIdleMode(CANSparkMax.IdleMode.kCoast);
   }
 
   public void setState(DriveState state){
@@ -254,7 +265,6 @@ public class Drivetrain extends SubsystemBase {
       limelightGain = -0.2;
     }
 
-
     limelightThrottle = deadband(Constants.driverController.getRawAxis(Axis.AxisID.LEFT_Y.getID()));
     limelightRawTurn = deadband(Constants.driverController.getRawAxis(Axis.AxisID.RIGHT_X.getID()));
 
@@ -284,23 +294,6 @@ public class Drivetrain extends SubsystemBase {
 //    turn = (turn == 0) ? 0 : turn/Math.abs(turn)*Math.sqrt(Math.abs(turn));
 //    turn = ((lastTurn == turn && Math.abs(turn) < 0.33) || turn == 0) ? 0 : turn;
 
-    if (!mDrive.isAlive()){
-      System.out.println("Motor timeout!");
-      System.out.println("Motor Expiration Timer: " + mDrive.getExpiration());
-    }
-
-    if (mLeftLeader.getBusVoltage() <= 7){
-      System.out.println("Motor Voltage Below 7 - Brownout! " + mLeftLeader.getBusVoltage() + " Volts");
-    }
-
-    if (mLimelight.calcDistance() > distanceClose - band && mLimelight.calcDistance() < distanceClose + band){
-      System.out.println("In close shooter range +- 40 inches");
-    }
-
-    if (mLimelight.calcDistance() > distanceFar - band && mLimelight.calcDistance() < distanceFar + band){
-      System.out.println("In far shooter range +- 40 inches");
-    }
-
     mDrive.arcadeDrive(throttle, turn);
     lastThrottle = (throttle == 0) ? lastThrottle : throttle;
     lastTurn = (turn == 0) ? lastTurn : turn;
@@ -322,26 +315,10 @@ public class Drivetrain extends SubsystemBase {
     double throttle = deadband(Constants.driverController.getRawAxis(Axis.AxisID.LEFT_Y.getID()));
     double turn = deadband(Constants.driverController.getRawAxis(Axis.AxisID.RIGHT_X.getID()));
 
-//    throttle = (throttle == 0) ? 0 : Math.abs(throttle)*throttle;
-//    turn = (turn == 0) ? 0 : turn/Math.abs(turn)*Math.sqrt(Math.abs(turn));
-//    turn = ((lastTurn == turn && Math.abs(turn) < 0.33) || turn == 0) ? 0 : turn;
+    System.out.println("Left Position (m) :" + mLeftEncoder.getPosition() * positionConversion);
+    System.out.println("Right Position (m) :" + mRightEncoder.getPosition() * positionConversion);
 
-//    if (!mDrive.isAlive()){
-//      System.out.println("Motor timeout!");
-//      System.out.println("Motor Expiration Timer: " + mDrive.getExpiration());
-//    }
-
-//    if (mLeftLeader.getBusVoltage() <= 7){
-//      System.out.println("Motor Voltage Below 7 - Brownout! " + mLeftLeader.getBusVoltage() + " Volts");
-//    }
-
-    if (mLimelight.calcDistance() > distanceClose - band && mLimelight.calcDistance() < distanceClose + band){
-      System.out.println("In close shooter range +- 40 inches");
-    }
-
-    if (mLimelight.calcDistance() > distanceFar - band && mLimelight.calcDistance() < distanceFar + band){
-      System.out.println("In far shooter range +- 40 inches");
-    }
+//    System.out.println("Yaw: " + mPigeon.getYaw());
 
 //    double left = throttle - turn;
 //    double right = throttle + turn;
@@ -356,13 +333,10 @@ public class Drivetrain extends SubsystemBase {
 //    mRightLeader.set(rightOutput * 0.5);
 
 
-//    System.out.println(throttle + " | " + turn);
     mDrive.arcadeDrive(-throttle, turn);
     lastThrottle = (throttle == 0) ? lastThrottle : throttle;
     lastTurn = (turn == 0) ? lastTurn : turn;
     mDrive.feed();
-//    printVelocity();
-//    System.out.println(mLeftEncoder.getVelocity() * velocityConversion);
 
     double xOffset = mLimelight.getxOffset();
     if (xOffset > 0){
@@ -419,7 +393,7 @@ public class Drivetrain extends SubsystemBase {
 //    System.out.println("Left Volts: " + mLeftVolts);
 //    System.out.println("Right Volts: " + mRightVolts);
 
-    System.out.println("RIGHT POSITION:" + rightWheelsPosition());
+//    System.out.println("Yaw: " + mPigeon.getYaw());
 
     mLeftMotors.setVoltage(mLeftVolts);
     mRightMotors.setVoltage(mRightVolts);
@@ -439,7 +413,10 @@ public class Drivetrain extends SubsystemBase {
 
   @Override
   public void periodic(){
-    mOdometry.update(Rotation2d.fromDegrees(mPigeon.getYaw()) , mLeftEncoder.getPosition() * positionConversion, mRightEncoder.getPosition() * positionConversion);
+    mOdometry.update(Rotation2d.fromDegrees(mPigeon.getYaw()), mLeftEncoder.getPosition() * positionConversion, mRightEncoder.getPosition() * positionConversion);
+    var translation = mOdometry.getPoseMeters().getTranslation();
+    SmartDashboard.putNumber("X", translation.getX());
+    SmartDashboard.putNumber("Y", translation.getY());
   }
 
   /***
@@ -471,7 +448,10 @@ public class Drivetrain extends SubsystemBase {
 
   public void resetOdometry(Pose2d pose){
     resetEncoders();
-    mOdometry.resetPosition(pose, Rotation2d.fromDegrees(getHeading()));
+//    resetYaw();
+    initOffset = mPigeon.getYaw();
+    System.out.println("Starting Degrees: " + Rotation2d.fromDegrees(mPigeon.getYaw()));
+    mOdometry.resetPosition(pose, Rotation2d.fromDegrees(mPigeon.getYaw()));
   }
 
 
