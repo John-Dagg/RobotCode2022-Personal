@@ -221,27 +221,21 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
-  public void brakeMode(){
-    mRightLeader.setIdleMode(CANSparkMax.IdleMode.kBrake);
-    mRightFollowerA.setIdleMode(CANSparkMax.IdleMode.kBrake);
-    mRightFollowerB.setIdleMode(CANSparkMax.IdleMode.kBrake);
-    mLeftLeader.setIdleMode(CANSparkMax.IdleMode.kBrake);
-    mLeftFollowerA.setIdleMode(CANSparkMax.IdleMode.kBrake);
-    mLeftFollowerB.setIdleMode(CANSparkMax.IdleMode.kBrake);
-  }
-
-  public void coastMode(){
-    mRightLeader.setIdleMode(CANSparkMax.IdleMode.kCoast);
-    mRightFollowerA.setIdleMode(CANSparkMax.IdleMode.kCoast);
-    mRightFollowerB.setIdleMode(CANSparkMax.IdleMode.kCoast);
-    mLeftLeader.setIdleMode(CANSparkMax.IdleMode.kCoast);
-    mLeftFollowerA.setIdleMode(CANSparkMax.IdleMode.kCoast);
-    mLeftFollowerB.setIdleMode(CANSparkMax.IdleMode.kCoast);
+  public void setIdleState(CANSparkMax.IdleMode state) {
+    if (!(mRightLeader.getIdleMode() == state)) {
+      mRightLeader.setIdleMode(state);
+      mRightFollowerA.setIdleMode(state);
+      mRightFollowerB.setIdleMode(state);
+    }
+    if (!(mLeftLeader.getIdleMode() == state)) {
+      mLeftLeader.setIdleMode(state);
+      mLeftFollowerA.setIdleMode(state);
+      mLeftFollowerB.setIdleMode(state);
+    }
   }
 
   public void setState(DriveState state){
     mState = state;
-
   }
 
   public void setShooterDrive(){
