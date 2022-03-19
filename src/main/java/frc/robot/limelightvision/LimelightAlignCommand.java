@@ -20,9 +20,9 @@ public class LimelightAlignCommand extends CommandBase {
 
     private boolean stopFlag;
 
-    private DriveState limelightMode;
+    private final DriveState limelightMode;
 
-    private double searchDirection;
+    private final double searchDirection;
 
     public LimelightAlignCommand(Drivetrain subsystemA, VPLimelight subsystemB, TurnDirection turn, TurnMode mode){
 
@@ -41,7 +41,7 @@ public class LimelightAlignCommand extends CommandBase {
 
     @Override
     public void initialize(){
-        mVision.steadyArray();
+//        mVision.steadyArray();
         mDrivetrain.mState = limelightMode;
         stopFlag = false;
 //        speed = 0.5;
@@ -52,7 +52,7 @@ public class LimelightAlignCommand extends CommandBase {
     public void execute(){
         mVision.updateTargets();
         if(mVision.getTargets() >= 1) {
-            mVision.steadyArray();
+//            mVision.steadyArray();
             aimTarget();
             System.out.println("Aiming at Targets");
         } else {
@@ -67,7 +67,7 @@ public class LimelightAlignCommand extends CommandBase {
 
     @Override
     public void end(boolean isFinished){
-        mVision.offArray();
+//        mVision.offArray();
         if(stopFlag){
             System.out.println("Ending Alignment");
         }

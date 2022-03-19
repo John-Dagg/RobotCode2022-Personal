@@ -28,9 +28,11 @@ import frc.robot.Constants;
 import frc.robot.Constants.*;
 import frc.robot.Constants.DriveTrain.*;
 
+import static frc.robot.Constants.DriveTrain.DriveState.*;
 import static frc.robot.Constants.DriveTrain.defaultState;
 import static frc.robot.Constants.DriveTrain.shifterPorts;
 import static frc.robot.Constants.driverController;
+import java.util.Arrays;
 
 
 public class Drivetrain extends SubsystemBase {
@@ -201,13 +203,22 @@ public class Drivetrain extends SubsystemBase {
       case LIMELIGHT_DRIVE:
         limelightDrive();
       case AUTO_DRIVE:
-//        brakeMode();
+        System.out.println("Left Volts: " + mLeftVolts);
+        System.out.println("Right Volts: " + mRightVolts);
         break;
       case AUTO_LIMELIGHT:
+        System.out.println("Left Volts: " + mLeftVolts);
+        System.out.println("Right Volts: " + mRightVolts);
         break;
       default:
         break;
     }
+
+
+    if ((Arrays.asList(new DriveState[] {TELE_LIMELIGHT, LIMELIGHT_DRIVE, AUTO_LIMELIGHT}).contains(mState))) mLimelight.steadyArray();
+    else mLimelight.offArray();
+
+
   }
 
   public void brakeMode(){
@@ -234,11 +245,11 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void setShooterDrive(){
-    setState(DriveState.TELE_DRIVE_SHOOTER);
+    setState(TELE_DRIVE_SHOOTER);
   }
 
   public void setIntakeDrive(){
-    setState(DriveState.TELE_DRIVE_INTAKE);
+    setState(TELE_DRIVE_INTAKE);
   }
 
   public void defaultState(){
@@ -246,11 +257,11 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void toggleDriveState(){
-    if (mState != DriveState.LIMELIGHT_DRIVE) {
-      mState = DriveState.LIMELIGHT_DRIVE;
+    if (mState != LIMELIGHT_DRIVE) {
+      mState = LIMELIGHT_DRIVE;
     }
-    if (mState != DriveState.TELE_DRIVE_INTAKE) {
-      mState = DriveState.TELE_DRIVE_INTAKE;
+    if (mState != TELE_DRIVE_INTAKE) {
+      mState = TELE_DRIVE_INTAKE;
     }
 
   }
@@ -276,12 +287,12 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void toggleArcadeStyle(){
-    if (mState != DriveState.TELE_DRIVE_INTAKE){
-      mState = DriveState.TELE_DRIVE_INTAKE;
+    if (mState != TELE_DRIVE_INTAKE){
+      mState = TELE_DRIVE_INTAKE;
       System.out.println("Intake Arcade Drive");
     }
-    if (mState != DriveState.TELE_DRIVE_SHOOTER){
-      mState = DriveState.TELE_DRIVE_SHOOTER;
+    if (mState != TELE_DRIVE_SHOOTER){
+      mState = TELE_DRIVE_SHOOTER;
       System.out.println("Shooter Tele Drive");
     }
   }
@@ -312,7 +323,6 @@ public class Drivetrain extends SubsystemBase {
 
 
   public void arcadeDriveIntake(){
-    mLimelight.offArray();
     double throttle = deadband(Constants.driverController.getRawAxis(Axis.AxisID.LEFT_Y.getID()));
     double turn = deadband(Constants.driverController.getRawAxis(Axis.AxisID.RIGHT_X.getID()));
 
@@ -352,7 +362,6 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void teleLimelight(){
-    mLimelight.steadyArray();
     double[] values = mLimelight.getValues();
     mDrive.arcadeDrive(values[0], values[1]);
     mDrive.feed();
