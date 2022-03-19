@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.io.Axis;
@@ -20,16 +21,15 @@ public class Shooter extends SubsystemBase {
     private final double integratedTicks = 2048;
 
     //Needs testing
-    private final double closeVel = -0.67;
+    private final double closeVel = -0.65;
     private final double farVel = -0.92;
     private final double idleVel = 0.00;
 
     public Shooter(){
+        SmartDashboard.putNumber("Shooter Speed", closeVel);
 
         shooterMotorLeader = MotorControllerFactory.makeTalonFX(Constants.Shooter.shooterAPort);
         shooterMotorFollower = MotorControllerFactory.makeTalonFX(Constants.Shooter.shooterBPort);
-
-
 
         angler = new DoubleSolenoid(anglerPorts[0], PneumaticsModuleType.CTREPCM, anglerPorts[1], anglerPorts[2]);
 
@@ -49,9 +49,11 @@ public class Shooter extends SubsystemBase {
 
     public void setShooterClose(){
         shooterMotorLeader.set(TalonFXControlMode.PercentOutput, closeVel);
+        setAnglerLow();
     }
 
     public void setShooterFar(){
+        setAnglerHigh();
         shooterMotorLeader.set(TalonFXControlMode.PercentOutput, farVel);
         double ticks = shooterMotorLeader.getSelectedSensorVelocity();
         double RPM = (ticks / integratedTicks) * 10 * 60;
@@ -60,6 +62,12 @@ public class Shooter extends SubsystemBase {
 
     public void setShooterVel(double speed){
         shooterMotorLeader.set(TalonFXControlMode.PercentOutput, speed);
+    }
+
+    public void setShooter(){
+        double vel = SmartDashboard.getNumber("Shooter Speed", closeVel);
+        shooterMotorLeader.set(TalonFXControlMode.PercentOutput, vel);
+        setAnglerHigh();
     }
 
     public void setShooterIdle(){

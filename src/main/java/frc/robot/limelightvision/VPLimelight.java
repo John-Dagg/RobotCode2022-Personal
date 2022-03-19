@@ -86,7 +86,9 @@ public class VPLimelight extends SubsystemBase {
     }
 
     public double calcDistance(){
+        updateTargets();
         yOffset = getyOffset();
+//        System.out.println(yOffset);
         return (Constants.LimelightVision.targetHeight - Constants.LimelightVision.cameraHeight)
                 / Math.tan(Units.degreesToRadians(Constants.LimelightVision.cameraAngle + yOffset));
     }
