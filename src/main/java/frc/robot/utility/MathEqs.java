@@ -12,4 +12,8 @@ public class MathEqs {
                 + (maximum * lowerBound) / (lowerBound - upperBound)) + minimum : maximum;
     }
 
+    public static double targetQuadratic(double a, double b, double c, double x) {
+        return a*x*x + b*x + c;
+    }
+
 }
