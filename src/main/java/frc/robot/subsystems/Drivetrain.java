@@ -13,7 +13,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -31,7 +30,6 @@ import frc.robot.Constants.DriveTrain.*;
 import static frc.robot.Constants.DriveTrain.DriveState.*;
 import static frc.robot.Constants.DriveTrain.defaultState;
 import static frc.robot.Constants.DriveTrain.shifterPorts;
-import static frc.robot.Constants.driverController;
 import java.util.Arrays;
 
 
@@ -71,6 +69,7 @@ public class Drivetrain extends SubsystemBase {
 
 
   public Drivetrain(VPLimelight subsystemA) {
+    SmartDashboard.putNumber("Distance", 0);
 
     mLimelight = subsystemA;
 
@@ -115,6 +114,45 @@ public class Drivetrain extends SubsystemBase {
     mState = defaultState;
 
 
+  }
+
+  public void masterDrive() {
+    switch (mState) {
+      case TELE_DRIVE_INTAKE:
+        arcadeDriveIntake();
+        mLimelight.steadyArray();
+        System.out.println("Distance (in) " + mLimelight.calcDistance());
+        break;
+      case TELE_DRIVE_SHOOTER:
+        arcadeDriveShooter();
+        break;
+      case TELE_LIMELIGHT:
+        teleLimelight();
+        break;
+      case LIMELIGHT_DRIVE:
+        limelightDrive();
+      case AUTO_DRIVE:
+        System.out.println("Left Volts: " + mLeftVolts);
+        System.out.println("Right Volts: " + mRightVolts);
+        break;
+      case AUTO_LIMELIGHT:
+        System.out.println("Left Volts: " + mLeftVolts);
+        System.out.println("Right Volts: " + mRightVolts);
+        break;
+      default:
+        break;
+    }
+    double dist = mLimelight.calcDistance();
+    SmartDashboard.putNumber("Distance", dist);
+
+//    System.out.println("Le: "+leftWheelsPosition()+" Re: "+rightWheelsPosition());
+
+
+//    if ((Arrays.asList(new DriveState[] {TELE_LIMELIGHT, LIMELIGHT_DRIVE, AUTO_LIMELIGHT}).contains(mState))) {
+//      mLimelight.steadyArray();
+//      System.out.println("Distance (in) " + mLimelight.calcDistance());
+//    }
+//    else mLimelight.offArray();
   }
 
 
@@ -188,38 +226,6 @@ public class Drivetrain extends SubsystemBase {
     return Math.abs(percentOutput) > DriveTrain.deadband ? percentOutput : 0;
   }
 
-  public void masterDrive() {
-    switch (mState) {
-      case TELE_DRIVE_INTAKE:
-//        coastMode();
-        arcadeDriveIntake();
-        break;
-      case TELE_DRIVE_SHOOTER:
-        arcadeDriveShooter();
-        break;
-      case TELE_LIMELIGHT:
-        teleLimelight();
-        break;
-      case LIMELIGHT_DRIVE:
-        limelightDrive();
-      case AUTO_DRIVE:
-        System.out.println("Left Volts: " + mLeftVolts);
-        System.out.println("Right Volts: " + mRightVolts);
-        break;
-      case AUTO_LIMELIGHT:
-        System.out.println("Left Volts: " + mLeftVolts);
-        System.out.println("Right Volts: " + mRightVolts);
-        break;
-      default:
-        break;
-    }
-
-
-    if ((Arrays.asList(new DriveState[] {TELE_LIMELIGHT, LIMELIGHT_DRIVE, AUTO_LIMELIGHT}).contains(mState))) mLimelight.steadyArray();
-    else mLimelight.offArray();
-
-
-  }
 
   public void setIdleState(CANSparkMax.IdleMode state) {
     if (!(mRightLeader.getIdleMode() == state)) {
@@ -320,8 +326,8 @@ public class Drivetrain extends SubsystemBase {
     double throttle = deadband(Constants.driverController.getRawAxis(Axis.AxisID.LEFT_Y.getID()));
     double turn = deadband(Constants.driverController.getRawAxis(Axis.AxisID.RIGHT_X.getID()));
 
-    System.out.println("Left Position (m) :" + mLeftEncoder.getPosition() * positionConversion);
-    System.out.println("Right Position (m) :" + mRightEncoder.getPosition() * positionConversion);
+//    System.out.println("Left Position (m) :" + mLeftEncoder.getPosition() * positionConversion);
+//    System.out.println("Right Position (m) :" + mRightEncoder.getPosition() * positionConversion);
 
 //    System.out.println("Yaw: " + mPigeon.getYaw());
 
@@ -439,7 +445,7 @@ public class Drivetrain extends SubsystemBase {
    */
 
   public double rightWheelsPosition(){
-    System.out.println("Right distance: "+mRightEncoder.getPosition() * positionConversion);
+//    System.out.println("Right distance: "+mRightEncoder.getPosition() * positionConversion);
     return mRightEncoder.getPosition() * positionConversion;
   }
 

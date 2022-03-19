@@ -76,7 +76,7 @@ public class RobotContainer {
     mDrivetrain.mState = Constants.DriveTrain.DriveState.TELE_DRIVE_INTAKE;
     mDrivetrain.setDefaultCommand(new RunCommand(mDrivetrain::masterDrive, mDrivetrain));
     mIntake.setDefaultCommand(new RunCommand(mIntake::triggerRollerIntake, mIntake));
-    mIndexer.setDefaultCommand(new RunCommand(mIndexer::indexerTest, mIndexer));
+//    mIndexer.setDefaultCommand(new RunCommand(mIndexer::indexerTest, mIndexer));
 //    mShooter.setDefaultCommand(new RunCommand(mShooter::shooterTest, mShooter));
 //    mLimelightVision.setDefaultCommand(new RunCommand(mLimelightVision::printNetworkTables, mLimelightVision));
 
@@ -131,6 +131,9 @@ public class RobotContainer {
     new JoystickButton(driverController, Button.ButtonID.B.getID())
             .whenHeld(mRightAlign);
 
+    new JoystickButton(driverController, Button.ButtonID.Y.getID())
+            .whenHeld(mDistanceTarget);
+
     //Drivetrain
 
     //If the left bumper is pressed and the drivetrain is in low gear perform the first command
@@ -169,39 +172,42 @@ public class RobotContainer {
 //    Shooter
 
     new JoystickButton(operatorController, Button.ButtonID.LEFT_BUMPER.getID())
-            .whenHeld(mShootFar);
-
-    new JoystickButton(operatorController, Button.ButtonID.LEFT_BUMPER.getID())
-            .whenInactive(mShooter::setShooterIdle);
-
-    new JoystickButton(operatorController, Button.ButtonID.LEFT_BUMPER.getID())
-            .whenInactive(mIndexer::setIndexerIdle);
+            .whenHeld(new StartEndCommand(mShooter::setShooterFar, mShooter::setShooterIdle));
 
     new JoystickButton(operatorController, Button.ButtonID.RIGHT_BUMPER.getID())
-            .whenHeld(mShootClose);
-
-    new JoystickButton(operatorController, Button.ButtonID.RIGHT_BUMPER.getID())
-            .whenInactive(mShooter::setShooterIdle);
-
-    new JoystickButton(operatorController, Button.ButtonID.RIGHT_BUMPER.getID())
-            .whenInactive(mIndexer::setIndexerIdle);
+            .whenHeld(new StartEndCommand(mShooter::setShooterClose, mShooter::setShooterIdle));
 
     new JoystickButton(operatorController, Button.ButtonID.Y.getID())
-            .whenHeld(mShootLow);
+            .whenHeld(new StartEndCommand(mIndexer::feedIndexer, mIndexer::setIndexerIdle));
+
+    new JoystickButton(operatorController, Button.ButtonID.X.getID())
+            .whenHeld(new StartEndCommand(mShooter::setShooter, mShooter::setShooterIdle));
+//
+//    new JoystickButton(operatorController, Button.ButtonID.LEFT_BUMPER.getID())
+//            .whenHeld(mShootFar);
+//
+//    new JoystickButton(operatorController, Button.ButtonID.RIGHT_BUMPER.getID())
+//            .whenHeld(mShootClose);
+//
+//    new JoystickButton(operatorController, Button.ButtonID.X.getID())
+//            .whenPressed(mShooter::setShooterClose);
+//
+//    new JoystickButton(operatorController, Button.ButtonID.Y.getID())
+//            .whenHeld(mShootLow);
 
 //    Climber
+
+    new JoystickButton(operatorController, Button.ButtonID.A.getID())
+            .whenHeld(mClimberControl);
+
+//    new JoystickButton(operatorController, Button.ButtonID.B.getID())
+//            .whenPressed(new InstantCommand(mClimber::brake));
 
 //    new JoystickButton(Constants.operatorController, Button.ButtonID.A.getID())
 //            .whenPressed(new ConditionalCommand(
 //                    new InstantCommand(mClimber::angleA),
 //                    new InstantCommand(mClimber::angleB),
 //                    mClimber::getAngle));
-
-    new JoystickButton(operatorController, Button.ButtonID.A.getID())
-            .whenHeld(mClimberControl);
-
-    new JoystickButton(operatorController, Button.ButtonID.B.getID())
-            .whenPressed(new InstantCommand(mClimber::brake));
 
   }
 

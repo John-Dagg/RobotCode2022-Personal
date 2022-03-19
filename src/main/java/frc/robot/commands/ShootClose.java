@@ -14,7 +14,7 @@ public class ShootClose extends CommandBase {
     public ShootClose(Shooter subsystemA, Indexer subsystemB, double time){
         mShooter = subsystemA;
         mIndexer = subsystemB;
-        this.time = time * 1000;
+        this.time = time;
         addRequirements(mShooter, mIndexer);
     }
 
@@ -33,11 +33,13 @@ public class ShootClose extends CommandBase {
 
     @Override
     public void execute(){
-        elapsedTime = System.currentTimeMillis() - start;
+        elapsedTime = (System.currentTimeMillis() - start) / 1000;
         mShooter.setShooterClose();
-        if(elapsedTime > 0.5){
-            mIndexer.feedIndexer();
-        }
+
+//        if(elapsedTime > 1){
+//            mIndexer.feedIndexer();
+//        }
+        mIndexer.feedIndexer();
     }
 
     @Override

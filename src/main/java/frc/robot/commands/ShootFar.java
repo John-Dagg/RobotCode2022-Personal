@@ -14,7 +14,7 @@ public class ShootFar extends CommandBase {
     public ShootFar(Shooter subsystemA, Indexer subsystemB, double time){
         mShooter = subsystemA;
         mIndexer = subsystemB;
-        this.time = time * 1000;
+        this.time = time*1000;
         addRequirements(mShooter, mIndexer);
     }
 
@@ -37,6 +37,7 @@ public class ShootFar extends CommandBase {
         if (elapsedTime > 0.7){
             mIndexer.feedIndexer();
         }
+//        mIndexer.feedIndexer();
 
     }
 

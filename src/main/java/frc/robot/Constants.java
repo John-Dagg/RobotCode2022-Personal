@@ -109,7 +109,7 @@ public final class Constants {
 
 
         public static final double targetHeight = 104; //in
-        public static final double cameraHeight = 9.5; //in
+        public static final double cameraHeight = 17; //in
         public static final double cameraAngle = 30.0; //degrees
 
         public enum TurnDirection {LEFT, RIGHT}
