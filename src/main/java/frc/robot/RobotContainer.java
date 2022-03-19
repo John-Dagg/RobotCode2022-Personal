@@ -76,7 +76,7 @@ public class RobotContainer {
     mDrivetrain.mState = Constants.DriveTrain.DriveState.TELE_DRIVE_INTAKE;
     mDrivetrain.setDefaultCommand(new RunCommand(mDrivetrain::masterDrive, mDrivetrain));
     mIntake.setDefaultCommand(new RunCommand(mIntake::triggerRollerIntake, mIntake));
-//    mIndexer.setDefaultCommand(new RunCommand(mIndexer::indexerTest, mIndexer));
+    mIndexer.setDefaultCommand(new RunCommand(mIndexer::indexerTest, mIndexer));
 //    mShooter.setDefaultCommand(new RunCommand(mShooter::shooterTest, mShooter));
 //    mLimelightVision.setDefaultCommand(new RunCommand(mLimelightVision::printNetworkTables, mLimelightVision));
 

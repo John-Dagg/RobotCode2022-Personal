@@ -41,6 +41,7 @@ public class LimelightAlignCommand extends CommandBase {
 
     @Override
     public void initialize(){
+        mVision.steadyArray();
         mDrivetrain.mState = limelightMode;
         stopFlag = false;
 //        speed = 0.5;
@@ -66,7 +67,7 @@ public class LimelightAlignCommand extends CommandBase {
 
     @Override
     public void end(boolean isFinished){
-        mVision.steadyArray();
+        mVision.offArray();
         if(stopFlag){
             System.out.println("Ending Alignment");
         }

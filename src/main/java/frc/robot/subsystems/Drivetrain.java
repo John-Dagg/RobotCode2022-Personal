@@ -312,6 +312,7 @@ public class Drivetrain extends SubsystemBase {
 
 
   public void arcadeDriveIntake(){
+    mLimelight.offArray();
     double throttle = deadband(Constants.driverController.getRawAxis(Axis.AxisID.LEFT_Y.getID()));
     double turn = deadband(Constants.driverController.getRawAxis(Axis.AxisID.RIGHT_X.getID()));
 
@@ -351,6 +352,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void teleLimelight(){
+    mLimelight.steadyArray();
     double[] values = mLimelight.getValues();
     mDrive.arcadeDrive(values[0], values[1]);
     mDrive.feed();

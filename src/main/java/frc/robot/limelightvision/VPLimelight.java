@@ -66,6 +66,10 @@ public class VPLimelight extends SubsystemBase {
         //Flashes limelight's lights
     }
 
+    public void offArray(){
+        NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1);
+    }
+
     public void steadyArray(){
         NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(0);
         //Set the limelight's array to the settings in the pipeline
