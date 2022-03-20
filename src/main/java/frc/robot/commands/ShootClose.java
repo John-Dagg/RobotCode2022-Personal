@@ -36,10 +36,10 @@ public class ShootClose extends CommandBase {
         elapsedTime = (System.currentTimeMillis() - start) / 1000;
         mShooter.setShooterClose();
 
-//        if(elapsedTime > 1){
-//            mIndexer.feedIndexer();
-//        }
-        mIndexer.feedIndexer();
+        if(elapsedTime > 1 && time != 1000000000){
+            mIndexer.feedIndexer();
+        }
+//        mIndexer.feedIndexer();
     }
 
     @Override

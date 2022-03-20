@@ -63,7 +63,7 @@ public class RobotContainer {
   //Auton
   private AutonGenerator autonGenerator = new AutonGenerator();
   private ArrayList<RamseteCommand> ramseteCommands;
-  private String[] mFiveBallAuton = {"FiveBallA", "FiveBallB", "FiveBallC", "FiveBallD"};
+  private String[] mFiveBallAuton = {"FiveBall1", "FiveBall2", "FiveBall3"};
   private String[] mTest = {"test"};
   private String[] mCurve = {"Curve"};
   private String[] mTurn = {"Turn"};
@@ -238,11 +238,11 @@ public class RobotContainer {
 
     SequentialCommandGroup auton = new SequentialCommandGroup(
             new ShootLow(mShooter, mIndexer, Constants.DriveTrain.DriveState.AUTO_DRIVE),
-            new ParallelRaceGroup(ramseteCommands.get(0).andThen(ramseteCommands.get(1)), new IntakeCargo(mIntake)),
+            new ParallelRaceGroup(ramseteCommands.get(0), new IntakeCargo(mIntake)),
             new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.LEFT, TurnMode.AUTON),
             new ShootClose(mShooter, mIndexer, 2),
-            new ParallelRaceGroup(ramseteCommands.get(2), new IntakeCargo(mIntake)),
-            ramseteCommands.get(3),
+            new ParallelRaceGroup(ramseteCommands.get(1), new IntakeCargo(mIntake)),
+            ramseteCommands.get(2),
 //            new LimelightDistanceCommand(mDrivetrain, mLimelightVision, false),
             new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.RIGHT, TurnMode.AUTON),
             new ShootClose(mShooter, mIndexer, 2),
