@@ -48,8 +48,8 @@ public class Drivetrain extends SubsystemBase {
   private DifferentialDrive mDrive;
   private DifferentialDriveOdometry mOdometry;
 
-  private final double positionConversion = Math.PI * Units.inchesToMeters(6) * (double)1/7 * 10.0/11.0; //Converts rotations to meters
-  private final double velocityConversion = Math.PI * Units.inchesToMeters(6) * (double)1/7 / 60 * 10.0/11.0; //Converts rpms to meters per second
+  private final double positionConversion = Math.PI * Units.inchesToMeters(6) * (double)1/7 * 5.0/10.0; //Converts rotations to meters
+  private final double velocityConversion = Math.PI * Units.inchesToMeters(6) * (double)1/7 / 60 * 5.0/10.0; //Converts rpms to meters per second
 
   private double mYaw, mLeftVolts, mRightVolts;
 
@@ -149,7 +149,7 @@ public class Drivetrain extends SubsystemBase {
     double dist = mLimelight.calcDistance();
     SmartDashboard.putNumber("Distance", dist);
 
-//    System.out.println("Re (in): "+leftWheelsPosition()+" Le (in): "+rightWheelsPosition());
+    System.out.println("Re (m): "+leftWheelsPosition()+" Le (m): "+rightWheelsPosition());
 
 
 

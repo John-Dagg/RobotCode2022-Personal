@@ -67,6 +67,7 @@ public class RobotContainer {
   private String[] mTest = {"test"};
   private String[] mCurve = {"Curve"};
   private String[] mTurn = {"Turn"};
+  private String[] mThreeBall = {"ThreeBall1", "ThreeBall2"};
 
   //Hardcode
   private final HardCodeAuton mAuton = new HardCodeAuton(mDrivetrain, mIntake, mIndexer, mShooter);
@@ -225,7 +226,7 @@ public class RobotContainer {
 
     mDrivetrain.mState = Constants.DriveTrain.DriveState.AUTO_DRIVE;
 
-    String[] commandsLocal = mFiveBallAuton;
+    String[] commandsLocal = mThreeBall;
 
     ramseteCommands = autonGenerator.getAutonCommands(commandsLocal, mDrivetrain);
     mDrivetrain.resetOdometry(autonGenerator.getTrajectory(commandsLocal[0]).getInitialPose());
@@ -235,18 +236,29 @@ public class RobotContainer {
     */
 
     //TODO: Test line by line and make sure this actually works
-
+/*
     SequentialCommandGroup auton = new SequentialCommandGroup(
-            new ShootLow(mShooter, mIndexer, Constants.DriveTrain.DriveState.AUTO_DRIVE),
+            new InstantCommand(mIntake::extendIntake), new ShootLow(mShooter, mIndexer, Constants.DriveTrain.DriveState.AUTO_DRIVE),
             new ParallelRaceGroup(ramseteCommands.get(0), new IntakeCargo(mIntake)),
-            new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.LEFT, TurnMode.AUTON),
-            new ShootClose(mShooter, mIndexer, 2),
-            new ParallelRaceGroup(ramseteCommands.get(1), new IntakeCargo(mIntake)),
-            ramseteCommands.get(2),
+            new ParallelCommandGroup(new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.LEFT, TurnMode.AUTON),
+                    new ShootClose(mShooter, mIndexer, 4, -0.72, false)),
+            new ParallelRaceGroup(ramseteCommands.get(1).andThen(ramseteCommands.get(2)), new IntakeCargo(mIntake)),
+
 //            new LimelightDistanceCommand(mDrivetrain, mLimelightVision, false),
-            new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.RIGHT, TurnMode.AUTON),
-            new ShootClose(mShooter, mIndexer, 2),
+            new ParallelCommandGroup(new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.RIGHT, TurnMode.AUTON),
+                    new ShootClose(mShooter, mIndexer, 4, -0.72, false)),
             new InstantCommand(mDrivetrain::stopDrive));
+
+ */
+    SequentialCommandGroup auton = new SequentialCommandGroup(
+            new InstantCommand(mIntake::extendIntake),
+            new ParallelRaceGroup(ramseteCommands.get(0), new IntakeCargo(mIntake)), new InstantCommand(mIntake::extendIntake),
+            new ParallelCommandGroup(new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.LEFT, TurnMode.AUTON),
+                    new ShootClose(mShooter, mIndexer, 3.5, -0.66, false)),
+            new ParallelRaceGroup(ramseteCommands.get(1), new IntakeCargo(mIntake)), new InstantCommand(mIntake::extendIntake),
+            new ParallelCommandGroup(new ShootClose(mShooter, mIndexer, 4, -0.72, false),
+                    new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.RIGHT, TurnMode.AUTON)));
+
 
     //Hard Coding
     return auton;
