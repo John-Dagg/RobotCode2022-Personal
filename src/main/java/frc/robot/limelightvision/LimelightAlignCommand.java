@@ -24,6 +24,10 @@ public class LimelightAlignCommand extends CommandBase {
 
     private final double searchDirection;
 
+    private double startTime, elapsedTime;
+
+    private final double bufferTime = 500;
+
     public LimelightAlignCommand(Drivetrain subsystemA, VPLimelight subsystemB, TurnDirection turn, TurnMode mode){
 
         mDrivetrain = subsystemA;
@@ -84,7 +88,8 @@ public class LimelightAlignCommand extends CommandBase {
         double turn = 0;
         double yaw = mVision.getxOffset();
         if (deadbandAngle < Math.abs(yaw)) {
-
+            startTime = -1;
+            elapsedTime = 0;
             //deadband angle is the acceptable offset from what is supposed to be the center of the target
             //deccel angle is the angle the robot starts decelerating at
             //max turn is the highest speed the robot will turn at
@@ -99,11 +104,18 @@ public class LimelightAlignCommand extends CommandBase {
             turn = Math.signum(yaw)*MathEqs.targetLinear2(Math.abs(yaw), maxTurn, minturn, deccelAngle, deadbandAngle);
             System.out.println("Yaw: "+yaw+" Turn: "+turn);
         } else {
-            System.out.println("Please work");
+
             if (limelightMode == DriveState.AUTO_LIMELIGHT) {
-                System.out.println("STOPPING ALIGNMENT");
-                stopFlag = true;
-                end(true);
+                if (startTime == -1) {
+                    startTime = System.currentTimeMillis();
+                }
+                elapsedTime = System.currentTimeMillis() - startTime;
+                System.out.println("Please work");
+                if (elapsedTime >= bufferTime) {
+                    System.out.println("STOPPING ALIGNMENT");
+                    stopFlag = true;
+                    end(true);
+                }
             }
         }
         System.out.println(yaw);
