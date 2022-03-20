@@ -26,7 +26,7 @@ public class LimelightAlignCommand extends CommandBase {
 
     private double startTime, elapsedTime;
 
-    private final double bufferTime = 500;
+    private final double bufferTime = 450;
 
     public LimelightAlignCommand(Drivetrain subsystemA, VPLimelight subsystemB, TurnDirection turn, TurnMode mode){
 
@@ -49,6 +49,8 @@ public class LimelightAlignCommand extends CommandBase {
         mDrivetrain.mState = limelightMode;
         stopFlag = false;
 //        speed = 0.5;
+        startTime = -1;
+        elapsedTime = 0;
         System.out.println("Starting Alignment");
     }
 
@@ -81,15 +83,13 @@ public class LimelightAlignCommand extends CommandBase {
 
     @Override
     public boolean isFinished(){
-        return stopFlag;
+        return stopFlag || elapsedTime >= bufferTime;
     }
 
     public void aimTarget(){
         double turn = 0;
         double yaw = mVision.getxOffset();
         if (deadbandAngle < Math.abs(yaw)) {
-            startTime = -1;
-            elapsedTime = 0;
             //deadband angle is the acceptable offset from what is supposed to be the center of the target
             //deccel angle is the angle the robot starts decelerating at
             //max turn is the highest speed the robot will turn at
@@ -103,22 +103,25 @@ public class LimelightAlignCommand extends CommandBase {
 //            turn = Math.max(turn, 0.2);
             turn = Math.signum(yaw)*MathEqs.targetLinear2(Math.abs(yaw), maxTurn, minturn, deccelAngle, deadbandAngle);
             System.out.println("Yaw: "+yaw+" Turn: "+turn);
-        } else {
-
-            if (limelightMode == DriveState.AUTO_LIMELIGHT) {
-                if (startTime == -1) {
-                    startTime = System.currentTimeMillis();
-                }
-                elapsedTime = System.currentTimeMillis() - startTime;
-                System.out.println("Please work");
-                if (elapsedTime >= bufferTime) {
-                    System.out.println("STOPPING ALIGNMENT");
-                    stopFlag = true;
-                    end(true);
-                }
+        }
+        if (limelightMode == DriveState.AUTO_LIMELIGHT && Math.abs(turn) < 0.2) {
+            if (startTime == -1) {
+                startTime = System.currentTimeMillis();
+            }
+            elapsedTime = System.currentTimeMillis() - startTime;
+            System.out.println(elapsedTime);
+            System.out.println("Please work");
+            if (elapsedTime >= bufferTime) {
+                System.out.println("STOPPING ALIGNMENT");
+                stopFlag = true;
+                end(true);
             }
         }
-        System.out.println(yaw);
+        else {
+            startTime = -1;
+            elapsedTime = 0;
+
+        }
         mVision.setValues(0, turn);
 
     }

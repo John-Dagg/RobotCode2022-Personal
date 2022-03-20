@@ -44,7 +44,7 @@ public class ShootLow extends CommandBase {
 
     @Override
     public boolean isFinished(){
-        return elapsedTime > 1.5;
+        return elapsedTime > 1.7;
     }
 
     @Override

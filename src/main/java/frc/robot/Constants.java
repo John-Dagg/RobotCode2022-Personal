@@ -27,8 +27,8 @@ public final class Constants {
         public static final double kv = 1.8559; //Volt seconds per meter
         public static final double ka = 0.58011 ; //Volt seconds squared per meter
 
-//        public static final double kP = 2.9; //Proportional Gain
-        public static final double kP = 0.; //Proportional Gain
+        public static final double kP = 2.9; //Proportional Gain
+//        public static final double kP = 0.; //Proportional Gain
 
         public static final double robotWidth = 0.74325;
         public static final DifferentialDriveKinematics driveKinematics = new DifferentialDriveKinematics(robotWidth);
