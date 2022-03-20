@@ -22,7 +22,7 @@ public class Shooter extends SubsystemBase {
 
     //Needs testing
     private final double closeVel = -0.65;
-    private final double farVel = -0.92;
+    private final double farVel = -0.75;
     private final double idleVel = 0.00;
 
     public Shooter(){

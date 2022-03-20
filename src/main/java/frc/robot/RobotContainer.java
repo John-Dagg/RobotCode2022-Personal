@@ -54,9 +54,11 @@ public class RobotContainer {
   //Complex Commands (that can't be inlined)
   private final ShootFar mShootFar = new ShootFar(mShooter, mIndexer);
   private final ShootClose mShootClose = new ShootClose(mShooter, mIndexer);
-  private final ShootLow mShootLow = new ShootLow(mShooter, mIndexer);
+  private final ShootLow mShootLow = new ShootLow(mShooter, mIndexer, Constants.DriveTrain.DriveState.TELE_DRIVE_INTAKE);
+  private final ShootLow mAutoLow = new ShootLow(mShooter, mIndexer, Constants.DriveTrain.DriveState.AUTO_DRIVE);
   private final IntakeCargo mIntakeCargo = new IntakeCargo(mIntake);
   private final ClimberControl mClimberControl = new ClimberControl(mClimber);
+  private final ShootCustom mCustomShooter = new ShootCustom(mShooter, mIndexer, mLimelightVision);
 
   //Auton
   private AutonGenerator autonGenerator = new AutonGenerator();
@@ -139,15 +141,15 @@ public class RobotContainer {
     //If the left bumper is pressed and the drivetrain is in low gear perform the first command
     //If the left bumper is pressed and the drivetrain is in high gear perform the second command
 
-    new JoystickButton(driverController, Button.ButtonID.LEFT_BUMPER.getID())
-            .whenPressed(new ConditionalCommand(
-                    new InstantCommand(mDrivetrain::highGear),
-                    new InstantCommand(mDrivetrain::lowGear),
-                    mDrivetrain::getLowGear));
-
-
 //    new JoystickButton(driverController, Button.ButtonID.LEFT_BUMPER.getID())
-//            .whenHeld(new StartEndCommand(mDrivetrain::highGear, mDrivetrain::lowGear));
+//            .whenPressed(new ConditionalCommand(
+//                    new InstantCommand(mDrivetrain::highGear),
+//                    new InstantCommand(mDrivetrain::lowGear),
+//                    mDrivetrain::getLowGear));
+
+
+    new JoystickButton(driverController, Button.ButtonID.LEFT_BUMPER.getID())
+            .whenHeld(new StartEndCommand(mDrivetrain::highGear, mDrivetrain::lowGear));
 
 //    Intake
 
@@ -171,7 +173,7 @@ public class RobotContainer {
 
 //    Shooter
 
-    new JoystickButton(operatorController, Button.ButtonID.LEFT_BUMPER.getID())
+    new JoystickButton(operatorController, Button.ButtonID.X.getID())
             .whenHeld(new StartEndCommand(mShooter::setShooterFar, mShooter::setShooterIdle));
 
     new JoystickButton(operatorController, Button.ButtonID.RIGHT_BUMPER.getID())
@@ -180,8 +182,15 @@ public class RobotContainer {
     new JoystickButton(operatorController, Button.ButtonID.Y.getID())
             .whenHeld(new StartEndCommand(mIndexer::feedIndexer, mIndexer::setIndexerIdle));
 
-    new JoystickButton(operatorController, Button.ButtonID.X.getID())
+    new JoystickButton(operatorController, Button.ButtonID.LEFT_BUMPER.getID())
             .whenHeld(new StartEndCommand(mShooter::setShooter, mShooter::setShooterIdle));
+
+    new JoystickButton(operatorController, Button.ButtonID.B.getID())
+            .whenHeld(mShootLow);
+
+//    new JoystickButton(operatorController, Button.ButtonID.START.getID())
+//            .whenHeld(mCustomShooter);
+
 //
 //    new JoystickButton(operatorController, Button.ButtonID.LEFT_BUMPER.getID())
 //            .whenHeld(mShootFar);
@@ -214,9 +223,9 @@ public class RobotContainer {
   //Global auton execution called here
   public Command getAutonomousCommand() {
 
-//    mDrivetrain.mState = Constants.DriveTrain.DriveState.AUTO_DRIVE;
+    mDrivetrain.mState = Constants.DriveTrain.DriveState.AUTO_DRIVE;
 
-    String[] commandsLocal = mTest;
+    String[] commandsLocal = mFiveBallAuton;
 
     ramseteCommands = autonGenerator.getAutonCommands(commandsLocal, mDrivetrain);
     mDrivetrain.resetOdometry(autonGenerator.getTrajectory(commandsLocal[0]).getInitialPose());
@@ -227,25 +236,25 @@ public class RobotContainer {
 
     //TODO: Test line by line and make sure this actually works
 
-//    SequentialCommandGroup auton = new SequentialCommandGroup(
-//            new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.RIGHT, TurnMode.AUTON),
-//            new ShootClose(mShooter, mIndexer, 2),
-//            new ParallelRaceGroup(ramseteCommands.get(0).andThen(ramseteCommands.get(1)), new IntakeCargo(mIntake)),
-//            new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.RIGHT, TurnMode.AUTON),
-//            new ShootClose(mShooter, mIndexer, 2),
-//            new ParallelRaceGroup(ramseteCommands.get(2), new IntakeCargo(mIntake)),
-//            ramseteCommands.get(3),
+    SequentialCommandGroup auton = new SequentialCommandGroup(
+            new ShootLow(mShooter, mIndexer, Constants.DriveTrain.DriveState.AUTO_DRIVE),
+            new ParallelRaceGroup(ramseteCommands.get(0).andThen(ramseteCommands.get(1)), new IntakeCargo(mIntake)),
+            new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.LEFT, TurnMode.AUTON),
+            new ShootClose(mShooter, mIndexer, 2),
+            new ParallelRaceGroup(ramseteCommands.get(2), new IntakeCargo(mIntake)),
+            ramseteCommands.get(3),
 //            new LimelightDistanceCommand(mDrivetrain, mLimelightVision, false),
-//            new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.RIGHT, TurnMode.AUTON),
-//            new ShootFar(mShooter, mIndexer, 2),
-//            new InstantCommand(mDrivetrain::stopDrive));
+            new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.RIGHT, TurnMode.AUTON),
+            new ShootClose(mShooter, mIndexer, 2),
+            new InstantCommand(mDrivetrain::stopDrive));
 
     //Hard Coding
+    return auton;
 //  return mAuton;
 //  return mOneBallAuton;
 
     //Auton Generation
-    return ramseteCommands.get(0).andThen(new InstantCommand(mDrivetrain::stopDrive));
+//    return ramseteCommands.get(0).andThen(new InstantCommand(mDrivetrain::stopDrive));
 
     //Default
 //  return null;

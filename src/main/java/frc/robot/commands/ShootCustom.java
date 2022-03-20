@@ -8,6 +8,7 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Indexer;
 import frc.robot.subsystems.Shooter;
 import frc.robot.limelightvision.VPLimelight;
+import frc.robot.utility.MathEqs;
 
 public class ShootCustom extends CommandBase {
 
@@ -31,21 +32,16 @@ public class ShootCustom extends CommandBase {
     }
 
     //Inches
-    public double calcDistance(){
-        pitch = mVision.getyOffset();
-        return (Constants.LimelightVision.targetHeight - Constants.LimelightVision.cameraHeight)
-                / Math.tan(Units.degreesToRadians(Constants.LimelightVision.cameraAngle + pitch));
-    }
-
-    //Inches
     public double calcSpeed(){
         //Equation to find the required initial velocity of a projectile
         //Assumes the ball will reach the same speed as the wheels which is inaccurate sadly
-        dist = calcDistance();
-        vel = Math.sqrt(((dist * dist) * 9.8)
-                / (dist * Math.sin(2 * hoodAngle) - (2 * (Constants.LimelightVision.targetHeight
-                - Constants.LimelightVision.cameraHeight) * Math.cos(hoodAngle) * Math.cos(hoodAngle))));
-        percentOutput = ((vel / (6 * Math.PI)) / 100 * 4096) / maxVel;
+        dist = mVision.calcDistance();
+//        vel = Math.sqrt(((dist * dist) * 9.8)
+//                / (dist * Math.sin(2 * hoodAngle) - (2 * (Constants.LimelightVision.targetHeight
+//                - Constants.LimelightVision.cameraHeight) * Math.cos(hoodAngle) * Math.cos(hoodAngle))));
+//        percentOutput = ((vel / (6 * Math.PI)) / 100 * 4096) / maxVel;
+        vel = MathEqs.targetQuadratic(-0.0004, 0.017, -0.6576, dist);
+
         return vel < 0 ? Math.max(vel, -1.0) : Math.min(vel, 1.0);
     }
 
@@ -60,16 +56,17 @@ public class ShootCustom extends CommandBase {
 
     @Override
     public void initialize(){
-        mShooter.setAnglerLow();
+        if (mVision.calcDistance() < 120){
+            mShooter.setAnglerLow();
+        } else {
+            mShooter.setAnglerHigh();
+        }
         setShooterCustom();
     }
 
     @Override
     public void execute(){
         setShooterCustom();
-        if (mShooter.getShooterVel() > getShooterCustomVel()){
-            mIndexer.feedIndexer();
-        }
     }
 
     @Override

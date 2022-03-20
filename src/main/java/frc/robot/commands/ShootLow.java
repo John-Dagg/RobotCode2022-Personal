@@ -10,12 +10,14 @@ public class ShootLow extends CommandBase {
 
     private Shooter mShooter;
     private Indexer mIndexer;
+    private Constants.DriveTrain.DriveState mState;
 
     private double speed, start, elapsedTime;
 
-    public ShootLow(Shooter subsystemA, Indexer subsystemB){
+    public ShootLow(Shooter subsystemA, Indexer subsystemB, Constants.DriveTrain.DriveState mDriveState){
         mShooter = subsystemA;
         mIndexer = subsystemB;
+        mState = mDriveState;
         addRequirements(mShooter, mIndexer);
 
         speed = -0.38;
@@ -32,10 +34,17 @@ public class ShootLow extends CommandBase {
     public void execute(){
         elapsedTime = (System.currentTimeMillis() - start) / 1000;
         mShooter.setShooterVel(speed);
-        if (elapsedTime > 0.25){
-            mIndexer.feedIndexer();
+        if (mState == Constants.DriveTrain.DriveState.AUTO_DRIVE || mState == Constants.DriveTrain.DriveState.AUTO_LIMELIGHT){
+            if (elapsedTime > 1) mIndexer.feedIndexer();
+//            if (elapsedTime > 1.5) end(true);
         }
 
+
+    }
+
+    @Override
+    public boolean isFinished(){
+        return elapsedTime > 1.5;
     }
 
     @Override

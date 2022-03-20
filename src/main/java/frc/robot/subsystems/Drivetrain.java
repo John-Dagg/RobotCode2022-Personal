@@ -48,8 +48,8 @@ public class Drivetrain extends SubsystemBase {
   private DifferentialDrive mDrive;
   private DifferentialDriveOdometry mOdometry;
 
-  private final double positionConversion = Math.PI * Units.inchesToMeters(6) * (double)1/7; //Converts rotations to meters
-  private final double velocityConversion = Math.PI * Units.inchesToMeters(6) * (double)1/7 / 60; //Converts rpms to meters per second
+  private final double positionConversion = Math.PI * Units.inchesToMeters(6) * (double)1/7 * 10.0/11.0; //Converts rotations to meters
+  private final double velocityConversion = Math.PI * Units.inchesToMeters(6) * (double)1/7 / 60 * 10.0/11.0; //Converts rpms to meters per second
 
   private double mYaw, mLeftVolts, mRightVolts;
 
@@ -98,10 +98,13 @@ public class Drivetrain extends SubsystemBase {
 
 
     //Creates two encoder objects for their respective motors
-    mLeftEncoder = mLeftLeader.getAlternateEncoder(SparkMaxAlternateEncoder.Type.kQuadrature, 4096);
-    mRightEncoder = mRightLeader.getAlternateEncoder(SparkMaxAlternateEncoder.Type.kQuadrature, 4096);
-    mLeftEncoder.setInverted(false);
-    mRightEncoder.setInverted(true);
+//    mLeftEncoder = mLeftLeader.getAlternateEncoder(SparkMaxAlternateEncoder.Type.kQuadrature, 4096);
+//    mRightEncoder = mRightLeader.getAlternateEncoder(SparkMaxAlternateEncoder.Type.kQuadrature, 4096);
+    mLeftEncoder = mLeftLeader.getEncoder();
+    mRightEncoder = mRightLeader.getEncoder();
+
+//    mLeftEncoder.setInverted(false);
+//    mRightEncoder.setInverted(true);
     resetEncoders();
 
     mDrive = new DifferentialDrive(mLeftMotors, mRightMotors);
@@ -120,14 +123,14 @@ public class Drivetrain extends SubsystemBase {
     switch (mState) {
       case TELE_DRIVE_INTAKE:
         arcadeDriveIntake();
-        mLimelight.steadyArray();
-        System.out.println("Distance (in) " + mLimelight.calcDistance());
+//        mLimelight.steadyArray();
+//        System.out.println("Distance (in) " + mLimelight.calcDistance());
         break;
       case TELE_DRIVE_SHOOTER:
         arcadeDriveShooter();
         break;
       case TELE_LIMELIGHT:
-        teleLimelight();
+        limelightDrive();
         break;
       case LIMELIGHT_DRIVE:
         limelightDrive();
@@ -136,8 +139,9 @@ public class Drivetrain extends SubsystemBase {
         System.out.println("Right Volts: " + mRightVolts);
         break;
       case AUTO_LIMELIGHT:
-        System.out.println("Left Volts: " + mLeftVolts);
-        System.out.println("Right Volts: " + mRightVolts);
+        limelightDrive();
+//        System.out.println("Left Volts: " + mLeftVolts);
+//        System.out.println("Right Volts: " + mRightVolts);
         break;
       default:
         break;
@@ -145,14 +149,12 @@ public class Drivetrain extends SubsystemBase {
     double dist = mLimelight.calcDistance();
     SmartDashboard.putNumber("Distance", dist);
 
-//    System.out.println("Le: "+leftWheelsPosition()+" Re: "+rightWheelsPosition());
+//    System.out.println("Re (in): "+leftWheelsPosition()+" Le (in): "+rightWheelsPosition());
 
 
-//    if ((Arrays.asList(new DriveState[] {TELE_LIMELIGHT, LIMELIGHT_DRIVE, AUTO_LIMELIGHT}).contains(mState))) {
-//      mLimelight.steadyArray();
-//      System.out.println("Distance (in) " + mLimelight.calcDistance());
-//    }
-//    else mLimelight.offArray();
+
+
+//    System.out.println(mState);
   }
 
 
@@ -266,7 +268,7 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
-  public void limelightDrive(){
+  public void limelightDrive2(){
     //Needs Work First
     mYaw = mLimelight.getxOffset();
     if (mYaw > 0.5) {
@@ -361,7 +363,7 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
-  public void teleLimelight(){
+  public void limelightDrive(){
     double[] values = mLimelight.getValues();
     mDrive.arcadeDrive(values[0], values[1]);
     mDrive.feed();
@@ -404,6 +406,8 @@ public class Drivetrain extends SubsystemBase {
 //    System.out.println("Left Volts: " + mLeftVolts);
 //    System.out.println("Right Volts: " + mRightVolts);
 
+    System.out.println("Le: " + leftWheelsPosition() + " Re: " + rightWheelsPosition());
+
 //    System.out.println("Yaw: " + mPigeon.getYaw());
 
     mLeftMotors.setVoltage(mLeftVolts);
@@ -424,10 +428,20 @@ public class Drivetrain extends SubsystemBase {
 
   @Override
   public void periodic(){
-    mOdometry.update(Rotation2d.fromDegrees(mPigeon.getYaw()), mLeftEncoder.getPosition() * positionConversion, mRightEncoder.getPosition() * positionConversion);
+    mOdometry.update(Rotation2d.fromDegrees(mPigeon.getYaw()), -mLeftEncoder.getPosition() * positionConversion, mRightEncoder.getPosition() * positionConversion);
     var translation = mOdometry.getPoseMeters().getTranslation();
     SmartDashboard.putNumber("X", translation.getX());
     SmartDashboard.putNumber("Y", translation.getY());
+
+    if ((Arrays.asList(new DriveState[] {TELE_LIMELIGHT, LIMELIGHT_DRIVE, AUTO_LIMELIGHT}).contains(mState))) {
+      mLimelight.steadyArray();
+//      System.out.println("Distance (in) " + mLimelight.calcDistance());
+    }
+    else mLimelight.offArray();
+
+    if ((Arrays.asList(new DriveState[] {AUTO_DRIVE, AUTO_LIMELIGHT}).contains(mState))) {
+      masterDrive();
+    }
   }
 
   /***
@@ -436,7 +450,7 @@ public class Drivetrain extends SubsystemBase {
    */
 
   public double leftWheelsPosition(){
-    return mLeftEncoder.getPosition() * positionConversion;
+    return -mLeftEncoder.getPosition() * positionConversion;
   }
 
   /***
@@ -454,7 +468,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds(){
-    return new DifferentialDriveWheelSpeeds(mLeftEncoder.getVelocity() * velocityConversion, mRightEncoder.getVelocity() * velocityConversion);
+    return new DifferentialDriveWheelSpeeds(-mLeftEncoder.getVelocity() * velocityConversion, mRightEncoder.getVelocity() * velocityConversion);
   }
 
   public void resetOdometry(Pose2d pose){
