@@ -7,6 +7,13 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.subsystems.Drivetrain;
+import frc.robot.utility.MathEqs;
+
+import static frc.robot.Constants.LimelightVision.HighGear.*;
+import static frc.robot.Constants.LimelightVision.HighGear.maxTurn_High;
+import static frc.robot.Constants.LimelightVision.LowGear.*;
+import static frc.robot.Constants.LimelightVision.LowGear.maxTurn_Low;
 
 public class VPLimelight extends SubsystemBase {
 
@@ -91,6 +98,57 @@ public class VPLimelight extends SubsystemBase {
 //        System.out.println(yOffset);
         return (Constants.LimelightVision.targetHeight - Constants.LimelightVision.cameraHeight)
                 / Math.tan(Units.degreesToRadians(Constants.LimelightVision.cameraAngle + yOffset));
+    }
+
+    public boolean aimTarget(Drivetrain mDrivetrain, Constants.DriveTrain.DriveState limelightMode, double startTime, double bufferTime){
+        double turn = 0;
+        double yaw = getxOffset();
+        double elapsedTime;
+        if (mDrivetrain.getShiftState() == Constants.DriveTrain.ShiftState.LOW_GEAR) {
+            if (deadbandAngle_Low < Math.abs(yaw)) {
+                /***
+                 deadband angle is the acceptable offset from what is supposed to be the center of the target
+                 deccel angle is the angle the robot starts decelerating at
+                 max turn is the highest speed the robot will turn at
+                 yaw is the angle the robot is away from the center of the target
+                 */
+
+                turn = Math.signum(yaw) * MathEqs.targetLinear2(Math.abs(yaw), maxTurn_Low, minturn_Low, deccelAngle_Low, deadbandAngle_Low);
+                System.out.println("Yaw: " + yaw + " Turn: " + turn);
+            }
+        } else {
+            if (deadbandAngle_High < Math.abs(yaw)) {
+                turn = Math.signum(yaw) * MathEqs.targetLinear2(Math.abs(yaw), maxTurn_High, minturn_High, deccelAngle_High, deadbandAngle_High);
+                System.out.println("Yaw: " + yaw + " Turn: " + turn);
+            }
+        }
+        if (limelightMode == Constants.DriveTrain.DriveState.AUTO_LIMELIGHT && Math.abs(turn) < 0.2) {
+            if (startTime == -1) {
+                startTime = System.currentTimeMillis();
+            }
+            elapsedTime = (System.currentTimeMillis() - startTime) /1000;
+            System.out.println(elapsedTime);
+            System.out.println("Please work");
+            if (elapsedTime >= bufferTime) {
+                System.out.println("STOPPING ALIGNMENT");
+                return true;
+            }
+        }
+        else {
+            startTime = -1;
+            elapsedTime = 0;
+        }
+        setValues(0, turn);
+        return false;
+    }
+
+    public void findTarget(Drivetrain mDrivetrain, double searchDirection){
+        if (mDrivetrain.getShiftState() == Constants.DriveTrain.ShiftState.LOW_GEAR){
+            setValues(0, searchDirection*maxTurn_Low);
+        } else {
+            setValues(0, searchDirection*maxTurn_High);
+        }
+
     }
 
 }

@@ -14,16 +14,18 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
-import static frc.robot.Constants.Auton.*;
-
+import static frc.robot.Constants.Auton.HighGear.*;
+import static frc.robot.Constants.Auton.LowGear.*;
+import static frc.robot.Constants.Auton.driveKinematics;
+import static frc.robot.Constants.DriveTrain.*;
 
 public class AutonGenerator {
 
+    ShiftState mShiftState;
     Drivetrain mDrivetrain;
     RamseteController mRamseteController = new RamseteController(Constants.Auton.ramseteB, Constants.Auton.ramseteZeta);
-    SimpleMotorFeedforward mFeedForward = new SimpleMotorFeedforward(ks, kv, ka);
-    PIDController leftPID = new PIDController(Constants.Auton.kP, 0, 0);
-    PIDController rightPID = new PIDController(Constants.Auton.kP, 0, 0);
+    SimpleMotorFeedforward mFeedForward;
+    PIDController leftPID, rightPID;
 
     //Fills an array with trajectories based on a String array of the paths and returns it
     public Trajectory getTrajectory(String pathing){
@@ -51,6 +53,23 @@ public class AutonGenerator {
         ArrayList<RamseteCommand> commands= new ArrayList<>();
         mRamseteController.setEnabled(true);
         mDrivetrain = subsystem;
+        ShiftState mShiftState = mDrivetrain.getShiftState();
+
+        switch (mShiftState) {
+            case LOW_GEAR:
+                mFeedForward = new SimpleMotorFeedforward(Low_ks, Low_kv, Low_ka);
+                leftPID = new PIDController(Low_kP, 0, 0);
+                rightPID = new PIDController(Low_kP, 0, 0);
+            break;
+            case HIGH_GEAR:
+                mFeedForward = new SimpleMotorFeedforward(High_ks, High_kv, High_ka);
+                leftPID = new PIDController(High_kP, 0, 0);
+                rightPID = new PIDController(High_kP, 0, 0);
+            break;
+            default:
+                System.out.println("Error! No Shift State");
+            break;
+        }
 
         for (int i = 0; i < pathing.length; i++){
             System.out.println("Adding trajectory " + i + " ...Hopefully");

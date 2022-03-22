@@ -77,9 +77,10 @@ public class Shooter extends SubsystemBase {
     //For use of commands to index the ball once the shooter is at the correct speed
     public double getShooterVel(){
         double ticks = shooterMotorLeader.getSelectedSensorVelocity();
-        double RPM = (ticks / integratedTicks) * 10 * 60;
+        double RPM = (ticks / integratedTicks) * 10 * 60; //Converts to RPM from ticks per 100ms
         double maxRPM = 6000;
         double percentOutput = RPM / maxRPM;
+        System.out.println("Shooter Percent Output: " + percentOutput);
         return percentOutput;
     }
 

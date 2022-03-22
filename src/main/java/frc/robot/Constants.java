@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Joystick;
+import frc.robot.subsystems.Drivetrain;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -26,12 +27,23 @@ public final class Constants {
 
     public static final class Auton {
 
-        public static final double ks = 0.206; //Volts
-        public static final double kv = 1.8559; //Volt seconds per meter
-        public static final double ka = 0.58011 ; //Volt seconds squared per meter
+        public static final class LowGear {
 
-        public static final double kP = 2.9; //Proportional Gain
-//        public static final double kP = 0.; //Proportional Gain
+            public static final double Low_ks = 0.206; //Volts
+            public static final double Low_kv = 1.8559; //Volt seconds per meter
+            public static final double Low_ka = 0.58011; //Volt seconds squared per meter
+
+            public static final double Low_kP = 2.9; //Proportional Gain
+        }
+
+        public static final class HighGear {
+
+            public static final double High_ks = 0;
+            public static final double High_kv = 0;
+            public static final double High_ka = 0;
+
+            public static final double High_kP = 0;
+        }
 
         public static final double robotWidth = 0.74325;
         public static final DifferentialDriveKinematics driveKinematics = new DifferentialDriveKinematics(robotWidth);
@@ -54,7 +66,9 @@ public final class Constants {
 
         public static final double deadband = 0.05;
 
-        public enum DriveState { TELE_DRIVE_INTAKE, TELE_DRIVE_SHOOTER, TELE_LIMELIGHT, LIMELIGHT_DRIVE, AUTO_DRIVE, AUTO_LIMELIGHT; }
+        public enum DriveState { TELE_DRIVE_INTAKE, TELE_DRIVE_SHOOTER, TELE_LIMELIGHT, LIMELIGHT_DRIVE, AUTO_DRIVE, AUTO_LIMELIGHT }
+
+        public enum ShiftState {LOW_GEAR, HIGH_GEAR}
 
         public static final DriveState defaultState = DriveState.TELE_DRIVE_INTAKE;
 
@@ -90,27 +104,21 @@ public final class Constants {
         public static final double deadband = 0.1;
     }
 
-    public static final class PhotonVision{
-
-        public static final double cameraHeight = Units.inchesToMeters(25);
-        public static final double cameraPitch = Units.degreesToRadians(0);
-        public static final double targetHeightA = Units.inchesToMeters(40);
-
-        public static final double turnLowerLimit = 2.5;
-        public static final double turnUpperLimit = 90;
-        public static final double turnRange = turnUpperLimit - turnLowerLimit;
-        public static final double turnSpeed = 0.25;
-    }
-
     public static final class LimelightVision{
 
-        public static final double goalAngleP = 0.5;
-        public static final double goalAngleN = -1;
-        public static final double deadbandAngle = 1.5;
-        public static final double deccelAngle = 30;
-        public static final double maxTurn = 0.8;
-        public static final double minturn = 0.15;
+        public static final class LowGear {
+            public static final double deadbandAngle_Low = 1.5;
+            public static final double deccelAngle_Low = 30;
+            public static final double maxTurn_Low = 0.8;
+            public static final double minturn_Low = 0.15;
+        }
 
+        public static final class HighGear {
+            public static final double deadbandAngle_High = 0;
+            public static final double deccelAngle_High = 0;
+            public static final double maxTurn_High = 0;
+            public static final double minturn_High = 0;
+        }
 
         public static final double targetHeight = 104; //in
         public static final double cameraHeight = 17; //in

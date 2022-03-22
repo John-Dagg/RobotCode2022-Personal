@@ -57,11 +57,11 @@ public class LimelightAlignShooterCommand extends CommandBase {
         mLimelight.updateTargets();
         if(mLimelight.getTargets() >= 1) {
             mLimelight.steadyArray();
-            aimTarget();
+//            aimTarget();
             System.out.println("Aiming at Targets");
         } else {
             mDrivetrain.printMotors();
-            findTarget();
+//            findTarget();
             System.out.println("Finding Targets");
         }
         elapsedTime = System.currentTimeMillis() - start;
@@ -78,29 +78,7 @@ public class LimelightAlignShooterCommand extends CommandBase {
         mDrivetrain.mState = Constants.DriveTrain.DriveState.TELE_DRIVE_INTAKE;
     }
 
-    public void aimTarget(){
-        double turn = 0;
-        double yaw = mLimelight.getxOffset();
-        if (deadbandAngle < Math.abs(yaw)) {
 
-            //deadband angle is the acceptable offset from what is supposed to be the center of the target
-            //deccel angle is the angle the robot starts decelerating at
-            //max turn is the highest speed the robot will turn at
-            //yaw is the angle the robot is away from the center of the target
-
-            turn = Math.signum(yaw)* MathEqs.targetLinear(Math.abs(yaw), maxTurn, deccelAngle, deadbandAngle);
-            System.out.println("Yaw: "+yaw+" Turn: "+turn);
-        } else {
-            System.out.println("Aligned with target");
-        }
-        System.out.println(yaw);
-        mLimelight.setValues(0, turn);
-
-    }
-
-    public void findTarget(){
-        mLimelight.setValues(0, maxTurn);
-    }
 
     public double calcShooterSpeed(){
         distance = mLimelight.calcDistance();

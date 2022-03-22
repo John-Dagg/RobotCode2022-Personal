@@ -28,6 +28,7 @@ import frc.robot.Constants.*;
 import frc.robot.Constants.DriveTrain.*;
 
 import static frc.robot.Constants.DriveTrain.DriveState.*;
+import static frc.robot.Constants.DriveTrain.ShiftState.*;
 import static frc.robot.Constants.DriveTrain.defaultState;
 import static frc.robot.Constants.DriveTrain.shifterPorts;
 import java.util.Arrays;
@@ -58,6 +59,7 @@ public class Drivetrain extends SubsystemBase {
   private double limelightGain;
 
   public DriveState mState;
+  public ShiftState mShiftState;
 
   private VPLimelight mLimelight;
 
@@ -151,21 +153,21 @@ public class Drivetrain extends SubsystemBase {
 
     System.out.println("Re (m): "+leftWheelsPosition()+" Le (m): "+rightWheelsPosition());
 
-
-
-
 //    System.out.println(mState);
   }
 
-
   public void lowGear(){
     mShifter.set(DoubleSolenoid.Value.kReverse);
-//    System.out.println("Low Gear"); //For Testing
+    mShiftState = LOW_GEAR;
   }
 
   public void highGear(){
     mShifter.set(DoubleSolenoid.Value.kForward);
-//    System.out.println("High Gear"); //For Testing
+    mShiftState = HIGH_GEAR;
+  }
+
+  public ShiftState getShiftState(){
+    return mShiftState;
   }
 
   public boolean getLowGear(){
@@ -177,34 +179,6 @@ public class Drivetrain extends SubsystemBase {
     }
     return gear;
   }
-
-
-
-  public MotorControllerGroup getLeftMotors(){
-    return mLeftMotors;
-  }
-
-  public MotorControllerGroup getRightMotors(){
-    return mRightMotors;
-  }
-
-  public CANSparkMax getLeftLeader(){
-    return mLeftLeader;
-  }
-
-  public CANSparkMax getRightLeader(){
-    return mRightLeader;
-  }
-
-  public RelativeEncoder getLeftEncoder(){
-    return mLeftEncoder;
-  }
-
-  public RelativeEncoder getRightEncoder(){
-    return mRightEncoder;
-  }
-
-  public Pigeon2 getPigeon(){return mPigeon;}
 
   public void resetEncoders(){
     mLeftEncoder.setPosition(0);
@@ -268,26 +242,6 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
-  public void limelightDrive2(){
-    //Needs Work First
-    mYaw = mLimelight.getxOffset();
-    if (mYaw > 0.5) {
-      limelightGain = 0.2;
-    }
-    if (mYaw < -0.5) {
-      limelightGain = -0.2;
-    }
-
-    limelightThrottle = deadband(Constants.driverController.getRawAxis(Axis.AxisID.LEFT_Y.getID()));
-    limelightRawTurn = deadband(Constants.driverController.getRawAxis(Axis.AxisID.RIGHT_X.getID()));
-
-    limelightTurn = limelightRawTurn + limelightGain;
-    limelightTurn = limelightRawTurn == 0 ? 0 : limelightTurn;
-
-    mDrive.arcadeDrive(limelightThrottle, limelightTurn);
-
-  }
-
   public void toggleArcadeStyle(){
     if (mState != TELE_DRIVE_INTAKE){
       mState = TELE_DRIVE_INTAKE;
@@ -333,19 +287,6 @@ public class Drivetrain extends SubsystemBase {
 
 //    System.out.println("Yaw: " + mPigeon.getYaw());
 
-//    double left = throttle - turn;
-//    double right = throttle + turn;
-
-    //Ternary operators that ensure the values supplied to the SparkMaxes are within the acceptable range.
-    //Math.max returns the greater of the two values
-    //Math.min returns the lower of the two values
-//    double leftOutput = left < 0 ? Math.max(left, -1) : Math.min(left, 1);
-//    double rightOutput = right < 0 ? Math.max(right, -1) : Math.min(right, 1);
-
-//    mLeftLeader.set(leftOutput * 0.5);
-//    mRightLeader.set(rightOutput * 0.5);
-
-
     mDrive.arcadeDrive(-throttle, turn);
     lastThrottle = (throttle == 0) ? lastThrottle : throttle;
     lastTurn = (turn == 0) ? lastTurn : turn;
@@ -372,24 +313,6 @@ public class Drivetrain extends SubsystemBase {
   public void autonDrive(double thottle, double turn){
     mDrive.arcadeDrive(thottle, turn);
     mDrive.feed();
-  }
-
-  public void tankDrive(){
-    double left = deadband(Constants.driverController.getRawAxis(Axis.AxisID.LEFT_Y.getID()));
-    double right = deadband(Constants.driverController.getRawAxis(Axis.AxisID.RIGHT_Y.getID()));
-
-    //Ternary operators that ensure the values supplied to the SparkMaxes are within the acceptable range.
-    //Math.max returns the greater of the two values
-    //Math.min returns the lower of the two values
-
-    double leftOutput = left < 0 ? Math.max(left, -1) : Math.min(left, 1);
-    double rightOutput = right < 0 ? Math.max(right, -1) : Math.min(right, 1);
-
-//    mLeftLeader.set(leftOutput * 0.5);
-//    mRightLeader.set(rightOutput * 0.5);
-
-
-    mDrive.tankDrive(left, right);
   }
 
   public void stopDrive(){

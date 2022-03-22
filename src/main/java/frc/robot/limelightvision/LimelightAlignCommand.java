@@ -4,19 +4,20 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxPIDController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.Constants.DriveTrain.DriveState;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.utility.MathEqs;
 import frc.robot.Constants.LimelightVision.*;
 
 import static frc.robot.Constants.LimelightVision.*;
+import static frc.robot.Constants.LimelightVision.LowGear.*;
+import static frc.robot.Constants.LimelightVision.HighGear.*;
 
 public class LimelightAlignCommand extends CommandBase {
 
     private final Drivetrain mDrivetrain;
     private final VPLimelight mVision;
-
-    private double speed;
 
     private boolean stopFlag;
 
@@ -26,7 +27,7 @@ public class LimelightAlignCommand extends CommandBase {
 
     private double startTime, elapsedTime;
 
-    private final double bufferTime = 450;
+    private final double bufferTime = 0.45;
 
     public LimelightAlignCommand(Drivetrain subsystemA, VPLimelight subsystemB, TurnDirection turn, TurnMode mode){
 
@@ -49,7 +50,6 @@ public class LimelightAlignCommand extends CommandBase {
         mDrivetrain.mState = limelightMode;
         stopFlag = false;
 //        speed = 0.5;
-        startTime = -1;
         elapsedTime = 0;
         System.out.println("Starting Alignment");
     }
@@ -58,17 +58,14 @@ public class LimelightAlignCommand extends CommandBase {
     public void execute(){
         mVision.updateTargets();
         if(mVision.getTargets() >= 1) {
-//            mVision.steadyArray();
-            aimTarget();
+            stopFlag = mVision.aimTarget(mDrivetrain, limelightMode, startTime, elapsedTime);
             System.out.println("Aiming at Targets");
         } else {
-//            mVision.flashArray();
-            mDrivetrain.printMotors();
-            findTarget();
+//            mDrivetrain.printMotors();
+            mVision.findTarget(mDrivetrain, searchDirection);
             System.out.println("Finding Targets");
         }
 //        System.out.println(mVision.getyOffset());
-
     }
 
     @Override
@@ -77,65 +74,13 @@ public class LimelightAlignCommand extends CommandBase {
         if(stopFlag){
             System.out.println("Ending Alignment");
         }
-        System.out.println("ENDING");
         mDrivetrain.mState = (limelightMode == DriveState.TELE_LIMELIGHT) ? DriveState.TELE_DRIVE_INTAKE : DriveState.AUTO_DRIVE;
     }
 
     @Override
     public boolean isFinished(){
-        return stopFlag || elapsedTime >= bufferTime;
+        return stopFlag;
     }
-
-    public void aimTarget(){
-        double turn = 0;
-        double yaw = mVision.getxOffset();
-        if (deadbandAngle < Math.abs(yaw)) {
-            //deadband angle is the acceptable offset from what is supposed to be the center of the target
-            //deccel angle is the angle the robot starts decelerating at
-            //max turn is the highest speed the robot will turn at
-            //yaw is the angle the robot is away from the center of the target
-
-//            mLeftMotors.set(calcTurn());
-//            mRightMotors.set(-calcTurn());
-//            turn = Math.signum(yaw)*calcTurn(yaw);
-//            turn = Math.signum(yaw) * 0.2;
-//            turn = Math.signum(yaw)*MathEqs.targetLinear(Math.abs(yaw), maxTurn, deccelAngle, deadbandAngle);
-//            turn = Math.max(turn, 0.2);
-            turn = Math.signum(yaw)*MathEqs.targetLinear2(Math.abs(yaw), maxTurn, minturn, deccelAngle, deadbandAngle);
-            System.out.println("Yaw: "+yaw+" Turn: "+turn);
-        }
-        if (limelightMode == DriveState.AUTO_LIMELIGHT && Math.abs(turn) < 0.2) {
-            if (startTime == -1) {
-                startTime = System.currentTimeMillis();
-            }
-            elapsedTime = System.currentTimeMillis() - startTime;
-            System.out.println(elapsedTime);
-            System.out.println("Please work");
-            if (elapsedTime >= bufferTime) {
-                System.out.println("STOPPING ALIGNMENT");
-                stopFlag = true;
-                end(true);
-            }
-        }
-        else {
-            startTime = -1;
-            elapsedTime = 0;
-
-        }
-        mVision.setValues(0, turn);
-
-    }
-
-    public void findTarget(){
-        mVision.setValues(0, searchDirection*maxTurn);
-    }
-    /*
-    public double calcTurn(double x){
-        return (speed * Math.abs(x)) / (deccelAngle - goalAngleP)
-                + (speed * goalAngleP) / (goalAngleP - deccelAngle);
-    }
-
-     */
 
 }
 
