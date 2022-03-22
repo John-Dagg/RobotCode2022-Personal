@@ -150,7 +150,7 @@ public class RobotContainer {
 
 
     new JoystickButton(driverController, Button.ButtonID.LEFT_BUMPER.getID())
-            .whenHeld(new StartEndCommand(mDrivetrain::highGear, mDrivetrain::lowGear));
+            .whenHeld(new StartEndCommand(mDrivetrain::lowGear, mDrivetrain::highGear));
 
 //    Intake
 
@@ -174,11 +174,8 @@ public class RobotContainer {
 
 //    Shooter
 
-    new JoystickButton(operatorController, Button.ButtonID.X.getID())
-            .whenHeld(new StartEndCommand(mShooter::setShooterFar, mShooter::setShooterIdle));
-
     new JoystickButton(operatorController, Button.ButtonID.RIGHT_BUMPER.getID())
-            .whenHeld(new StartEndCommand(mShooter::setShooterClose, mShooter::setShooterIdle));
+            .whenHeld(new StartEndCommand(mShooter::setShooterFar, mShooter::setShooterIdle));
 
     new JoystickButton(operatorController, Button.ButtonID.Y.getID())
             .whenHeld(new StartEndCommand(mIndexer::feedIndexer, mIndexer::setIndexerIdle));
@@ -209,6 +206,9 @@ public class RobotContainer {
 
     new JoystickButton(operatorController, Button.ButtonID.A.getID())
             .whenHeld(mClimberControl);
+
+    new JoystickButton(operatorController, Button.ButtonID.B.getID())
+            .whenPressed(mClimber::angleClimber);
 
 //    new JoystickButton(operatorController, Button.ButtonID.B.getID())
 //            .whenPressed(new InstantCommand(mClimber::brake));

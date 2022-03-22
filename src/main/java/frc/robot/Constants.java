@@ -21,6 +21,9 @@ public final class Constants {
     public static final Joystick driverController = new Joystick(0);
     public static final Joystick operatorController = new Joystick(1);
 
+    public enum IntakeState {IN, OUT}
+    public enum HoodState {LOW, HIGH}
+
     public static final class Auton {
 
         public static final double ks = 0.206; //Volts

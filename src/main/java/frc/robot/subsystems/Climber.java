@@ -17,7 +17,7 @@ public class Climber extends SubsystemBase {
     private DoubleSolenoid climberSolenoid;
     private DoubleSolenoid brake;
 
-    private double winchVel, speed;
+    private double winchVel;
 
     public Climber() {
 
@@ -31,19 +31,22 @@ public class Climber extends SubsystemBase {
         climberFollower.follow(climberLeader);
         climberLeader.setNeutralMode(NeutralMode.Brake); //So the winch doesn't uncoil when the motor isn't being powered
         climberFollower.setNeutralMode(NeutralMode.Brake);
-
-        //Change this to change power to climber
-        speed = 0.1;
     }
 
     public void winchRawControl(){
         winchVel = Constants.operatorController.getRawAxis(Axis.AxisID.LEFT_Y.getID());
-        double turnDirection = (Constants.operatorController.getRawAxis(Axis.AxisID.LEFT_Y.getID()) > 0) ? -1 : 1;
-        double climberVel = (Constants.operatorController.getRawAxis(Axis.AxisID.LEFT_Y.getID()) / 1.5);
-        winchVel =  Math.abs(winchVel) > Constants.Climber.deadband ? Math.abs(climberVel) : 0;
+        double turnDirection = (Constants.operatorController.getRawAxis(Axis.AxisID.LEFT_Y.getID()) > 0) ? 1 : -1;
+        winchVel =  Math.abs(winchVel) > Constants.Climber.deadband ? Math.abs(winchVel): 0;
 
         double winch = winchVel * turnDirection;
         climberLeader.set(TalonSRXControlMode.PercentOutput, winch);
+
+        if (climberLeader.getSensorCollection().isFwdLimitSwitchClosed()) Math.max(0, winchVel);
+
+        climberLeader.set(TalonSRXControlMode.PercentOutput, winch);
+
+
+
     }
 
     public void winchUp(){
@@ -77,6 +80,12 @@ public class Climber extends SubsystemBase {
     }
 
     public void angleB(){
+        if (climberSolenoid.get() != DoubleSolenoid.Value.kReverse) climberSolenoid.set(DoubleSolenoid.Value.kReverse);
+    }
+
+    public void angleClimber(){
+        if (climberSolenoid.get() == DoubleSolenoid.Value.kOff) climberSolenoid.set(DoubleSolenoid.Value.kForward);
+        if (climberSolenoid.get() != DoubleSolenoid.Value.kForward) climberSolenoid.set(DoubleSolenoid.Value.kForward);
         if (climberSolenoid.get() != DoubleSolenoid.Value.kReverse) climberSolenoid.set(DoubleSolenoid.Value.kReverse);
     }
 
