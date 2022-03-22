@@ -32,6 +32,10 @@ import java.util.ArrayList;
 
 import static frc.robot.Constants.driverController;
 import static frc.robot.Constants.operatorController;
+import static frc.robot.Constants.LimelightVision.TurnDirection.*;
+import static frc.robot.Constants.HoodState.*;
+import static frc.robot.Constants.IntakeState.*;
+
 
 public class RobotContainer {
 
@@ -249,7 +253,7 @@ public class RobotContainer {
                     new ShootClose(mShooter, mIndexer, 4, -0.72, false)),
             new InstantCommand(mDrivetrain::stopDrive));
 
- */
+
     SequentialCommandGroup auton = new SequentialCommandGroup(
             new InstantCommand(mIntake::extendIntake),
             new ParallelRaceGroup(ramseteCommands.get(0), new IntakeCargo(mIntake)), new InstantCommand(mIntake::extendIntake),
@@ -259,6 +263,13 @@ public class RobotContainer {
             new ParallelCommandGroup(new ShootClose(mShooter, mIndexer, 4, -0.72, false),
                     new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.RIGHT, TurnMode.AUTON)));
 
+ */
+
+    SequentialCommandGroup auton = new SequentialCommandGroup(
+            new AutonDrive(mIntake, ramseteCommands, 0),
+            new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, RIGHT, HIGH, IN, -0.72, 4),
+            new AutonDrive(mIntake, ramseteCommands, 1),
+            new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, RIGHT, HIGH, IN, -0.72, 4));
 
     //Hard Coding
     return auton;

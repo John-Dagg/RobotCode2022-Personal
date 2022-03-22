@@ -49,8 +49,8 @@ public class AutonGenerator {
     }
 
     //Fills an array with Ramsete commands based on a String array of paths and returns it
-    public ArrayList<RamseteCommand> getAutonCommands(String[] pathing, Drivetrain subsystem){
-        ArrayList<RamseteCommand> commands= new ArrayList<>();
+    public ArrayList<RamseteCommand> getAutonCommands(String[] pathing, Drivetrain subsystem) {
+        ArrayList<RamseteCommand> commands = new ArrayList<>();
         mRamseteController.setEnabled(true);
         mDrivetrain = subsystem;
         ShiftState mShiftState = mDrivetrain.getShiftState();
@@ -60,21 +60,21 @@ public class AutonGenerator {
                 mFeedForward = new SimpleMotorFeedforward(Low_ks, Low_kv, Low_ka);
                 leftPID = new PIDController(Low_kP, 0, 0);
                 rightPID = new PIDController(Low_kP, 0, 0);
-            break;
+                break;
             case HIGH_GEAR:
                 mFeedForward = new SimpleMotorFeedforward(High_ks, High_kv, High_ka);
                 leftPID = new PIDController(High_kP, 0, 0);
                 rightPID = new PIDController(High_kP, 0, 0);
-            break;
+                break;
             default:
                 System.out.println("Error! No Shift State");
-            break;
+                break;
         }
 
-        for (int i = 0; i < pathing.length; i++){
+        for (int i = 0; i < pathing.length; i++) {
             System.out.println("Adding trajectory " + i + " ...Hopefully");
             Trajectory trajectory = getTrajectory(pathing[i]);
-            if (trajectory == null){
+            if (trajectory == null) {
                 System.out.println("Trajectory " + i + " not found");
                 return null;
             }
@@ -87,7 +87,9 @@ public class AutonGenerator {
                             driveKinematics,
                             mDrivetrain::getWheelSpeeds,
                             leftPID, rightPID,
-                            (leftVolts, rightVolts) -> {mDrivetrain.tankDriveVolts(leftVolts, rightVolts);},
+                            (leftVolts, rightVolts) -> {
+                                mDrivetrain.tankDriveVolts(leftVolts, rightVolts);
+                            },
                             mDrivetrain));
         }
         return commands;

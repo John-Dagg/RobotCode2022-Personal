@@ -1,18 +1,10 @@
 package frc.robot.limelightvision;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.SparkMaxPIDController;
-import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.Constants.DriveTrain.DriveState;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.utility.MathEqs;
-import frc.robot.Constants.LimelightVision.*;
 
 import static frc.robot.Constants.LimelightVision.*;
-import static frc.robot.Constants.LimelightVision.LowGear.*;
-import static frc.robot.Constants.LimelightVision.HighGear.*;
 
 public class LimelightAlignCommand extends CommandBase {
 
