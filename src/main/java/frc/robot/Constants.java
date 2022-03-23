@@ -51,6 +51,8 @@ public final class Constants {
         //Constants for using the ramsete controller
         public static final double ramseteB = 2;
         public static final double ramseteZeta = 0.7;
+
+
     }
 
     public static final class DriveTrain {
@@ -110,14 +112,14 @@ public final class Constants {
             public static final double deadbandAngle_Low = 1.5;
             public static final double deccelAngle_Low = 30;
             public static final double maxTurn_Low = 0.8;
-            public static final double minturn_Low = 0.15;
+            public static final double minturn_Low = 0.2;
         }
 
         public static final class HighGear {
-            public static final double deadbandAngle_High = 0;
-            public static final double deccelAngle_High = 0;
-            public static final double maxTurn_High = 0;
-            public static final double minturn_High = 0;
+            public static final double deadbandAngle_High = 2;
+            public static final double deccelAngle_High = 30;
+            public static final double maxTurn_High = 0.8;
+            public static final double minturn_High = 0.2;
         }
 
         public static final double targetHeight = 104; //in

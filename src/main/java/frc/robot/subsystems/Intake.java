@@ -50,13 +50,13 @@ public class Intake extends SubsystemBase {
 
     public void rollerIntake(){
         rollerBar.set(intakeSpeed);
-        stallFailsafe();
+//        stallFailsafe();
 //        staticRoller.set(1);
     }
 
     public void rollerOuttake(){
         rollerBar.set(-intakeSpeed);
-        stallFailsafe();
+//        stallFailsafe();
 //        staticRoller.set(-1);
 
     }

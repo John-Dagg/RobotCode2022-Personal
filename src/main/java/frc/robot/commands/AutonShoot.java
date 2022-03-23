@@ -26,7 +26,7 @@ public class AutonShoot extends CommandBase {
     private IntakeState mIntakeState;
 
     private double speed, time, elapsedTime, start, startTime, turnDir;
-    private double bufferTime = 0.5;
+    private double bufferTime = 1.0;
     private boolean robotAligned;
 
     public AutonShoot(Drivetrain subsystemA, Intake subsystemB, Indexer subsystemC, Shooter subsystemD, VPLimelight subsystemE,
@@ -51,7 +51,7 @@ public class AutonShoot extends CommandBase {
 
         mShooter.setShooterVel(speed);
 
-        mDrivetrain.mState = AUTO_DRIVE;
+        mDrivetrain.mState = AUTO_LIMELIGHT;
         robotAligned = false;
         elapsedTime = 0;
         startTime = -1;
@@ -69,7 +69,8 @@ public class AutonShoot extends CommandBase {
         }
 
         mShooter.setShooterVel(speed);
-        if (robotAligned && mShooter.getShooterVel() >= speed){
+        if (robotAligned && Math.abs(mShooter.getShooterVel()) > 0.55){
+            System.out.println(mShooter.getShooterVel());
             mIndexer.feedIndexer();
         }
 

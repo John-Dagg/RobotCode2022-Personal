@@ -151,7 +151,7 @@ public class Drivetrain extends SubsystemBase {
     double dist = mLimelight.calcDistance();
     SmartDashboard.putNumber("Distance", dist);
 
-    System.out.println("Re (m): "+leftWheelsPosition()+" Le (m): "+rightWheelsPosition());
+//    System.out.println("Re (m): "+leftWheelsPosition()+" Le (m): "+rightWheelsPosition());
 
 //    System.out.println(mState);
   }

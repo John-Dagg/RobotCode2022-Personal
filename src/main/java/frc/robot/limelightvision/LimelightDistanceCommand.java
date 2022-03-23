@@ -21,7 +21,7 @@ public class LimelightDistanceCommand extends CommandBase {
     private boolean distanceCompleted;
     private boolean stopFlag;
 
-    private final double distanceClose = 72; //inches
+    private final double distanceClose = 80; //inches
     private final double distanceFar = 178; //inches
     private final double band = 10;
 
@@ -42,7 +42,7 @@ public class LimelightDistanceCommand extends CommandBase {
         mDrivetrain.mState = Constants.DriveTrain.DriveState.TELE_LIMELIGHT;
         stopFlag = false;
         speed = 0.5;
-        buffer = 5;
+        buffer = 10;
         mVision.updateTargets();
 //        goalDistance = goalDistance; //inches
         initDistance = mVision.calcDistance();
@@ -60,15 +60,16 @@ public class LimelightDistanceCommand extends CommandBase {
     @Override
     public void execute(){
 
-        actualTravel = mDrivetrain.rightWheelsPosition();
+        actualTravel = Units.metersToInches(-mDrivetrain.rightWheelsPosition());
 //        System.out.println(mRightEncoder.getPosition());
 //        speed = calcSpeed();
         remainDistance = goalTravel-actualTravel;
         speed = 0;
-        System.out.println("SPEED: "+speed+" | Travel: " + actualTravel);
+
 
         if (Math.abs(remainDistance) > buffer) {
-            speed = -Math.signum(remainDistance)*MathEqs.targetLinear(remainDistance, 0.8, 100, buffer);
+            speed = -Math.signum(remainDistance)*MathEqs.targetLinear2(remainDistance, 0.8, 0.25,50, buffer);
+            System.out.println("SPEED: "+speed+" | TRAVEL: " + actualTravel);
             System.out.println("Remaining Distance: "+remainDistance);
         }
         else {

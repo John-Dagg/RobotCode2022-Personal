@@ -39,6 +39,11 @@ public class Shooter extends SubsystemBase {
 
     }
 
+    public void setAngle(){
+        if (angler.get() != DoubleSolenoid.Value.kForward) angler.set(DoubleSolenoid.Value.kForward);
+        if (angler.get() != DoubleSolenoid.Value.kReverse) angler.set(DoubleSolenoid.Value.kReverse);
+    }
+
     public void setAnglerLow(){
         if (angler.get() != DoubleSolenoid.Value.kReverse) angler.set(DoubleSolenoid.Value.kReverse);
     }
@@ -66,8 +71,8 @@ public class Shooter extends SubsystemBase {
 
     public void setShooter(){
         double vel = SmartDashboard.getNumber("Shooter Speed", closeVel);
+        System.out.println("Shooter Vel" + getShooterVel());
         shooterMotorLeader.set(TalonFXControlMode.PercentOutput, vel);
-        setAnglerHigh();
     }
 
     public void setShooterIdle(){

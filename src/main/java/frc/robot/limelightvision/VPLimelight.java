@@ -23,6 +23,8 @@ public class VPLimelight extends SubsystemBase {
     private double targets, xOffset, yOffset, targetArea, targetSkew;
 
     public double throttleValue, turnValue;
+    double startTime;
+    double elapsedTime;
 
     public VPLimelight(){
         mNetworkTable = NetworkTableInstance.getDefault().getTable("limelight");
@@ -100,10 +102,11 @@ public class VPLimelight extends SubsystemBase {
                 / Math.tan(Units.degreesToRadians(Constants.LimelightVision.cameraAngle + yOffset));
     }
 
-    public boolean aimTarget(Drivetrain mDrivetrain, Constants.DriveTrain.DriveState limelightMode, double startTime, double bufferTime){
+    public boolean aimTarget(Drivetrain mDrivetrain, Constants.DriveTrain.DriveState limelightMode, double start, double bufferTime){
         double turn = 0;
         double yaw = getxOffset();
-        double elapsedTime;
+
+
         if (mDrivetrain.getShiftState() == Constants.DriveTrain.ShiftState.LOW_GEAR) {
             if (deadbandAngle_Low < Math.abs(yaw)) {
                 /***
@@ -114,22 +117,25 @@ public class VPLimelight extends SubsystemBase {
                  */
 
                 turn = Math.signum(yaw) * MathEqs.targetLinear2(Math.abs(yaw), maxTurn_Low, minturn_Low, deccelAngle_Low, deadbandAngle_Low);
-                System.out.println("Yaw: " + yaw + " Turn: " + turn);
+//                System.out.println("Yaw: " + yaw + " Turn: " + turn);
             }
         } else {
             if (deadbandAngle_High < Math.abs(yaw)) {
                 turn = Math.signum(yaw) * MathEqs.targetLinear2(Math.abs(yaw), maxTurn_High, minturn_High, deccelAngle_High, deadbandAngle_High);
-                System.out.println("Yaw: " + yaw + " Turn: " + turn);
+//                System.out.println("Yaw: " + yaw + " Turn: " + turn);
             }
         }
-        if (limelightMode == Constants.DriveTrain.DriveState.AUTO_LIMELIGHT && Math.abs(turn) < 0.2) {
+        if (limelightMode == Constants.DriveTrain.DriveState.AUTO_LIMELIGHT && Math.abs(turn) < 0.25) {
             if (startTime == -1) {
+                System.out.println("RESET: "+startTime);
                 startTime = System.currentTimeMillis();
+                System.out.println("START TIME "+startTime);
             }
-            elapsedTime = (System.currentTimeMillis() - startTime) /1000;
-            System.out.println(elapsedTime);
-            System.out.println("Please work");
-            if (elapsedTime >= bufferTime) {
+
+            elapsedTime = Math.abs((System.currentTimeMillis() - startTime) /1000);
+            System.out.println("TIME REMAINING: "+(bufferTime-elapsedTime));
+//            System.out.println("Please work");
+            if (elapsedTime >= 0.5) {
                 System.out.println("STOPPING ALIGNMENT");
                 return true;
             }

@@ -54,6 +54,7 @@ public class AutonGenerator {
         mRamseteController.setEnabled(true);
         mDrivetrain = subsystem;
         ShiftState mShiftState = mDrivetrain.getShiftState();
+        mShiftState = ShiftState.LOW_GEAR;
 
         switch (mShiftState) {
             case LOW_GEAR:

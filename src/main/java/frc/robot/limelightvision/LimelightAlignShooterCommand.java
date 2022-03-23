@@ -58,11 +58,11 @@ public class LimelightAlignShooterCommand extends CommandBase {
         if(mLimelight.getTargets() >= 1) {
             mLimelight.steadyArray();
 //            aimTarget();
-            System.out.println("Aiming at Targets");
+//            System.out.println("Aiming at Targets");
         } else {
             mDrivetrain.printMotors();
 //            findTarget();
-            System.out.println("Finding Targets");
+//            System.out.println("Finding Targets");
         }
         elapsedTime = System.currentTimeMillis() - start;
         mShooter.setShooterVel(shooterSpeed);

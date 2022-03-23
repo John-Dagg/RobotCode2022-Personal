@@ -4,12 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.RamseteController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryUtil;
-import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -17,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.autons.AutonGenerator;
+import frc.robot.autons.AutonRoutine;
 import frc.robot.autons.HardCodeAuton;
 import frc.robot.autons.TaxiOneBallHardCode;
 import frc.robot.commands.*;
@@ -26,8 +21,6 @@ import frc.robot.limelightvision.*;
 import frc.robot.subsystems.*;
 import frc.robot.Constants.LimelightVision.*;
 
-import java.io.IOException;
-import java.nio.file.Path;
 import java.util.ArrayList;
 
 import static frc.robot.Constants.driverController;
@@ -47,6 +40,8 @@ public class RobotContainer {
   private final Indexer mIndexer = new Indexer();
   private final Climber mClimber = new Climber();
 
+  private final SubsystemBase[] mSubsystems =  {mDrivetrain, mIntake, mShooter, mIndexer, mLimelightVision};
+
   //Limelight Vision
   private final LimelightAlignCommand mLeftAlign = new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.LEFT, TurnMode.TELEOP);
   private final LimelightAlignCommand mRightAlign = new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.RIGHT, TurnMode.TELEOP);
@@ -64,14 +59,11 @@ public class RobotContainer {
   private final ClimberControl mClimberControl = new ClimberControl(mClimber);
   private final ShootCustom mCustomShooter = new ShootCustom(mShooter, mIndexer, mLimelightVision);
 
-  //Auton
-  private AutonGenerator autonGenerator = new AutonGenerator();
-  private ArrayList<RamseteCommand> ramseteCommands;
-  private String[] mFiveBallAuton = {"FiveBall1", "FiveBall2", "FiveBall3"};
-  private String[] mTest = {"test"};
-  private String[] mCurve = {"Curve"};
-  private String[] mTurn = {"Turn"};
-  private String[] mThreeBall = {"ThreeBall1", "ThreeBall2"};
+
+
+  //Auton Routines
+  private AutonRoutine mTest2 = new AutonRoutine(mSubsystems, AutonRoutine.Routine.THREE_BALL_TEST);
+
 
   //Hardcode
   private final HardCodeAuton mAuton = new HardCodeAuton(mDrivetrain, mIntake, mIndexer, mShooter);
@@ -84,7 +76,7 @@ public class RobotContainer {
     mDrivetrain.setDefaultCommand(new RunCommand(mDrivetrain::masterDrive, mDrivetrain));
     mIntake.setDefaultCommand(new RunCommand(mIntake::triggerRollerIntake, mIntake));
 //    mIndexer.setDefaultCommand(new RunCommand(mIndexer::indexerTest, mIndexer));
-//    mShooter.setDefaultCommand(new RunCommand(mShooter::shooterTest, mShooter));
+//    mShooter.setDefaultCommand(new RunCommand(mShooter::getShooterVel, mShooter));
 //    mLimelightVision.setDefaultCommand(new RunCommand(mLimelightVision::printNetworkTables, mLimelightVision));
 
   }
@@ -117,11 +109,7 @@ public class RobotContainer {
      * B - Toggle Brake
      * Left Y - Raw Winch Control (Requires A to be held)
      *
-     * Auton                                            TODO: AutonGenerator is returning a nullPointer? Not filling array correctly?
-     *                                                        Tune PID constants and ka, kv, ks
-     *                                                        Check encoders
-     *                                                        Add timer to shoot close/far commands so they actually end in auton
-     *                                                        Test Sequential Command Groups and Parallel Race Groups in auton
+     * Auton
      *
      *     (Disabled)
      * X - Align Target Angle + Default Turn Left
@@ -190,6 +178,9 @@ public class RobotContainer {
     new JoystickButton(operatorController, Button.ButtonID.B.getID())
             .whenHeld(mShootLow);
 
+    new POVButton(operatorController, 90)
+            .whenPressed(new InstantCommand(mShooter::setAngle));
+
 //    new JoystickButton(operatorController, Button.ButtonID.START.getID())
 //            .whenHeld(mCustomShooter);
 
@@ -230,10 +221,10 @@ public class RobotContainer {
 
     mDrivetrain.mState = Constants.DriveTrain.DriveState.AUTO_DRIVE;
 
-    String[] commandsLocal = mThreeBall;
-
-    ramseteCommands = autonGenerator.getAutonCommands(commandsLocal, mDrivetrain);
-    mDrivetrain.resetOdometry(autonGenerator.getTrajectory(commandsLocal[0]).getInitialPose());
+//    String[] commandsLocal = mThreeBall;
+//
+//    ramseteCommands = autonGenerator.getAutonCommands(commandsLocal, mDrivetrain);
+//    mDrivetrain.resetOdometry(autonGenerator.getTrajectory(commandsLocal[0]).getInitialPose());
 
     /***
     * Aim -> Shoot -> Drive and Collect -> Aim -> Shoot -> Drive and Collect -> Correct Distance -> Aim -> Shoot -> Stop
@@ -265,14 +256,9 @@ public class RobotContainer {
 
  */
 
-    SequentialCommandGroup auton = new SequentialCommandGroup(
-            new AutonDrive(mIntake, ramseteCommands, 0),
-            new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, RIGHT, HIGH, IN, -0.72, 4),
-            new AutonDrive(mIntake, ramseteCommands, 1),
-            new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, RIGHT, HIGH, IN, -0.72, 4));
 
     //Hard Coding
-    return auton;
+//    return auton;
 //  return mAuton;
 //  return mOneBallAuton;
 
@@ -280,7 +266,7 @@ public class RobotContainer {
 //    return ramseteCommands.get(0).andThen(new InstantCommand(mDrivetrain::stopDrive));
 
     //Default
-//  return null;
+  return null;
   }
 
   public void activateTeleop() {

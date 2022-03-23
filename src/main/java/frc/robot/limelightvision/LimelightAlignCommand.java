@@ -51,11 +51,11 @@ public class LimelightAlignCommand extends CommandBase {
         mVision.updateTargets();
         if(mVision.getTargets() >= 1) {
             stopFlag = mVision.aimTarget(mDrivetrain, limelightMode, startTime, elapsedTime);
-            System.out.println("Aiming at Targets");
+//            System.out.println("Aiming at Targets");
         } else {
 //            mDrivetrain.printMotors();
             mVision.findTarget(mDrivetrain, searchDirection);
-            System.out.println("Finding Targets");
+//            System.out.println("Finding Targets");
         }
 //        System.out.println(mVision.getyOffset());
     }
