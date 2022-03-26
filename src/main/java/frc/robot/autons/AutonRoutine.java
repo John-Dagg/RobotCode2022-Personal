@@ -27,15 +27,17 @@ public class AutonRoutine {
 
 
     public enum Routine {
-        FIVE_BALL_TEST(0, new String[]{"FiveBall1", "FiveBall2", "FiveBall3"}),
-        THREE_BALL_TEST(1, new String[]{"ThreeBall1", "ThreeBall2"});
+        FIVE_BALL_TEST(0, "Five Ball Test", new String[]{"FiveBall1", "FiveBall2", "FiveBall3"}),
+        THREE_BALL_TEST(1,"Three Ball Test", new String[]{"ThreeBall1", "ThreeBall2"});
 
-        Routine(int index, String[] trajectory){
+        Routine(int index, String name, String[] trajectory){
             this.index = index;
+            this.name = name;
             this.trajectory = trajectory;
 
         }
         private int index;
+        private String name;
         private String[] trajectory;
         private SequentialCommandGroup commands;
 
@@ -48,6 +50,8 @@ public class AutonRoutine {
         public SequentialCommandGroup getCommands() {
             return commands;
         }
+
+        public String getName() {return name; }
 
     }
 
@@ -74,6 +78,14 @@ public class AutonRoutine {
 
         ramseteCommands = autonGenerator.getAutonCommands(mRoutine.getRoutineTrajectory(), mDrivetrain);
 
+        /***
+         * These switch-case statements handle how each autonomous routine is structured:
+         * A) THREE_BALL_TEST
+         *    1) Intake 1 cargo while driving from position A to B
+         *    2) Align angle via Limelight while revving shooter, shoot 2 cargo via running indexer when aligned
+         *    3) Intake 1 cargo while driving from position B to C
+         *    4) Align angle via Limelight while revving shooter, shoot 1 cargo via running indexer when aligned
+         */
 
         switch (mRoutine) {
             case FIVE_BALL_TEST:
@@ -103,7 +115,12 @@ public class AutonRoutine {
         return mRoutine.getCommands();
     }
 
+    public String getName() {
+        return mRoutine.getName();
+    }
+
     public void routineInitialize() {
         mDrivetrain.resetOdometry(autonGenerator.getTrajectory(mRoutine.getRoutineTrajectory()[0]).getInitialPose());
     }
+
 }

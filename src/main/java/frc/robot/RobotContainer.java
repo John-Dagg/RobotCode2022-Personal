@@ -7,10 +7,11 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-import frc.robot.autons.AutonGenerator;
 import frc.robot.autons.AutonRoutine;
 import frc.robot.autons.HardCodeAuton;
 import frc.robot.autons.TaxiOneBallHardCode;
@@ -21,14 +22,8 @@ import frc.robot.limelightvision.*;
 import frc.robot.subsystems.*;
 import frc.robot.Constants.LimelightVision.*;
 
-import java.util.ArrayList;
-
 import static frc.robot.Constants.driverController;
 import static frc.robot.Constants.operatorController;
-import static frc.robot.Constants.LimelightVision.TurnDirection.*;
-import static frc.robot.Constants.HoodState.*;
-import static frc.robot.Constants.IntakeState.*;
-
 
 public class RobotContainer {
 
@@ -63,6 +58,9 @@ public class RobotContainer {
 
   //Auton Routines
   private final AutonRoutine mThreeBall = new AutonRoutine(mSubsystems, AutonRoutine.Routine.THREE_BALL_TEST);
+  private final AutonRoutine mFiveBall = new AutonRoutine(mSubsystems, AutonRoutine.Routine.FIVE_BALL_TEST);
+
+  private final SendableChooser<AutonRoutine> mAutons = new SendableChooser<>();
 
 
   //Hardcode
@@ -71,13 +69,14 @@ public class RobotContainer {
 
   public RobotContainer() {
 
+    mAutons.setDefaultOption(mThreeBall.getName(), mThreeBall);
+    mAutons.addOption(mFiveBall.getName(), mFiveBall);
+    SmartDashboard.putData(mAutons);
+
     configureButtonBindings();
     mDrivetrain.mState = Constants.DriveTrain.DriveState.TELE_DRIVE_INTAKE;
     mDrivetrain.setDefaultCommand(new RunCommand(mDrivetrain::masterDrive, mDrivetrain));
     mIntake.setDefaultCommand(new RunCommand(mIntake::triggerRollerIntake, mIntake));
-//    mIndexer.setDefaultCommand(new RunCommand(mIndexer::indexerTest, mIndexer));
-//    mShooter.setDefaultCommand(new RunCommand(mShooter::getShooterVel, mShooter));
-//    mLimelightVision.setDefaultCommand(new RunCommand(mLimelightVision::printNetworkTables, mLimelightVision));
 
   }
 
@@ -96,7 +95,7 @@ public class RobotContainer {
      * Right Bumper - Extends + Intakes (Hold)
      * Right Trigger - Intake
      * Left Trigger - Outtake
-     * X - Shooter Arcade Drive Toggle                  TODO: Limelight - Find appropriate distance and tune calcDistance() {@link LimelightDistanceCommand}
+     * X - Shooter Arcade Drive Toggle
      * B - Intake Arcade Drive Toggle
      * A - Toggle Four-Bar
      *
@@ -218,9 +217,13 @@ public class RobotContainer {
 
   //Global auton execution called here
   public Command getAutonomousCommand() {
+
+    AutonRoutine selectedRoutine = mAutons.getSelected();
+    selectedRoutine.routineInitialize();
+
     mDrivetrain.mState = Constants.DriveTrain.DriveState.AUTO_DRIVE;
-    mThreeBall.routineInitialize();
-    return mThreeBall.getRoutine();
+
+    return selectedRoutine.getRoutine();
   }
 
   public void activateTeleop() {
