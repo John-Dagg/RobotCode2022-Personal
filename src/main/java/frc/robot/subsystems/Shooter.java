@@ -37,7 +37,7 @@ public class Shooter extends SubsystemBase {
 
     //Jack edits
 
-    private double gTargetPower, gActualPower, gAppliedPower, gMagnitude, gInterval = 0.005, gDeadband = 0.005, gDeviance;
+    private double gTargetPower, gActualPower, gAppliedPower, gMagnitude, gInterval = 0.0025, gDeadband = 0.005, gDeviance;
 
     public Shooter(){
         SmartDashboard.putNumber("Shooter Speed", closeVel);
@@ -127,7 +127,7 @@ public class Shooter extends SubsystemBase {
         gDeviance = gTargetPower - gActualPower;
 
         if (Math.abs(gDeviance) > gDeadband) {
-            gMagnitude = gTargetPower + Math.signum(gDeviance)*gInterval;
+            gMagnitude = Math.signum(gDeviance)*gInterval;
         }
         gAppliedPower = gTargetPower + gMagnitude;
 
