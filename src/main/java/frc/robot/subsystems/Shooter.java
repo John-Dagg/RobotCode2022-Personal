@@ -34,6 +34,11 @@ public class Shooter extends SubsystemBase {
     double appliedOutput = 0.65;
     double gain = 0;
 
+
+    //Jack edits
+
+    private double gTargetPower, gActualPower, gAppliedPower, gMagnitude, gInterval = 0.005, gDeadband = 0.005, gDeviance;
+
     public Shooter(){
         SmartDashboard.putNumber("Shooter Speed", closeVel);
 
@@ -109,6 +114,24 @@ public class Shooter extends SubsystemBase {
 
 
         shooterMotorLeader.set(TalonFXControlMode.PercentOutput, -appliedOutput);
+//        printRPM();
+    }
+
+    public void setShooterGain(){
+        gTargetPower = Math.abs(SmartDashboard.getNumber("Shooter Speed", closeVel));
+
+        RPM = shooterMotorLeader.getSelectedSensorVelocity() * ticksToRPM;
+
+        gActualPower = Math.abs(RPM * actualPercentConversion);
+
+        gDeviance = gTargetPower - gActualPower;
+
+        if (Math.abs(gDeviance) > gDeadband) {
+            gMagnitude = gTargetPower + Math.signum(gDeviance)*gInterval;
+        }
+        gAppliedPower = gTargetPower + gMagnitude;
+
+        shooterMotorLeader.set(TalonFXControlMode.PercentOutput, -gAppliedPower);
 //        printRPM();
     }
 
