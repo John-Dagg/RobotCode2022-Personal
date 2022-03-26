@@ -3,6 +3,8 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -17,13 +19,15 @@ public class Shooter extends SubsystemBase {
 
     private TalonFX shooterMotorLeader, shooterMotorFollower;
     private DoubleSolenoid angler;
+    private PIDController mController;
 
     private final double integratedTicks = 2048;
 
-    //Needs testing
-    private final double closeVel = -0.65;
+    private final double closeVel = -0.68;
     private final double farVel = -0.75;
     private final double idleVel = 0.00;
+
+    private double RPMgoal;
 
     public Shooter(){
         SmartDashboard.putNumber("Shooter Speed", closeVel);
@@ -37,6 +41,15 @@ public class Shooter extends SubsystemBase {
         shooterMotorFollower.follow(shooterMotorLeader);
         shooterMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
 
+        mController = new PIDController(0.1, 0, 0);
+    }
+
+    public void PIDshooter(){
+        RPMgoal = 4000;
+        double setpoint = (RPMgoal / 600) * integratedTicks;
+        double value = mController.calculate(shooterMotorLeader.getSelectedSensorVelocity(), setpoint);
+        System.out.println("PID Controller Value: " + value);
+        shooterMotorLeader.set(TalonFXControlMode.Velocity, value);
     }
 
     public void setAngle(){
@@ -60,23 +73,35 @@ public class Shooter extends SubsystemBase {
     public void setShooterFar(){
         setAnglerHigh();
         shooterMotorLeader.set(TalonFXControlMode.PercentOutput, farVel);
-        double ticks = shooterMotorLeader.getSelectedSensorVelocity();
-        double RPM = (ticks / integratedTicks) * 10 * 60;
-//        System.out.println(RPM);
+        printRPM();
     }
 
     public void setShooterVel(double speed){
         shooterMotorLeader.set(TalonFXControlMode.PercentOutput, speed);
+        printRPM();
     }
 
     public void setShooter(){
         double vel = SmartDashboard.getNumber("Shooter Speed", closeVel);
         System.out.println("Shooter Vel" + getShooterVel());
         shooterMotorLeader.set(TalonFXControlMode.PercentOutput, vel);
+        printRPM();
     }
 
     public void setShooterIdle(){
         shooterMotorLeader.set(TalonFXControlMode.PercentOutput, idleVel);
+    }
+
+    public void printRPM(){
+        double ticks = shooterMotorLeader.getSelectedSensorVelocity();
+        double RPM = (ticks / integratedTicks) * 10 * 60; //Converts to RPM from ticks per 100ms
+        System.out.println("RPM: " + RPM);
+        SmartDashboard.putNumber("RPM", RPM);
+    }
+
+    @Override
+    public void periodic(){
+        printRPM();
     }
 
     //For use of commands to index the ball once the shooter is at the correct speed
@@ -84,8 +109,9 @@ public class Shooter extends SubsystemBase {
         double ticks = shooterMotorLeader.getSelectedSensorVelocity();
         double RPM = (ticks / integratedTicks) * 10 * 60; //Converts to RPM from ticks per 100ms
         double maxRPM = 6000;
+        System.out.println("RPM: " + RPM);
         double percentOutput = RPM / maxRPM;
-        System.out.println("Shooter Percent Output: " + percentOutput);
+//        System.out.println("Shooter Percent Output: " + percentOutput);
         return percentOutput;
     }
 

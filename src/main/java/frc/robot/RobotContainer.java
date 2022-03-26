@@ -133,15 +133,18 @@ public class RobotContainer {
     //If the left bumper is pressed and the drivetrain is in low gear perform the first command
     //If the left bumper is pressed and the drivetrain is in high gear perform the second command
 
-//    new JoystickButton(driverController, Button.ButtonID.LEFT_BUMPER.getID())
-//            .whenPressed(new ConditionalCommand(
-//                    new InstantCommand(mDrivetrain::highGear),
-//                    new InstantCommand(mDrivetrain::lowGear),
-//                    mDrivetrain::getLowGear));
-
-
     new JoystickButton(driverController, Button.ButtonID.LEFT_BUMPER.getID())
-            .whenHeld(new StartEndCommand(mDrivetrain::lowGear, mDrivetrain::highGear));
+            .whenPressed(new ConditionalCommand(
+                    new InstantCommand(mDrivetrain::highGear),
+                    new InstantCommand(mDrivetrain::lowGear),
+                    mDrivetrain::getLowGear));
+
+
+//    new JoystickButton(driverController, Button.ButtonID.LEFT_BUMPER.getID())
+//            .whenHeld(new StartEndCommand(mDrivetrain::lowGear, mDrivetrain::highGear));
+
+    new JoystickButton(driverController, Button.ButtonID.START.getID())
+            .whenPressed(new InstantCommand(mDrivetrain::lowGear));
 
 //    Intake
 
@@ -165,36 +168,35 @@ public class RobotContainer {
 
 //    Shooter
 
-    new JoystickButton(operatorController, Button.ButtonID.RIGHT_BUMPER.getID())
-            .whenHeld(new StartEndCommand(mShooter::setShooterFar, mShooter::setShooterIdle));
-
     new JoystickButton(operatorController, Button.ButtonID.Y.getID())
             .whenHeld(new StartEndCommand(mIndexer::feedIndexer, mIndexer::setIndexerIdle));
 
+    new JoystickButton(operatorController, Button.ButtonID.RIGHT_BUMPER.getID())
+            .whenHeld(new RunCommand(mShooter::setShooterFar));
+
+    new JoystickButton(operatorController, Button.ButtonID.RIGHT_BUMPER.getID())
+            .whenReleased(new RunCommand(mShooter::setShooterIdle));
+
     new JoystickButton(operatorController, Button.ButtonID.LEFT_BUMPER.getID())
-            .whenHeld(new StartEndCommand(mShooter::setShooter, mShooter::setShooterIdle));
+            .whenHeld(new RunCommand(mShooter::setShooter));
 
-    new JoystickButton(operatorController, Button.ButtonID.B.getID())
-            .whenHeld(mShootLow);
+    new JoystickButton(operatorController, Button.ButtonID.LEFT_BUMPER.getID())
+            .whenReleased(new RunCommand(mShooter::setShooterIdle));
 
-    new POVButton(operatorController, 90)
-            .whenPressed(new InstantCommand(mShooter::setAngle));
+    new JoystickButton(operatorController, Button.ButtonID.X.getID())
+            .whenHeld(new RunCommand(mShooter::PIDshooter));
+
+    new JoystickButton(operatorController, Button.ButtonID.X.getID())
+            .whenReleased(new RunCommand(mShooter::setShooterIdle));
+
+//    new JoystickButton(operatorController, Button.ButtonID.X.getID())
+//            .whenHeld(mShootLow);
+
+//    new POVButton(operatorController, 90)
+//            .whenPressed(new InstantCommand(mShooter::setAngle));
 
 //    new JoystickButton(operatorController, Button.ButtonID.START.getID())
 //            .whenHeld(mCustomShooter);
-
-//
-//    new JoystickButton(operatorController, Button.ButtonID.LEFT_BUMPER.getID())
-//            .whenHeld(mShootFar);
-//
-//    new JoystickButton(operatorController, Button.ButtonID.RIGHT_BUMPER.getID())
-//            .whenHeld(mShootClose);
-//
-//    new JoystickButton(operatorController, Button.ButtonID.X.getID())
-//            .whenPressed(mShooter::setShooterClose);
-//
-//    new JoystickButton(operatorController, Button.ButtonID.Y.getID())
-//            .whenHeld(mShootLow);
 
 //    Climber
 
@@ -203,15 +205,6 @@ public class RobotContainer {
 
     new JoystickButton(operatorController, Button.ButtonID.B.getID())
             .whenPressed(mClimber::angleClimber);
-
-//    new JoystickButton(operatorController, Button.ButtonID.B.getID())
-//            .whenPressed(new InstantCommand(mClimber::brake));
-
-//    new JoystickButton(Constants.operatorController, Button.ButtonID.A.getID())
-//            .whenPressed(new ConditionalCommand(
-//                    new InstantCommand(mClimber::angleA),
-//                    new InstantCommand(mClimber::angleB),
-//                    mClimber::getAngle));
 
   }
 

@@ -105,9 +105,9 @@ public class VPLimelight extends SubsystemBase {
     public boolean aimTarget(Drivetrain mDrivetrain, Constants.DriveTrain.DriveState limelightMode, double start, double bufferTime){
         double turn = 0;
         double yaw = getxOffset();
+//        System.out.println(mDrivetrain.getShiftState());
 
-
-        if (mDrivetrain.getShiftState() == Constants.DriveTrain.ShiftState.LOW_GEAR) {
+        if (mDrivetrain.getShiftState() != Constants.DriveTrain.ShiftState.HIGH_GEAR) {
             if (deadbandAngle_Low < Math.abs(yaw)) {
                 /***
                  deadband angle is the acceptable offset from what is supposed to be the center of the target
@@ -122,7 +122,9 @@ public class VPLimelight extends SubsystemBase {
         } else {
             if (deadbandAngle_High < Math.abs(yaw)) {
                 turn = Math.signum(yaw) * MathEqs.targetLinear2(Math.abs(yaw), maxTurn_High, minturn_High, deccelAngle_High, deadbandAngle_High);
+//                turn = Math.signum(yaw) * MathEqs.targetLinear2(Math.abs(yaw), maxTurn_Low, minturn_Low, deccelAngle_Low, deadbandAngle_Low);
 //                System.out.println("Yaw: " + yaw + " Turn: " + turn);
+//                System.out.println("WHAT IS HAPPENING...");
             }
         }
         if (limelightMode == Constants.DriveTrain.DriveState.AUTO_LIMELIGHT && Math.abs(turn) < 0.25) {
@@ -149,7 +151,7 @@ public class VPLimelight extends SubsystemBase {
     }
 
     public void findTarget(Drivetrain mDrivetrain, double searchDirection){
-        if (mDrivetrain.getShiftState() == Constants.DriveTrain.ShiftState.LOW_GEAR){
+        if (mDrivetrain.getShiftState() != Constants.DriveTrain.ShiftState.HIGH_GEAR){
             setValues(0, searchDirection*maxTurn_Low);
         } else {
             setValues(0, searchDirection*maxTurn_High);

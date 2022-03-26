@@ -2,13 +2,13 @@ package frc.robot.autons;
 
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants;
+import frc.robot.commands.AutonDrive;
 import frc.robot.commands.*;
 
 import static frc.robot.Constants.HoodState.HIGH;
 import static frc.robot.Constants.IntakeState.IN;
 import static frc.robot.Constants.LimelightVision.TurnDirection.LEFT;
 import static frc.robot.Constants.LimelightVision.TurnDirection.RIGHT;
-import frc.robot.autons.AutonGenerator;
 import frc.robot.limelightvision.LimelightAlignCommand;
 import frc.robot.limelightvision.VPLimelight;
 import frc.robot.subsystems.*;
@@ -21,8 +21,6 @@ public class AutonRoutine {
 
 //    private String[] mFiveBallAuton = {"FiveBall1", "FiveBall2", "FiveBall3"};
 //    private String[] mTest = {"test"};
-//    private String[] mCurve = {"Curve"};
-//    private String[] mTurn = {"Turn"};
 //    private String[] mThreeBall = {"ThreeBall1", "ThreeBall2"};
 
 
@@ -56,18 +54,17 @@ public class AutonRoutine {
     }
 
     private ArrayList<RamseteCommand> ramseteCommands;
-    private AutonGenerator autonGenerator;
+    private final AutonGenerator autonGenerator = new AutonGenerator();
 
-    private VPLimelight mLimelightVision;
-    private Drivetrain mDrivetrain;
-    private Intake mIntake;
-    private Shooter mShooter;
-    private Indexer mIndexer;
+    private final VPLimelight mLimelightVision;
+    private final Drivetrain mDrivetrain;
+    private final Intake mIntake;
+    private final Shooter mShooter;
+    private final Indexer mIndexer;
 
     private final Routine mRoutine;
 
     public AutonRoutine(SubsystemBase[] subsystems, Routine routine){
-
 
         mDrivetrain = (Drivetrain) subsystems[0];
         mIntake = (Intake) subsystems[1];
@@ -76,8 +73,12 @@ public class AutonRoutine {
         mLimelightVision = (VPLimelight) subsystems[4];
         mRoutine = routine;
 
-        ramseteCommands = autonGenerator.getAutonCommands(mRoutine.getRoutineTrajectory(), mDrivetrain);
-
+        try {
+            ramseteCommands = autonGenerator.getAutonCommands(mRoutine.getRoutineTrajectory(), mDrivetrain);
+        }
+        catch (NullPointerException e) {
+            System.err.println(e + " ");
+        }
         /***
          * These switch-case statements handle how each autonomous routine is structured:
          * A) THREE_BALL_TEST
@@ -93,18 +94,18 @@ public class AutonRoutine {
                     new InstantCommand(mIntake::extendIntake), new ShootLow(mShooter, mIndexer, Constants.DriveTrain.DriveState.AUTO_DRIVE),
                     new ParallelRaceGroup(ramseteCommands.get(0), new IntakeCargo(mIntake)),
                     new ParallelCommandGroup(new LimelightAlignCommand(mDrivetrain, mLimelightVision, Constants.LimelightVision.TurnDirection.LEFT, Constants.LimelightVision.TurnMode.AUTON),
-                            new ShootClose(mShooter, mIndexer, 4, -0.72, false)),
+                            new ShootClose(mShooter, mIndexer, 4, -0.68, false)),
                     new ParallelRaceGroup(ramseteCommands.get(1).andThen(ramseteCommands.get(2)), new IntakeCargo(mIntake)),
                     new ParallelCommandGroup(new LimelightAlignCommand(mDrivetrain, mLimelightVision, Constants.LimelightVision.TurnDirection.RIGHT, Constants.LimelightVision.TurnMode.AUTON),
-                            new ShootClose(mShooter, mIndexer, 4, -0.72, false)),
+                            new ShootClose(mShooter, mIndexer, 4, -0.67, false)),
                     new InstantCommand(mDrivetrain::stopDrive)));
                 break;
             case THREE_BALL_TEST:
                 mRoutine.setCommands(new SequentialCommandGroup(
                         new AutonDrive(mIntake, ramseteCommands, 0),
-                        new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, RIGHT, HIGH, IN, -0.72, 4),
+                        new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, RIGHT, HIGH, IN, -0.66, 3.5),
                         new AutonDrive(mIntake, ramseteCommands, 1),
-                        new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, LEFT, HIGH, IN, -0.72, 4)));
+                        new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, RIGHT, HIGH, IN, -0.68, 4)));
                 break;
             default:
                 break;

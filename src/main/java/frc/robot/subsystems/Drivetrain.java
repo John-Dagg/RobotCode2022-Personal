@@ -137,8 +137,8 @@ public class Drivetrain extends SubsystemBase {
       case LIMELIGHT_DRIVE:
         limelightDrive();
       case AUTO_DRIVE:
-        System.out.println("Left Volts: " + mLeftVolts);
-        System.out.println("Right Volts: " + mRightVolts);
+//        System.out.println("Left Volts: " + mLeftVolts);
+//        System.out.println("Right Volts: " + mRightVolts);
         break;
       case AUTO_LIMELIGHT:
         limelightDrive();
@@ -167,6 +167,8 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public ShiftState getShiftState(){
+    if (mShifter.get() == DoubleSolenoid.Value.kReverse) mShiftState = LOW_GEAR;
+    else mShiftState = HIGH_GEAR;
     return mShiftState;
   }
 
