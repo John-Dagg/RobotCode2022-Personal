@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
@@ -19,7 +20,6 @@ public class Shooter extends SubsystemBase {
 
     private TalonFX shooterMotorLeader, shooterMotorFollower;
     private DoubleSolenoid angler;
-    private PIDController mController;
 
     private final double integratedTicks = 2048;
 
@@ -27,7 +27,12 @@ public class Shooter extends SubsystemBase {
     private final double farVel = -0.75;
     private final double idleVel = 0.00;
 
-    private double RPMgoal;
+    private double ticksToRPM = (1 / integratedTicks) * 10 * 60; //ticks per 100ms to RPM
+    private final double maxRPM = 5600;
+    private double actualPercentConversion = 1. / maxRPM;
+    double RPM, actualPercent;
+    double appliedOutput = 0.65;
+    double gain = 0;
 
     public Shooter(){
         SmartDashboard.putNumber("Shooter Speed", closeVel);
@@ -41,15 +46,14 @@ public class Shooter extends SubsystemBase {
         shooterMotorFollower.follow(shooterMotorLeader);
         shooterMotorLeader.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
 
-        mController = new PIDController(0.1, 0, 0);
     }
 
     public void PIDshooter(){
-        RPMgoal = 4000;
-        double setpoint = (RPMgoal / 600) * integratedTicks;
-        double value = mController.calculate(shooterMotorLeader.getSelectedSensorVelocity(), setpoint);
-        System.out.println("PID Controller Value: " + value);
-        shooterMotorLeader.set(TalonFXControlMode.Velocity, value);
+        RPM = shooterMotorLeader.getSelectedSensorVelocity() * ticksToRPM;
+        actualPercent = RPM * actualPercentConversion;
+        shooterMotorLeader.set(TalonFXControlMode.PercentOutput, appliedOutput);
+        appliedOutput = -(appliedOutput + (appliedOutput - actualPercent));
+
     }
 
     public void setAngle(){
@@ -78,14 +82,34 @@ public class Shooter extends SubsystemBase {
 
     public void setShooterVel(double speed){
         shooterMotorLeader.set(TalonFXControlMode.PercentOutput, speed);
-        printRPM();
+        RPM = shooterMotorLeader.getSelectedSensorVelocity() * ticksToRPM;
+        actualPercent = RPM * actualPercentConversion;
+//        printRPM();
     }
 
     public void setShooter(){
         double vel = SmartDashboard.getNumber("Shooter Speed", closeVel);
-        System.out.println("Shooter Vel" + getShooterVel());
+        /*
         shooterMotorLeader.set(TalonFXControlMode.PercentOutput, vel);
-        printRPM();
+        RPM = shooterMotorLeader.getSelectedSensorVelocity() * ticksToRPM;
+        actualPercent = RPM * actualPercentConversion;
+
+         */
+        appliedOutput = Math.abs(vel);
+        RPM = shooterMotorLeader.getSelectedSensorVelocity() * ticksToRPM;
+        actualPercent = Math.abs(RPM * actualPercentConversion);
+//
+//        double deviance = (appliedOutput - actualPercent);
+//        if (appliedOutput - gain > actualPercent + 0.01) {
+//            gain += 0.005;
+//        }
+//        else if (appliedOutput + gain < actualPercent - 0.01) {
+//            gain -= 0.005;
+//        }
+
+
+        shooterMotorLeader.set(TalonFXControlMode.PercentOutput, -appliedOutput);
+//        printRPM();
     }
 
     public void setShooterIdle(){
@@ -95,13 +119,15 @@ public class Shooter extends SubsystemBase {
     public void printRPM(){
         double ticks = shooterMotorLeader.getSelectedSensorVelocity();
         double RPM = (ticks / integratedTicks) * 10 * 60; //Converts to RPM from ticks per 100ms
+        if (RPM == 0.0) return;
         System.out.println("RPM: " + RPM);
         SmartDashboard.putNumber("RPM", RPM);
     }
 
     @Override
     public void periodic(){
-        printRPM();
+//        printRPM();
+        System.out.println("Actual Percent Output: " + actualPercent + " | Applied Percent Output: " + appliedOutput);
     }
 
     //For use of commands to index the ball once the shooter is at the correct speed
