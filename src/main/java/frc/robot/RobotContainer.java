@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.autons.AutonRoutine;
 import frc.robot.autons.HardCodeAuton;
 import frc.robot.autons.TaxiOneBallHardCode;
@@ -139,6 +138,9 @@ public class RobotContainer {
                     new InstantCommand(mDrivetrain::lowGear),
                     mDrivetrain::getLowGear));
 
+    new JoystickButton(driverController, Button.ButtonID.START.getID())
+            .whenPressed(new InstantCommand(mDrivetrain::resetEncoders));
+
 
 //    new JoystickButton(driverController, Button.ButtonID.LEFT_BUMPER.getID())
 //            .whenHeld(new StartEndCommand(mDrivetrain::lowGear, mDrivetrain::highGear));
@@ -172,19 +174,19 @@ public class RobotContainer {
             .whenHeld(new StartEndCommand(mIndexer::feedIndexer, mIndexer::setIndexerIdle));
 
     new JoystickButton(operatorController, Button.ButtonID.RIGHT_BUMPER.getID())
-            .whenHeld(new RunCommand(mShooter::setShooterFar));
+            .whenHeld(new RunCommand(mShooter::shootFar));
 
     new JoystickButton(operatorController, Button.ButtonID.RIGHT_BUMPER.getID())
             .whenReleased(new RunCommand(mShooter::setShooterIdle));
 
     new JoystickButton(operatorController, Button.ButtonID.LEFT_BUMPER.getID())
-            .whenHeld(new RunCommand(mShooter::setShooter));
+            .whenHeld(new RunCommand(mShooter::shootClose));
 
     new JoystickButton(operatorController, Button.ButtonID.LEFT_BUMPER.getID())
             .whenReleased(new RunCommand(mShooter::setShooterIdle));
 
     new JoystickButton(operatorController, Button.ButtonID.X.getID())
-            .whenHeld(new RunCommand(mShooter::PIDshooter));
+            .whenHeld(new RunCommand(mShooter::shootLow));
 
     new JoystickButton(operatorController, Button.ButtonID.X.getID())
             .whenReleased(new RunCommand(mShooter::setShooterIdle));

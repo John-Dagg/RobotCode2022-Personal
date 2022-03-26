@@ -116,9 +116,9 @@ public final class Constants {
         }
 
         public static final class HighGear {
-            public static final double deadbandAngle_High = 3;
+            public static final double deadbandAngle_High = 2;
             public static final double deccelAngle_High = 30;
-            public static final double maxTurn_High = 0.8;
+            public static final double maxTurn_High = 0.5;
             public static final double minturn_High = 0.2;
         }
 

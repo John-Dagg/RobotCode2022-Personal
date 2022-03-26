@@ -16,4 +16,6 @@ public class MathEqs {
         return a*x*x + b*x + c;
     }
 
+    public static double roundCustom(double x) {return Math.round(x*1000.0)/1000.0;}
+
 }

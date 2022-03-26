@@ -48,6 +48,7 @@ public class LimelightAlignCommand extends CommandBase {
 
     @Override
     public void execute(){
+
         mVision.updateTargets();
         if(mVision.getTargets() >= 1) {
             stopFlag = mVision.aimTarget(mDrivetrain, limelightMode, startTime, elapsedTime);

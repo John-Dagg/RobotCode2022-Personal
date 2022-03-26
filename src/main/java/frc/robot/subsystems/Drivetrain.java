@@ -49,8 +49,8 @@ public class Drivetrain extends SubsystemBase {
   private DifferentialDrive mDrive;
   private DifferentialDriveOdometry mOdometry;
 
-  private final double positionConversion = Math.PI * Units.inchesToMeters(6) * (double)1/7 * 5.0/10.0; //Converts rotations to meters
-  private final double velocityConversion = Math.PI * Units.inchesToMeters(6) * (double)1/7 / 60 * 5.0/10.0; //Converts rpms to meters per second
+  private final double positionConversion = Math.PI * Units.inchesToMeters(6) * (double)1/7; //Converts rotations to meters
+  private final double velocityConversion = Math.PI * Units.inchesToMeters(6) * (double)1/7 / 60; //Converts rpms to meters per second
 
   private double mYaw, mLeftVolts, mRightVolts;
 
@@ -367,6 +367,8 @@ public class Drivetrain extends SubsystemBase {
     if ((Arrays.asList(new DriveState[] {AUTO_DRIVE, AUTO_LIMELIGHT}).contains(mState))) {
       masterDrive();
     }
+
+//    System.out.println("RIGHT POSITION: " + rightWheelsPosition() + " | LEFT POSITION: " + leftWheelsPosition());
   }
 
   /***

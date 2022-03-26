@@ -21,7 +21,7 @@ public class LimelightDistanceCommand extends CommandBase {
     private boolean distanceCompleted;
     private boolean stopFlag;
 
-    private final double distanceClose = 80; //inches
+    private final double distanceClose = 85; //inches
     private final double distanceFar = 178; //inches
     private final double band = 10;
 
@@ -42,14 +42,16 @@ public class LimelightDistanceCommand extends CommandBase {
         mDrivetrain.mState = Constants.DriveTrain.DriveState.TELE_LIMELIGHT;
         stopFlag = false;
         speed = 0.5;
-        buffer = 10;
+        buffer = 2.5;
         mVision.updateTargets();
 //        goalDistance = goalDistance; //inches
+
         initDistance = mVision.calcDistance();
         goalTravel = initDistance - goalDistance;
         mDrivetrain.resetEncoders();
 
-        distanceCompleted = false;
+//        if (goalTravel < 5 || goalTravel > -5) distanceCompleted = true;
+//        else distanceCompleted = false;
 
         System.out.println("Goal distance (in): "+goalDistance);
         System.out.println("Initial distance (in): "+initDistance);
@@ -68,8 +70,10 @@ public class LimelightDistanceCommand extends CommandBase {
 
 
         if (Math.abs(remainDistance) > buffer) {
-            speed = -Math.signum(remainDistance)*MathEqs.targetLinear2(remainDistance, 0.8, 0.25,50, buffer);
-            System.out.println("SPEED: "+speed+" | TRAVEL: " + actualTravel);
+            speed = -Math.signum(remainDistance)*MathEqs.targetLinear2(remainDistance, 0.65, 0.17,50, buffer);
+//            speed = -Math.signum(remainDistance)*MathEqs.targetLinear(remainDistance, 0.6,100, buffer);
+            System.out.println("SPEED: "+MathEqs.roundCustom(speed)+" | TRAVEL: " + MathEqs.roundCustom(actualTravel) +
+                    " | REMAINING: "+MathEqs.roundCustom(remainDistance));
             System.out.println("Remaining Distance: "+remainDistance);
         }
         else {
@@ -90,12 +94,14 @@ public class LimelightDistanceCommand extends CommandBase {
 
     @Override
     public boolean isFinished(){
-        return stopFlag;
+        return stopFlag || distanceCompleted;
     }
 
     @Override
     public void end(boolean isFinished) {
         mVision.setValues(0,0);
+
+
         mDrivetrain.mState = Constants.DriveTrain.DriveState.TELE_DRIVE_INTAKE;
 
     }

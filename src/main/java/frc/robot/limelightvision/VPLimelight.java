@@ -32,6 +32,11 @@ public class VPLimelight extends SubsystemBase {
         //printNetworkTables();
     }
 
+    @Override
+    public void periodic(){
+//        System.out.println("Distance Calc: " + MathEqs.roundCustom(calcDistance()));
+    }
+
     public void printNetworkTables(){
 
         updateTargets();
@@ -95,9 +100,11 @@ public class VPLimelight extends SubsystemBase {
     }
 
     public double calcDistance(){
+        steadyArray();
         updateTargets();
         yOffset = getyOffset();
 //        System.out.println(yOffset);
+        offArray();
         return (Constants.LimelightVision.targetHeight - Constants.LimelightVision.cameraHeight)
                 / Math.tan(Units.degreesToRadians(Constants.LimelightVision.cameraAngle + yOffset));
     }
