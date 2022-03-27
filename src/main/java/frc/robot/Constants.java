@@ -38,11 +38,11 @@ public final class Constants {
 
         public static final class HighGear {
 
-            public static final double High_ks = 0;
-            public static final double High_kv = 0;
-            public static final double High_ka = 0;
+            public static final double High_ks = 0.2334;
+            public static final double High_kv = 2.1969;
+            public static final double High_ka = 0.5125;
 
-            public static final double High_kP = 0;
+            public static final double High_kP = 3.1031;
         }
 
         public static final double robotWidth = 0.74325;
@@ -126,7 +126,7 @@ public final class Constants {
         public static final double cameraHeight = 17; //in
         public static final double cameraAngle = 30.0; //degrees
 
-        public enum TurnDirection {LEFT, RIGHT}
+        public enum TurnDirection {LEFT, RIGHT, NONE}
 
         public enum TurnMode {TELEOP, AUTON}
 

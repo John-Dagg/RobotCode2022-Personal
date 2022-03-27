@@ -59,6 +59,17 @@ public class RobotContainer {
   private final AutonRoutine mThreeBall = new AutonRoutine(mSubsystems, AutonRoutine.Routine.THREE_BALL_TEST);
   private final AutonRoutine mFiveBall = new AutonRoutine(mSubsystems, AutonRoutine.Routine.FIVE_BALL_TEST);
 
+
+  private final AutonRoutine ls2bd = new AutonRoutine(mSubsystems, AutonRoutine.Routine.LEFT_SIDE_TWO_BALL_DEFAULT);
+  private final AutonRoutine ls2br = new AutonRoutine(mSubsystems, AutonRoutine.Routine.LEFT_SIDE_TWO_BALL_ROLL);
+  private final AutonRoutine ls4bd = new AutonRoutine(mSubsystems, AutonRoutine.Routine.LEFT_SIDE_FOUR_BALL_DEFAULT);
+  private final AutonRoutine rs2bc = new AutonRoutine(mSubsystems, AutonRoutine.Routine.RIGHT_SIDE_TWO_BALL_CLOSE);
+  private final AutonRoutine rs2bf = new AutonRoutine(mSubsystems, AutonRoutine.Routine.RIGHT_SIDE_TWO_BALL_FAR);
+  private final AutonRoutine rs3bf = new AutonRoutine(mSubsystems, AutonRoutine.Routine.RIGHT_SIDE_THREE_BALL_FAR);
+  private final AutonRoutine rs4bc = new AutonRoutine(mSubsystems, AutonRoutine.Routine.RIGHT_SIDE_FOUR_BALL_CLOSE);
+  private final AutonRoutine rs4bf = new AutonRoutine(mSubsystems, AutonRoutine.Routine.RIGHT_SIDE_FOUR_BALL_FAR);
+  private final AutonRoutine rs5bf = new AutonRoutine(mSubsystems, AutonRoutine.Routine.RIGHT_SIDE_FIVE_BALL_FAR);
+
   private final SendableChooser<AutonRoutine> mAutons = new SendableChooser<>();
 
 
@@ -70,6 +81,17 @@ public class RobotContainer {
 
     mAutons.setDefaultOption(mThreeBall.getName(), mThreeBall);
     mAutons.addOption(mFiveBall.getName(), mFiveBall);
+
+    mAutons.addOption(ls2bd.getName(), ls2bd);
+    mAutons.addOption(ls2br.getName(), ls2br);
+    mAutons.addOption(ls4bd.getName(), ls4bd);
+    mAutons.addOption(rs2bc.getName(), rs2bc);
+    mAutons.addOption(rs2bf.getName(), rs2bf);
+    mAutons.addOption(rs3bf.getName(), rs3bf);
+    mAutons.addOption(rs4bc.getName(), rs4bc);
+    mAutons.addOption(rs4bf.getName(), rs4bf);
+    mAutons.addOption(rs5bf.getName(), rs5bf);
+
     SmartDashboard.putData(mAutons);
 
     configureButtonBindings();

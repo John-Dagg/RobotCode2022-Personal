@@ -61,7 +61,13 @@ public class AutonShoot extends CommandBase {
     public void execute(){
         elapsedTime = (System.currentTimeMillis() - start) /1000;
 
-        mLimelight.updateTargets();
+        if (mTurnDirection != TurnDirection.NONE) {
+            mLimelight.updateTargets();
+        }
+        else {
+            robotAligned = true;
+        }
+
         if (mLimelight.getTargets() >= 1) {
             robotAligned = mLimelight.aimTarget(mDrivetrain, AUTO_LIMELIGHT, startTime, bufferTime);
         } else {
