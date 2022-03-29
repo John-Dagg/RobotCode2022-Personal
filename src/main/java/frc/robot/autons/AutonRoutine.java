@@ -183,7 +183,7 @@ public class AutonRoutine {
                         new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, LEFT, HIGH, IN, 0.71, 1, 2.2),
                         new AutonDrive(mIntake, ramseteCommands, 2),
                         new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, RIGHT, HIGH, IN, 0.73, 1, 2),
-                        new AutonDrive(mIntake, ramseteCommands, 3, false),
+                        new AutonDrive(mIntake, ramseteCommands, 3, false), //Boolean doesn't actually matter
                         new AutonDrive(mIntake, ramseteCommands, 4, false),
                         new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, LEFT, HIGH, OUT, 0.74, 1, 2.3)));
                 break;

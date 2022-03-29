@@ -34,7 +34,7 @@ public class AutonGenerator {
         try {
             Path path = Filesystem.getDeployDirectory().toPath().resolve("opt/output/" + pathing + ".wpilib.json");
             trajectory = (TrajectoryUtil.fromPathweaverJson(path));
-            System.out.println("Added trajectory " + " to array");
+            System.out.println("Added trajectory " + pathing + " to array");
         } catch (IOException e){
             System.out.println("Couldn't find trajectory path");
             e.printStackTrace();
@@ -43,7 +43,7 @@ public class AutonGenerator {
 
 //        trajectory = trajectories.get(0);
         if (trajectory != null){
-            System.out.println("Retrieved first trajectory");
+            System.out.println("Retrieved trajectory");
         }
         return trajectory;
     }
@@ -73,7 +73,7 @@ public class AutonGenerator {
         }
 
         for (int i = 0; i < pathing.length; i++) {
-            System.out.println("Adding trajectory " + i + " ...Hopefully");
+            System.out.println("Adding trajectory " + i + " to commands");
             Trajectory trajectory = getTrajectory(pathing[i]);
             if (trajectory == null) {
                 System.out.println("Trajectory " + i + " not found");
