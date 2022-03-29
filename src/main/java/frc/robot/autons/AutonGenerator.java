@@ -32,7 +32,7 @@ public class AutonGenerator {
 //        ArrayList<Trajectory> trajectories = new ArrayList<>();
         Trajectory trajectory;
         try {
-            Path path = Filesystem.getDeployDirectory().toPath().resolve("output/" + pathing + ".wpilib.json");
+            Path path = Filesystem.getDeployDirectory().toPath().resolve("opt/output/" + pathing + ".wpilib.json");
             trajectory = (TrajectoryUtil.fromPathweaverJson(path));
             System.out.println("Added trajectory " + " to array");
         } catch (IOException e){

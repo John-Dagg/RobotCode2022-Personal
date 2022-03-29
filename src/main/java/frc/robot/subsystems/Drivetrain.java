@@ -7,7 +7,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.sensors.Pigeon2;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxAlternateEncoder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
@@ -48,9 +47,9 @@ public class Drivetrain extends SubsystemBase {
   private MotorControllerGroup mLeftMotors, mRightMotors;
   private DifferentialDrive mDrive;
   private DifferentialDriveOdometry mOdometry;
-
-  private final double positionConversion = Math.PI * Units.inchesToMeters(6) * (double)1/7; //Converts rotations to meters
-  private final double velocityConversion = Math.PI * Units.inchesToMeters(6) * (double)1/7 / 60; //Converts rpms to meters per second
+  //SysID Gear Ratio (High Gear) - 1 / 8.15
+  private final double positionConversion = Math.PI * Units.inchesToMeters(6) * (double)1/7 * (7.3 / 8.5); //Converts rotations to meters
+  private final double velocityConversion = Math.PI * Units.inchesToMeters(6) * (double)1/7 / 60 * (7.3 / 8.5); //Converts rpms to meters per second
 
   private double mYaw, mLeftVolts, mRightVolts;
 
@@ -151,10 +150,33 @@ public class Drivetrain extends SubsystemBase {
     double dist = mLimelight.calcDistance();
     SmartDashboard.putNumber("Distance", dist);
 
+    if ((Arrays.asList(new DriveState[] {TELE_LIMELIGHT, LIMELIGHT_DRIVE, AUTO_LIMELIGHT, AUTO_DRIVE}).contains(mState))) {
+      mLimelight.steadyArray();
+//      System.out.println("Distance (in) " + mLimelight.calcDistance());
+    }
+    else mLimelight.offArray();
+
 //    System.out.println("Re (m): "+leftWheelsPosition()+" Le (m): "+rightWheelsPosition());
 
 //    System.out.println(mState);
   }
+
+  @Override
+  public void periodic(){
+    mOdometry.update(Rotation2d.fromDegrees(mPigeon.getYaw()), -mLeftEncoder.getPosition() * positionConversion, mRightEncoder.getPosition() * positionConversion);
+    var translation = mOdometry.getPoseMeters().getTranslation();
+    SmartDashboard.putNumber("X", translation.getX());
+    SmartDashboard.putNumber("Y", translation.getY());
+
+
+
+    if ((Arrays.asList(new DriveState[] {AUTO_DRIVE, AUTO_LIMELIGHT}).contains(mState))) {
+      masterDrive();
+    }
+
+//    System.out.println("RIGHT POSITION: " + rightWheelsPosition() + " | LEFT POSITION: " + leftWheelsPosition());
+  }
+
 
   public void lowGear(){
     mShifter.set(DoubleSolenoid.Value.kReverse);
@@ -328,10 +350,10 @@ public class Drivetrain extends SubsystemBase {
     mLeftVolts = leftVolts;
     mRightVolts = rightVolts;
 
-//    System.out.println("Left Volts: " + mLeftVolts);
-//    System.out.println("Right Volts: " + mRightVolts);
+    System.out.println("Left Volts: " + mLeftVolts);
+    System.out.println("Right Volts: " + mRightVolts);
 
-    System.out.println("Le: " + leftWheelsPosition() + " Re: " + rightWheelsPosition());
+//    System.out.println("Le: " + leftWheelsPosition() + " Re: " + rightWheelsPosition());
 
 //    System.out.println("Yaw: " + mPigeon.getYaw());
 
@@ -351,25 +373,6 @@ public class Drivetrain extends SubsystemBase {
                       +" R3: "+mRightFollowerB.getAppliedOutput());
   }
 
-  @Override
-  public void periodic(){
-    mOdometry.update(Rotation2d.fromDegrees(mPigeon.getYaw()), -mLeftEncoder.getPosition() * positionConversion, mRightEncoder.getPosition() * positionConversion);
-    var translation = mOdometry.getPoseMeters().getTranslation();
-    SmartDashboard.putNumber("X", translation.getX());
-    SmartDashboard.putNumber("Y", translation.getY());
-
-    if ((Arrays.asList(new DriveState[] {TELE_LIMELIGHT, LIMELIGHT_DRIVE, AUTO_LIMELIGHT}).contains(mState))) {
-      mLimelight.steadyArray();
-//      System.out.println("Distance (in) " + mLimelight.calcDistance());
-    }
-    else mLimelight.offArray();
-
-    if ((Arrays.asList(new DriveState[] {AUTO_DRIVE, AUTO_LIMELIGHT}).contains(mState))) {
-      masterDrive();
-    }
-
-//    System.out.println("RIGHT POSITION: " + rightWheelsPosition() + " | LEFT POSITION: " + leftWheelsPosition());
-  }
 
   /***
    * Returns the position of the left wheels in meters

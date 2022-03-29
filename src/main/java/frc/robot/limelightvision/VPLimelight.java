@@ -21,6 +21,9 @@ public class VPLimelight extends SubsystemBase {
 
     private NetworkTableEntry vpTargets, vpxOffset, vpyOffset, vpTargetArea, vpTargetSkew;
     private double targets, xOffset, yOffset, targetArea, targetSkew;
+    private double bufferTime = 1.0;
+
+
 
     public double throttleValue, turnValue;
     double startTime;
@@ -109,7 +112,8 @@ public class VPLimelight extends SubsystemBase {
                 / Math.tan(Units.degreesToRadians(Constants.LimelightVision.cameraAngle + yOffset));
     }
 
-    public boolean aimTarget(Drivetrain mDrivetrain, Constants.DriveTrain.DriveState limelightMode, double start, double bufferTime){
+    public boolean aimTarget(Drivetrain mDrivetrain, Constants.DriveTrain.DriveState limelightMode){
+        steadyArray();
         double turn = 0;
         double yaw = getxOffset();
 //        System.out.println(mDrivetrain.getShiftState());
@@ -130,11 +134,11 @@ public class VPLimelight extends SubsystemBase {
             if (deadbandAngle_High < Math.abs(yaw)) {
                 turn = Math.signum(yaw) * MathEqs.targetLinear2(Math.abs(yaw), maxTurn_High, minturn_High, deccelAngle_High, deadbandAngle_High);
 //                turn = Math.signum(yaw) * MathEqs.targetLinear2(Math.abs(yaw), maxTurn_Low, minturn_Low, deccelAngle_Low, deadbandAngle_Low);
-//                System.out.println("Yaw: " + yaw + " Turn: " + turn);
+                System.out.println("Yaw: " + yaw + " Turn: " + turn);
 //                System.out.println("WHAT IS HAPPENING...");
             }
         }
-        if (limelightMode == Constants.DriveTrain.DriveState.AUTO_LIMELIGHT && Math.abs(turn) < 0.25) {
+        if (limelightMode == Constants.DriveTrain.DriveState.AUTO_LIMELIGHT && Math.abs(turn) < 0.2) {
             if (startTime == -1) {
                 System.out.println("RESET: "+startTime);
                 startTime = System.currentTimeMillis();

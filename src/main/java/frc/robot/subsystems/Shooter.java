@@ -23,7 +23,7 @@ public class Shooter extends SubsystemBase {
 
     private final double closeVel = 0.68;
     private final double farVel = 0.8;
-    private final double lowVel = 0.5;
+    private final double lowVel = 0.35;
     private final double idleVel = 0.00;
 
     private double ticksToRPM = (1 / integratedTicks) * 10 * 60; //ticks per 100ms to RPM
@@ -171,13 +171,7 @@ public class Shooter extends SubsystemBase {
 
     //For use of commands to index the ball once the shooter is at the correct speed
     public double getShooterVel(){
-        double ticks = shooterMotorLeader.getSelectedSensorVelocity();
-        double RPM = (ticks / integratedTicks) * 10 * 60; //Converts to RPM from ticks per 100ms
-        double maxRPM = 6000;
-        System.out.println("RPM: " + RPM);
-        double percentOutput = RPM / maxRPM;
-//        System.out.println("Shooter Percent Output: " + percentOutput);
-        return percentOutput;
+        return gActualPower;
     }
 
     //For use of commands to index the ball into the shooter before the falcons on the shooter reach full speed

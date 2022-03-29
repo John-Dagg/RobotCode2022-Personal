@@ -16,4 +16,8 @@ public class AutonDrive extends ParallelRaceGroup {
     public AutonDrive(ArrayList<RamseteCommand> mRamseteCommands, int index){
         super(mRamseteCommands.get(index));
     }
+
+    public AutonDrive(Intake mIntake, ArrayList<RamseteCommand> mRamseteCommands, int index, boolean retractIntake) {
+        super(new AutonIntakeCustom(mIntake), mRamseteCommands.get(index));
+    }
 }

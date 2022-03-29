@@ -1,13 +1,14 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.Intake;
 
-public class IntakeCargo extends CommandBase {
+public class AutonIntakeCustom extends CommandBase {
 
     private Intake mIntake;
 
-    public IntakeCargo(Intake subsystem){
+    public AutonIntakeCustom(Intake subsystem){
         mIntake = subsystem;
 
         addRequirements(mIntake);
@@ -26,7 +27,6 @@ public class IntakeCargo extends CommandBase {
     @Override
     public void end(boolean isFinished){
         mIntake.rollerStop();
-        mIntake.retractIntake();
     }
 
 

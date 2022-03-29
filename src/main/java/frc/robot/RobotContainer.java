@@ -56,9 +56,9 @@ public class RobotContainer {
 
 
   //Auton Routines
-  private final AutonRoutine mThreeBall = new AutonRoutine(mSubsystems, AutonRoutine.Routine.THREE_BALL_TEST);
-  private final AutonRoutine mFiveBall = new AutonRoutine(mSubsystems, AutonRoutine.Routine.FIVE_BALL_TEST);
-
+//  private final AutonRoutine mThreeBall = new AutonRoutine(mSubsystems, AutonRoutine.Routine.THREE_BALL_TEST);
+//  private final AutonRoutine mFiveBall = new AutonRoutine(mSubsystems, AutonRoutine.Routine.FIVE_BALL_TEST);
+//
 
   private final AutonRoutine ls2bd = new AutonRoutine(mSubsystems, AutonRoutine.Routine.LEFT_SIDE_TWO_BALL_DEFAULT);
   private final AutonRoutine ls2br = new AutonRoutine(mSubsystems, AutonRoutine.Routine.LEFT_SIDE_TWO_BALL_ROLL);
@@ -79,10 +79,10 @@ public class RobotContainer {
 
   public RobotContainer() {
 
-    mAutons.setDefaultOption(mThreeBall.getName(), mThreeBall);
-    mAutons.addOption(mFiveBall.getName(), mFiveBall);
-
-    mAutons.addOption(ls2bd.getName(), ls2bd);
+//    mAutons.setDefaultOption(mThreeBall.getName(), mThreeBall);
+//    mAutons.addOption(mFiveBall.getName(), mFiveBall);
+//
+    mAutons.setDefaultOption(ls2bd.getName(), ls2bd);
     mAutons.addOption(ls2br.getName(), ls2br);
     mAutons.addOption(ls4bd.getName(), ls4bd);
     mAutons.addOption(rs2bc.getName(), rs2bc);
@@ -163,12 +163,15 @@ public class RobotContainer {
     new JoystickButton(driverController, Button.ButtonID.START.getID())
             .whenPressed(new InstantCommand(mDrivetrain::resetEncoders));
 
+//    new JoystickButton(driverController, Button.ButtonID.SELECT.getID())
+//            .whenHeld(new StartEndCommand(mLimelightVision::steadyArray, mLimelightVision::offArray));
+
 
 //    new JoystickButton(driverController, Button.ButtonID.LEFT_BUMPER.getID())
 //            .whenHeld(new StartEndCommand(mDrivetrain::lowGear, mDrivetrain::highGear));
 
-    new JoystickButton(driverController, Button.ButtonID.START.getID())
-            .whenPressed(new InstantCommand(mDrivetrain::lowGear));
+//    new JoystickButton(driverController, Button.ButtonID.START.getID())
+//            .whenPressed(new InstantCommand(mDrivetrain::lowGear));
 
 //    Intake
 
