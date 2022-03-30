@@ -26,9 +26,8 @@ public class AutonShoot extends CommandBase {
     private HoodState mHoodState;
     private IntakeState mIntakeState;
 
-    private double speed, time, elapsedTime, start, startTime, turnDir;
+    private double speed, time, elapsedTime, start, startTime, turnDir, shootTime;
     private boolean robotAligned, customShootTime;
-    private double shootTime, endTime;
 
     public AutonShoot(Drivetrain subsystemA, Intake subsystemB, Indexer subsystemC, Shooter subsystemD, VPLimelight subsystemE,
                       TurnDirection turnDirection, HoodState hoodState, IntakeState intakeState, double speed, double time){
@@ -54,7 +53,7 @@ public class AutonShoot extends CommandBase {
 
         this.speed = speed;
         this.shootTime = shootTime;
-        this.endTime = endTime;
+        this.time = endTime;
         customShootTime = true;
     }
 
@@ -72,8 +71,6 @@ public class AutonShoot extends CommandBase {
         robotAligned = false;
         elapsedTime = 0;
         startTime = -1;
-
-        time = endTime;
     }
 
     @Override
