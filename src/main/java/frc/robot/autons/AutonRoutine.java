@@ -1,7 +1,6 @@
 package frc.robot.autons;
 
 import edu.wpi.first.wpilibj2.command.*;
-import frc.robot.Constants;
 import frc.robot.commands.AutonDrive;
 import frc.robot.commands.*;
 
@@ -10,7 +9,6 @@ import static frc.robot.Constants.IntakeState.IN;
 import static frc.robot.Constants.IntakeState.OUT;
 import static frc.robot.Constants.LimelightVision.TurnDirection.*;
 
-import frc.robot.limelightvision.LimelightAlignCommand;
 import frc.robot.limelightvision.VPLimelight;
 import frc.robot.subsystems.*;
 
@@ -29,15 +27,15 @@ public class AutonRoutine {
 //        FIVE_BALL_TEST(0, "[TEST] Five Ball", new String[]{"FiveBall1", "FiveBall2", "FiveBall3"}),
 //        THREE_BALL_TEST(1,"[TEST] Three Ball", new String[]{"ThreeBall1", "ThreeBall2"}),
 
-        LEFT_SIDE_TWO_BALL_DEFAULT(1,"Left Side 2 Ball Default", new String[]{"LS-2BD-AB"}),
-        LEFT_SIDE_FOUR_BALL_DEFAULT(2,"Left Side 4 Ball Default", new String[]{"LS-4BD-AB", "LS-4BD-BC", "LS-4BD-CD"}),
-        LEFT_SIDE_TWO_BALL_ROLL(3,"Left Side 2 Ball Roll", new String[]{"LS-2BR-AB", "LS-2BR-BC"}),
-        RIGHT_SIDE_TWO_BALL_CLOSE(4,"Right Side 2 Ball Close", new String[]{"RS-2BC-AB"}),
-        RIGHT_SIDE_TWO_BALL_FAR(5,"Right Side 2 Ball Far", new String[]{"RS-2BF-AB"}),
-        RIGHT_SIDE_THREE_BALL_FAR(6,"Right Side 3 Ball Far", new String[]{"RS-3BF-AB", "RS-3BF-BC", "RS-3BF-CD"}),
-        RIGHT_SIDE_FOUR_BALL_FAR(7,"Right Side 4 Ball Far", new String[]{"RS-4BF-AB", "RS-4BF-BC", "RS-4BF-CD", "RS-4BF-DE"}),
-        RIGHT_SIDE_FOUR_BALL_CLOSE(8,"Right Side 4 Ball Close", new String[]{"RS-4BC-AB", "RS-4BC-BC", "RS-4BC-CD"}),
-        RIGHT_SIDE_FIVE_BALL_FAR(9,"Right Side 5 Ball Far", new String[]{"RS-5BF-AB", "RS-5BF-BC", "RS-5BF-CD", "RS-5BF-DE", "RS-5BF-EF"});
+        LEFT_SIDE_TWO_BALL_DEFAULT(1,"Left Side 2 Ball", new String[]{"LS-2BD-AB"}),
+        LEFT_SIDE_TWO_BALL_ROLL(2,"Left Side 2 Ball Roll", new String[]{"LS-2BR-AB", "LS-2BR-BC"}),
+        LEFT_SIDE_FOUR_BALL_DEFAULT(3,"Left Side 4 Ball", new String[]{"LS-4BD-AB", "LS-4BD-BC", "LS-4BD-CD"}),
+        RIGHT_SIDE_TWO_BALL_CLOSE(4,"Close Right Side 2 Ball", new String[]{"RS-2BC-AB"}),
+        RIGHT_SIDE_FOUR_BALL_CLOSE(5,"Close Right Side 4 Ball", new String[]{"RS-4BC-AB", "RS-4BC-BC", "RS-4BC-CD"}),
+        RIGHT_SIDE_TWO_BALL_FAR(6,"Far Right Side 2 Ball", new String[]{"RS-2BF-AB"}),
+        RIGHT_SIDE_THREE_BALL_FAR(7,"Far Right Side 3 Ball", new String[]{"RS-3BF-AB", "RS-3BF-BC"}),
+        RIGHT_SIDE_FOUR_BALL_FAR(8,"Far Right Side 4 Ball", new String[]{"RS-4BF-AB", "RS-4BF-BC", "RS-4BF-CD"}),
+        RIGHT_SIDE_FIVE_BALL_FAR(9,"Far Right Side 5 Ball", new String[]{"RS-5BF-AB", "RS-5BF-BC", "RS-5BF-CD", "RS-5BF-DE", "RS-5BF-EF"});
 
         Routine(int index, String name, String[] trajectory){
             this.index = index;
@@ -126,6 +124,13 @@ public class AutonRoutine {
                         new AutonDrive(mIntake, ramseteCommands, 0),
                         new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, RIGHT, HIGH, IN, 0.7, 4)));
                 break;
+            case LEFT_SIDE_TWO_BALL_ROLL:
+                mRoutine.setCommands(new SequentialCommandGroup(
+                        new AutonDrive(mIntake, ramseteCommands, 0),
+                        new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, RIGHT, HIGH, IN, 0.7, 3.5),
+                        new AutonDrive(mIntake, ramseteCommands, 1),
+                        new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, NONE, HIGH, IN, 0.4, 3.5)));
+                break;
             case LEFT_SIDE_FOUR_BALL_DEFAULT:
                 mRoutine.setCommands(new SequentialCommandGroup(
                         new AutonDrive(mIntake, ramseteCommands, 0),
@@ -135,17 +140,18 @@ public class AutonRoutine {
                     new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, RIGHT, HIGH, OUT, 0.73, 3)));
 
                 break;
-            case LEFT_SIDE_TWO_BALL_ROLL:
-                mRoutine.setCommands(new SequentialCommandGroup(
-                        new AutonDrive(mIntake, ramseteCommands, 0),
-                        new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, RIGHT, HIGH, IN, 0.7, 3.5),
-                        new AutonDrive(mIntake, ramseteCommands, 1),
-                        new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, NONE, HIGH, IN, 0.4, 3.5)));
-                break;
             case RIGHT_SIDE_TWO_BALL_CLOSE:
                 mRoutine.setCommands(new SequentialCommandGroup(
                         new AutonDrive(mIntake, ramseteCommands, 0),
                         new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, RIGHT, HIGH, OUT, 0.75, 4.5)));
+                break;
+            case RIGHT_SIDE_FOUR_BALL_CLOSE:
+                mRoutine.setCommands(new SequentialCommandGroup(
+                        new AutonDrive(mIntake, ramseteCommands, 0),
+                        new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, RIGHT, HIGH, IN, 0.68, 1, 2.5),
+                        new AutonDrive(mIntake, ramseteCommands, 1, false),
+                        new AutonDrive(mIntake, ramseteCommands, 2, false),
+                        new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, LEFT, HIGH, IN, 0.73, 1, 2.5)));
                 break;
             case RIGHT_SIDE_TWO_BALL_FAR:
                 mRoutine.setCommands(new SequentialCommandGroup(
@@ -156,26 +162,16 @@ public class AutonRoutine {
                 mRoutine.setCommands(new SequentialCommandGroup(
                         new AutonDrive(mIntake, ramseteCommands, 0),
                         new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, RIGHT, HIGH, IN, 0.68, 4.0),
-                        new AutonDrive(ramseteCommands, 1),
-                        new AutonDrive(mIntake, ramseteCommands, 2),
+                        new AutonDrive(mIntake, ramseteCommands, 1),
                         new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, LEFT, HIGH, IN, 0.72, 4.0)));
                 break;
             case RIGHT_SIDE_FOUR_BALL_FAR:
                 mRoutine.setCommands(new SequentialCommandGroup(
                         new AutonDrive(mIntake, ramseteCommands, 0),
                         new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, RIGHT, HIGH, IN, 0.68, 1, 2.5),
-                        new AutonDrive(ramseteCommands, 1),
-                        new AutonDrive(mIntake, ramseteCommands, 2),
-                        new AutonDrive(mIntake, ramseteCommands, 3),
+                        new AutonDrive(mIntake, ramseteCommands, 1, false),
+                        new AutonDrive(mIntake, ramseteCommands, 2, false),
                         new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, LEFT, HIGH, IN, 0.72, 1, 2.5)));
-                break;
-            case RIGHT_SIDE_FOUR_BALL_CLOSE:
-                mRoutine.setCommands(new SequentialCommandGroup(
-                        new AutonDrive(mIntake, ramseteCommands, 0),
-                        new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, RIGHT, HIGH, IN, 0.68, 1, 2.5),
-                        new AutonDrive(mIntake, ramseteCommands, 1),
-                        new AutonDrive(mIntake, ramseteCommands, 2),
-                        new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, LEFT, HIGH, IN, 0.73, 1, 2.5)));
                 break;
             case RIGHT_SIDE_FIVE_BALL_FAR:
                 mRoutine.setCommands(new SequentialCommandGroup(

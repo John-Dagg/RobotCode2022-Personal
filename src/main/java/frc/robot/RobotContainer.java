@@ -242,6 +242,7 @@ public class RobotContainer {
     selectedRoutine.routineInitialize();
 
     mDrivetrain.mState = Constants.DriveTrain.DriveState.AUTO_DRIVE;
+    mDrivetrain.highGear();
 
     return selectedRoutine.getRoutine();
   }

@@ -179,12 +179,12 @@ public class Drivetrain extends SubsystemBase {
 
 
   public void lowGear(){
-    mShifter.set(DoubleSolenoid.Value.kReverse);
+    if (mShifter.get() != DoubleSolenoid.Value.kReverse) mShifter.set(DoubleSolenoid.Value.kReverse);
     mShiftState = LOW_GEAR;
   }
 
   public void highGear(){
-    mShifter.set(DoubleSolenoid.Value.kForward);
+    if (mShifter.get() != DoubleSolenoid.Value.kForward) mShifter.set(DoubleSolenoid.Value.kForward);
     mShiftState = HIGH_GEAR;
   }
 

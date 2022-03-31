@@ -5,9 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Joystick;
-import frc.robot.subsystems.Drivetrain;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -68,7 +66,7 @@ public final class Constants {
 
         public static final double deadband = 0.05;
 
-        public enum DriveState { TELE_DRIVE_INTAKE, TELE_DRIVE_SHOOTER, TELE_LIMELIGHT, LIMELIGHT_DRIVE, AUTO_DRIVE, AUTO_LIMELIGHT }
+        public enum DriveState {TELE_DRIVE_INTAKE, TELE_DRIVE_SHOOTER, TELE_LIMELIGHT, LIMELIGHT_DRIVE, AUTO_DRIVE, AUTO_LIMELIGHT}
 
         public enum ShiftState {LOW_GEAR, HIGH_GEAR}
 
@@ -110,16 +108,16 @@ public final class Constants {
 
         public static final class LowGear {
             public static final double deadbandAngle_Low = 2.;
-            public static final double deccelAngle_Low = 30;
+            public static final double deccelAngle_Low = 30.;
             public static final double maxTurn_Low = 0.8;
-            public static final double minturn_Low = 0.2;
+            public static final double minturn_Low = 0.3;
         }
 
         public static final class HighGear {
-            public static final double deadbandAngle_High = 2;
-            public static final double deccelAngle_High = 30;
+            public static final double deadbandAngle_High = 2.;
+            public static final double deccelAngle_High = 30.;
             public static final double maxTurn_High = 0.65;
-            public static final double minturn_High = 0.3;
+            public static final double minturn_High = 0.25;
         }
 
         public static final double targetHeight = 104; //in
@@ -129,8 +127,6 @@ public final class Constants {
         public enum TurnDirection {LEFT, RIGHT, NONE}
 
         public enum TurnMode {TELEOP, AUTON}
-
-        public enum DistanceGoal {CLOSE, FAR}
 
     }
 

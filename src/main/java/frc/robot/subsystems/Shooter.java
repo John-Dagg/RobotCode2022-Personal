@@ -23,7 +23,7 @@ public class Shooter extends SubsystemBase {
 
     private final double closeVel = 0.68;
     private final double farVel = 0.8;
-    private final double lowVel = 0.35;
+    private final double lowVel = 0.38;
     private final double idleVel = 0.00;
 
     private double ticksToRPM = (1 / integratedTicks) * 10 * 60; //ticks per 100ms to RPM
@@ -33,8 +33,6 @@ public class Shooter extends SubsystemBase {
     double deviance = 0;
     double targetPercent = 0.8;
 
-
-    //Jack edits
 
     private double gTargetPower, gActualPower, gAppliedPower = 0, gMagnitude, gInterval = 0.005, gDeadband = 0.01, gDeviance;
 
@@ -91,11 +89,21 @@ public class Shooter extends SubsystemBase {
 
     }
 
-    public void shootLow(){setShooterGain(lowVel);}
+    public void shootLow(){
+        setShooterGain(lowVel);
+        if (angler.get() != DoubleSolenoid.Value.kReverse) setAnglerLow();
+    }
 
-    public void shootClose(){setShooterGain(closeVel);}
+    public void shootClose(){
+        setShooterGain(closeVel);
+        if (angler.get() != DoubleSolenoid.Value.kForward) setAnglerHigh();
 
-    public void shootFar(){setShooterGain(farVel);}
+    }
+
+    public void shootFar(){
+        setShooterGain(farVel);
+        if (angler.get() != DoubleSolenoid.Value.kForward) setAnglerHigh();
+    }
 
     public void setAngle(){
         if (angler.get() != DoubleSolenoid.Value.kForward) angler.set(DoubleSolenoid.Value.kForward);

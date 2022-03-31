@@ -92,13 +92,10 @@ public class AutonShoot extends CommandBase {
         mShooter.setShooterGain(speed);
         System.out.println("SHOOTER VEL: " + mShooter.getShooterVel());
         if (customShootTime) {
-            if (elapsedTime > shootTime && Math.abs(mShooter.getShooterVel()) > Math.abs(speed) - 0.1) {
+            if (elapsedTime > shootTime && Math.abs(mShooter.getShooterVel()) > Math.abs(speed) - 0.1)
                 mIndexer.feedIndexer();
-            }
         } else {
-            if (elapsedTime > 1 && Math.abs(mShooter.getShooterVel()) > Math.abs(speed) - 0.1) {
-                mIndexer.feedIndexer();
-            }
+            if (elapsedTime > 1 && Math.abs(mShooter.getShooterVel()) > Math.abs(speed) - 0.1) mIndexer.feedIndexer();
         }
 
     }
