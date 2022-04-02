@@ -86,9 +86,9 @@ public class RobotContainer {
     mAutons.addOption(ls2br.getName(), ls2br);
     mAutons.addOption(ls4bd.getName(), ls4bd);
     mAutons.addOption(rs2bc.getName(), rs2bc);
+    mAutons.addOption(rs4bc.getName(), rs4bc);
     mAutons.addOption(rs2bf.getName(), rs2bf);
     mAutons.addOption(rs3bf.getName(), rs3bf);
-    mAutons.addOption(rs4bc.getName(), rs4bc);
     mAutons.addOption(rs4bf.getName(), rs4bf);
     mAutons.addOption(rs5bf.getName(), rs5bf);
 

@@ -86,6 +86,7 @@ public class Shooter extends SubsystemBase {
             gMagnitude = 0;
         }
         gAppliedPower = gTargetPower + gMagnitude;
+//        System.out.println("Per Out: " + gAppliedPower + " | Leader Current: " + shooterMotorLeader.getSupplyCurrent() + " | Follower Current: " + shooterMotorFollower.getSupplyCurrent());
 
     }
 

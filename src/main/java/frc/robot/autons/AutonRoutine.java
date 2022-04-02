@@ -121,67 +121,67 @@ public class AutonRoutine {
             //MAIN ROUTINES (UNTESTED)
             case LEFT_SIDE_TWO_BALL_DEFAULT:
                 mRoutine.setCommands(new SequentialCommandGroup(
-                        new AutonDrive(mIntake, ramseteCommands, 0),
-                        new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, RIGHT, HIGH, IN, 0.7, 4)));
+                        new AutonDrive(mIntake, ramseteCommands, 0, false, 0.5),
+                        new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, RIGHT, HIGH, OUT, 0.68, 4)));
                 break;
             case LEFT_SIDE_TWO_BALL_ROLL:
                 mRoutine.setCommands(new SequentialCommandGroup(
-                        new AutonDrive(mIntake, ramseteCommands, 0),
-                        new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, RIGHT, HIGH, IN, 0.7, 3.5),
-                        new AutonDrive(mIntake, ramseteCommands, 1),
+                        new AutonDrive(mIntake, ramseteCommands, 0, false, 0.5),
+                        new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, RIGHT, HIGH, OUT, 0.68, 3.5),
+                        new AutonDrive(mIntake, ramseteCommands, 1, 0.5),
                         new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, NONE, HIGH, IN, 0.4, 3.5)));
                 break;
             case LEFT_SIDE_FOUR_BALL_DEFAULT:
                 mRoutine.setCommands(new SequentialCommandGroup(
-                        new AutonDrive(mIntake, ramseteCommands, 0),
-                        new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, RIGHT, HIGH, IN, 0.75, 3),
-                        new AutonDrive(mIntake, ramseteCommands, 1, false),
-                        new AutonDrive(mIntake, ramseteCommands, 2, false),
+                        new AutonDrive(mIntake, ramseteCommands, 0, 0.5),
+                        new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, RIGHT, HIGH, IN, 0.68, 3),
+                        new AutonDrive(mIntake, ramseteCommands, 1, false, 0.5),
+                        new AutonDrive(mIntake, ramseteCommands, 2, false, 0.5),
                     new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, RIGHT, HIGH, OUT, 0.73, 3)));
 
                 break;
             case RIGHT_SIDE_TWO_BALL_CLOSE:
                 mRoutine.setCommands(new SequentialCommandGroup(
-                        new AutonDrive(mIntake, ramseteCommands, 0),
-                        new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, RIGHT, HIGH, OUT, 0.75, 4.5)));
+                        new AutonDrive(mIntake, ramseteCommands, 0, 0.5),
+                        new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, RIGHT, HIGH, OUT, 0.69, 4.5)));
                 break;
             case RIGHT_SIDE_FOUR_BALL_CLOSE:
                 mRoutine.setCommands(new SequentialCommandGroup(
-                        new AutonDrive(mIntake, ramseteCommands, 0),
+                        new AutonDrive(mIntake, ramseteCommands, 0, 0.5),
                         new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, RIGHT, HIGH, IN, 0.68, 1, 2.5),
-                        new AutonDrive(mIntake, ramseteCommands, 1, false),
-                        new AutonDrive(mIntake, ramseteCommands, 2, false),
-                        new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, LEFT, HIGH, IN, 0.73, 1, 2.5)));
+                        new AutonDrive(mIntake, ramseteCommands, 1, false, 0.5),
+                        new AutonDrive(mIntake, ramseteCommands, 2, false, 0.5),
+                        new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, LEFT, HIGH, IN, 0.72, 1, 2.5)));
                 break;
             case RIGHT_SIDE_TWO_BALL_FAR:
                 mRoutine.setCommands(new SequentialCommandGroup(
-                        new AutonDrive(mIntake, ramseteCommands, 0),
-                        new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, RIGHT, HIGH, IN, 0.68, 5.0)));
+                        new AutonDrive(mIntake, ramseteCommands, 0, 0.5),
+                        new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, RIGHT, HIGH, IN, 0.71, 3.0)));
                 break;
             case RIGHT_SIDE_THREE_BALL_FAR:
                 mRoutine.setCommands(new SequentialCommandGroup(
-                        new AutonDrive(mIntake, ramseteCommands, 0),
-                        new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, RIGHT, HIGH, IN, 0.68, 4.0),
-                        new AutonDrive(mIntake, ramseteCommands, 1),
+                        new AutonDrive(mIntake, ramseteCommands, 0, 0.5),
+                        new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, RIGHT, HIGH, IN, 0.71, 4.0),
+                        new AutonDrive(mIntake, ramseteCommands, 1, 0.5),
                         new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, LEFT, HIGH, IN, 0.72, 4.0)));
                 break;
             case RIGHT_SIDE_FOUR_BALL_FAR:
                 mRoutine.setCommands(new SequentialCommandGroup(
-                        new AutonDrive(mIntake, ramseteCommands, 0),
+                        new AutonDrive(mIntake, ramseteCommands, 0, 0.5),
                         new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, RIGHT, HIGH, IN, 0.68, 1, 2.5),
-                        new AutonDrive(mIntake, ramseteCommands, 1, false),
-                        new AutonDrive(mIntake, ramseteCommands, 2, false),
+                        new AutonDrive(mIntake, ramseteCommands, 1, false, 0.5),
+                        new AutonDrive(mIntake, ramseteCommands, 2, false, 0.5),
                         new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, LEFT, HIGH, IN, 0.72, 1, 2.5)));
                 break;
             case RIGHT_SIDE_FIVE_BALL_FAR:
                 mRoutine.setCommands(new SequentialCommandGroup(
-                        new AutonDrive(mIntake, ramseteCommands, 0),
+                        new AutonDrive(mIntake, ramseteCommands, 0, 0.5),
                         new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, LEFT, HIGH, IN, 0.68, 1, 2.2),
-                        new AutonDrive(mIntake, ramseteCommands, 2),
-                        new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, RIGHT, HIGH, IN, 0.73, 1, 2),
-                        new AutonDrive(mIntake, ramseteCommands, 3, false), //Boolean doesn't actually matter
-                        new AutonDrive(mIntake, ramseteCommands, 4, false),
-                        new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, LEFT, HIGH, OUT, 0.73, 1, 2.3)));
+                        new AutonDrive(mIntake, ramseteCommands, 2, 0.5),
+                        new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, RIGHT, HIGH, IN, 0.7, 1, 2),
+                        new AutonDrive(mIntake, ramseteCommands, 3, false, 0.5), //Boolean doesn't actually matter
+                        new AutonDrive(mIntake, ramseteCommands, 4, false, 0.5),
+                        new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, LEFT, HIGH, OUT, 0.72, 1, 2.3)));
                 break;
             default:
                 break;
