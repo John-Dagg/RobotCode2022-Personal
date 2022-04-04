@@ -148,10 +148,10 @@ public class AutonRoutine {
             case RIGHT_SIDE_FOUR_BALL_CLOSE:
                 mRoutine.setCommands(new SequentialCommandGroup(
                         new AutonDrive(mIntake, ramseteCommands, 0, 0.5),
-                        new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, RIGHT, HIGH, IN, 0.68, 1, 2.5),
+                        new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, RIGHT, HIGH, IN, 0.7, 1, 2.5),
                         new AutonDrive(mIntake, ramseteCommands, 1, false, 0.5),
                         new AutonDrive(mIntake, ramseteCommands, 2, false, 0.5),
-                        new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, LEFT, HIGH, IN, 0.72, 1, 2.5)));
+                        new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, LEFT, HIGH, IN, 0.74, 1, 2.5)));
                 break;
             case RIGHT_SIDE_TWO_BALL_FAR:
                 mRoutine.setCommands(new SequentialCommandGroup(
