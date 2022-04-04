@@ -98,25 +98,6 @@ public class AutonRoutine {
          */
 
         switch (mRoutine) {
-//            case FIVE_BALL_TEST:
-//                    mRoutine.setCommands(new SequentialCommandGroup(
-//                    new InstantCommand(mIntake::extendIntake), new ShootLow(mShooter, mIndexer, Constants.DriveTrain.DriveState.AUTO_DRIVE),
-//                    new ParallelRaceGroup(ramseteCommands.get(0), new IntakeCargo(mIntake)),
-//                    new ParallelCommandGroup(new LimelightAlignCommand(mDrivetrain, mLimelightVision, Constants.LimelightVision.TurnDirection.LEFT, Constants.LimelightVision.TurnMode.AUTON),
-//                            new ShootClose(mShooter, mIndexer, 4, -0.68, false)),
-//                    new ParallelRaceGroup(ramseteCommands.get(1).andThen(ramseteCommands.get(2)), new IntakeCargo(mIntake)),
-//                    new ParallelCommandGroup(new LimelightAlignCommand(mDrivetrain, mLimelightVision, Constants.LimelightVision.TurnDirection.RIGHT, Constants.LimelightVision.TurnMode.AUTON),
-//                            new ShootClose(mShooter, mIndexer, 4, -0.67, false)),
-//                    new InstantCommand(mDrivetrain::stopDrive)));
-//                break;
-//            case THREE_BALL_TEST:
-//                mRoutine.setCommands(new SequentialCommandGroup(
-//                        new AutonDrive(mIntake, ramseteCommands, 0),
-//                        new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, RIGHT, HIGH, IN, -0.66, 3.5),
-//                        new AutonDrive(mIntake, ramseteCommands, 1),
-//                        new AutonShoot(mDrivetrain, mIntake, mIndexer, mShooter, mLimelightVision, RIGHT, HIGH, IN, -0.68, 4)));
-//                        new InstantCommand(mDrivetrain::stopDrive);
-//                break;
 
             //MAIN ROUTINES (UNTESTED)
             case LEFT_SIDE_TWO_BALL_DEFAULT:
