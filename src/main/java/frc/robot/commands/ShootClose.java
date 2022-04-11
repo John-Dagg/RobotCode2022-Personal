@@ -28,11 +28,10 @@ public class ShootClose extends CommandBase {
     @Override
     public void initialize(){
         start = System.currentTimeMillis();
-        if (close) mShooter.setAnglerLow();
-        else mShooter.setShooterFar();
+//        if (close) mShooter.setAnglerLow();
+//        else mShooter.setShooterFar();
 
         mShooter.setShooterVel(speed);
-
     }
 
     @Override

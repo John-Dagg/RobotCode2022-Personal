@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.io.Axis;
 import frc.robot.limelightvision.VPLimelight;
-import frc.robot.utility.MotorControllerFactory;
+import frc.robot.utility.ControllerFactory;
 import frc.robot.Constants;
 import frc.robot.Constants.*;
 import frc.robot.Constants.DriveTrain.*;
@@ -74,12 +74,12 @@ public class Drivetrain extends SubsystemBase {
 
     mLimelight = subsystemA;
 
-    mLeftLeader = MotorControllerFactory.makeSparkMax(DriveTrain.leftLeaderPort);
-    mLeftFollowerA = MotorControllerFactory.makeSparkMax(DriveTrain.leftFollowerAPort);
-    mLeftFollowerB = MotorControllerFactory.makeSparkMax(DriveTrain.leftFollowerBPort);
-    mRightLeader = MotorControllerFactory.makeSparkMax(DriveTrain.rightLeaderPort);
-    mRightFollowerA = MotorControllerFactory.makeSparkMax(DriveTrain.rightFollowerAPort);
-    mRightFollowerB = MotorControllerFactory.makeSparkMax(DriveTrain.rightFollowerBPort);
+    mLeftLeader = ControllerFactory.makeSparkMax(DriveTrain.leftLeaderPort);
+    mLeftFollowerA = ControllerFactory.makeSparkMax(DriveTrain.leftFollowerAPort);
+    mLeftFollowerB = ControllerFactory.makeSparkMax(DriveTrain.leftFollowerBPort);
+    mRightLeader = ControllerFactory.makeSparkMax(DriveTrain.rightLeaderPort);
+    mRightFollowerA = ControllerFactory.makeSparkMax(DriveTrain.rightFollowerAPort);
+    mRightFollowerB = ControllerFactory.makeSparkMax(DriveTrain.rightFollowerBPort);
 
     mRightLeader.setIdleMode(CANSparkMax.IdleMode.kCoast);
     mRightFollowerA.setIdleMode(CANSparkMax.IdleMode.kCoast);
@@ -263,7 +263,6 @@ public class Drivetrain extends SubsystemBase {
     if (mState != TELE_DRIVE_INTAKE) {
       mState = TELE_DRIVE_INTAKE;
     }
-
   }
 
   public void toggleArcadeStyle(){
@@ -278,8 +277,8 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void arcadeDriveShooter(){
-    double throttle = deadband(Constants.driverController.getRawAxis(Axis.AxisID.LEFT_Y.getID()));
-    double turn = deadband(Constants.driverController.getRawAxis(Axis.AxisID.RIGHT_X.getID()));
+    double throttle = deadband(Constants.driverController.getRawAxis(Axis.LEFT_Y.getID()));
+    double turn = deadband(Constants.driverController.getRawAxis(Axis.RIGHT_X.getID()));
 
 //    throttle = (throttle == 0) ? 0 : Math.abs(throttle)*throttle;
 //    turn = (turn == 0) ? 0 : turn/Math.abs(turn)*Math.sqrt(Math.abs(turn));
@@ -303,8 +302,8 @@ public class Drivetrain extends SubsystemBase {
 
 
   public void arcadeDriveIntake(){
-    double throttle = deadband(Constants.driverController.getRawAxis(Axis.AxisID.LEFT_Y.getID()));
-    double turn = deadband(Constants.driverController.getRawAxis(Axis.AxisID.RIGHT_X.getID()));
+    double throttle = deadband(Constants.driverController.getRawAxis(Axis.LEFT_Y.getID()));
+    double turn = deadband(Constants.driverController.getRawAxis(Axis.RIGHT_X.getID()));
 
 //    System.out.println("Left Position (m) :" + mLeftEncoder.getPosition() * positionConversion);
 //    System.out.println("Right Position (m) :" + mRightEncoder.getPosition() * positionConversion);
@@ -344,14 +343,12 @@ public class Drivetrain extends SubsystemBase {
     mRightLeader.set(0);
   }
 
-
-
   public void tankDriveVolts(double leftVolts, double rightVolts){
     mLeftVolts = leftVolts;
     mRightVolts = rightVolts;
 
-    System.out.println("Left Volts: " + mLeftVolts);
-    System.out.println("Right Volts: " + mRightVolts);
+//    System.out.println("Left Volts: " + mLeftVolts);
+//    System.out.println("Right Volts: " + mRightVolts);
 
 //    System.out.println("Le: " + leftWheelsPosition() + " Re: " + rightWheelsPosition());
 
@@ -361,7 +358,6 @@ public class Drivetrain extends SubsystemBase {
     mRightMotors.setVoltage(mRightVolts);
 
     mDrive.feed();
-
   }
 
   public void printMotors() {
@@ -372,7 +368,6 @@ public class Drivetrain extends SubsystemBase {
                       +" R2: "+mRightFollowerA.getAppliedOutput()
                       +" R3: "+mRightFollowerB.getAppliedOutput());
   }
-
 
   /***
    * Returns the position of the left wheels in meters
@@ -403,9 +398,7 @@ public class Drivetrain extends SubsystemBase {
 
   public void resetOdometry(Pose2d pose){
     resetEncoders();
-//    resetYaw();
     initOffset = mPigeon.getYaw();
-    System.out.println("Starting Degrees: " + Rotation2d.fromDegrees(mPigeon.getYaw()));
     mOdometry.resetPosition(pose, Rotation2d.fromDegrees(mPigeon.getYaw()));
   }
 

@@ -25,15 +25,15 @@ public class ShootFar extends CommandBase {
     @Override
     public void initialize(){
         start = System.currentTimeMillis();
-        mShooter.setAnglerHigh();
-        mShooter.setShooterFar();
+//        mShooter.setAnglerHigh();
+        mShooter.rpmShootFar();
     }
 
     @Override
     public void execute(){
         elapsedTime = System.currentTimeMillis() - start;
         elapsedTime = elapsedTime / 1000;
-        mShooter.setShooterFar();
+        mShooter.rpmShootFar();
         if (elapsedTime > 0.7){
             mIndexer.feedIndexer();
         }

@@ -1,4 +1,4 @@
-package frc.robot.autons;
+package frc.robot.hardcodeAutons;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
@@ -53,7 +53,7 @@ public class HardCodeAuton extends CommandBase {
             if (elapseTime > 0.5){
                 mIntake.rollerIntake();
             }
-            mShooter.setAnglerLow();
+//            mShooter.setAnglerLow();
             mShooter.setShooterVel(-speed);
         }
 

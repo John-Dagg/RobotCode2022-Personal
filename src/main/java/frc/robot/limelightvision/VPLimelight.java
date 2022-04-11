@@ -134,19 +134,19 @@ public class VPLimelight extends SubsystemBase {
             if (deadbandAngle_High < Math.abs(yaw)) {
                 turn = Math.signum(yaw) * MathEqs.targetLinear2(Math.abs(yaw), maxTurn_High, minturn_High, deccelAngle_High, deadbandAngle_High);
 //                turn = Math.signum(yaw) * MathEqs.targetLinear2(Math.abs(yaw), maxTurn_Low, minturn_Low, deccelAngle_Low, deadbandAngle_Low);
-                System.out.println("Yaw: " + yaw + " Turn: " + turn);
+//                System.out.println("Yaw: " + yaw + " Turn: " + turn);
 //                System.out.println("WHAT IS HAPPENING...");
             }
         }
         if (limelightMode == Constants.DriveTrain.DriveState.AUTO_LIMELIGHT && Math.abs(turn) < 0.2) {
             if (startTime == -1) {
-                System.out.println("RESET: "+startTime);
+//                System.out.println("RESET: "+startTime);
                 startTime = System.currentTimeMillis();
-                System.out.println("START TIME "+startTime);
+//                System.out.println("START TIME "+startTime);
             }
 
             elapsedTime = Math.abs((System.currentTimeMillis() - startTime) /1000);
-            System.out.println("TIME REMAINING: "+(bufferTime-elapsedTime));
+//            System.out.println("TIME REMAINING: "+(bufferTime-elapsedTime));
 //            System.out.println("Please work");
             if (elapsedTime >= 0.5) {
                 System.out.println("STOPPING ALIGNMENT");

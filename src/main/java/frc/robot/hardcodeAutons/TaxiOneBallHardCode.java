@@ -1,4 +1,4 @@
-package frc.robot.autons;
+package frc.robot.hardcodeAutons;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
@@ -49,7 +49,7 @@ public class TaxiOneBallHardCode extends CommandBase {
         if (mDrivetrain.leftWheelsPosition() < 0.8 && mDrivetrain.rightWheelsPosition() < 0.8){
             System.out.println("Running phase 1");
             mDrivetrain.autonDrive(0.4, 0);
-            mShooter.setAnglerLow();
+//            mShooter.setAnglerLow();
             mShooter.setShooterVel(-speed);
         }
 

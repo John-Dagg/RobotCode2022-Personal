@@ -1,9 +1,11 @@
-package frc.robot.commands;
+package frc.robot.autons;
 
 
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.commands.AutonIntakeCustom;
+import frc.robot.commands.IntakeCargo;
 import frc.robot.subsystems.Intake;
 
 import java.util.ArrayList;

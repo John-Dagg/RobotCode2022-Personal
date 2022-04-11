@@ -2,11 +2,16 @@ package frc.robot.utility;
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
-public class MotorControllerFactory {
+/***
+ *  Class that simplifies motor controller and solenoid object creation
+ */
+
+public class ControllerFactory {
 
     public static CANSparkMax makeSparkMax(int port){
         CANSparkMax mSparkMax = new CANSparkMax(port, CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -26,9 +31,9 @@ public class MotorControllerFactory {
         return mTalonSRX;
     }
 
-    public static VictorSPX makeVictorSPX(int port){
-        VictorSPX mVictorSPX = new VictorSPX(port);
-        mVictorSPX.configFactoryDefault();
-        return mVictorSPX;
+    public static DoubleSolenoid makeDoubleSolenoid(int portA, int portB){
+        DoubleSolenoid mDoubleSolenoid = new DoubleSolenoid(13, PneumaticsModuleType.CTREPCM, portA, portB);
+        return mDoubleSolenoid;
     }
+
 }

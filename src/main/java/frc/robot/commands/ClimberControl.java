@@ -14,7 +14,7 @@ public class ClimberControl extends CommandBase {
 
     @Override
     public void initialize(){
-        mClimber.disengageBrake();
+//        mClimber.disengageBrake();
     }
 
     @Override
@@ -25,7 +25,7 @@ public class ClimberControl extends CommandBase {
     @Override
     public void end(boolean isFinished){
         mClimber.winchStop();
-        mClimber.engageBrake();
+//        mClimber.engageBrake();
     }
 
 

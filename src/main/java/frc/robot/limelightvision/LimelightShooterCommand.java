@@ -46,9 +46,9 @@ public class LimelightShooterCommand extends CommandBase {
         }
         distance = mLimelight.calcDistance();
         if (distance < lowHoodRange && distance > minRange){
-            mShooter.setAnglerLow();
+//            mShooter.setAnglerLow();
         } else if (distance > highHoodRange && distance < maxRange){
-            mShooter.setShooterFar();
+//            mShooter.setShooterFar();
         } else {
             System.out.println("Out of viable range");
         }

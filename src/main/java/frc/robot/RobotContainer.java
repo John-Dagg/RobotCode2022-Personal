@@ -12,8 +12,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.autons.AutonRoutine;
-import frc.robot.autons.HardCodeAuton;
-import frc.robot.autons.TaxiOneBallHardCode;
+import frc.robot.hardcodeAutons.HardCodeAuton;
+import frc.robot.hardcodeAutons.TaxiOneBallHardCode;
 import frc.robot.commands.*;
 import frc.robot.io.Axis;
 import frc.robot.io.Button;
@@ -39,27 +39,16 @@ public class RobotContainer {
   //Limelight Vision
   private final LimelightAlignCommand mLeftAlign = new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.LEFT, TurnMode.TELEOP);
   private final LimelightAlignCommand mRightAlign = new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.RIGHT, TurnMode.TELEOP);
-  private final LimelightAlignCommand mAutonLeftAlign = new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.LEFT, TurnMode.AUTON);
-  private final LimelightAlignCommand mAutonRightAlign = new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.RIGHT, TurnMode.AUTON);
 
   private final LimelightDistanceCommand mDistanceTarget = new LimelightDistanceCommand(mDrivetrain, mLimelightVision, true);
 
   //Complex Commands (that can't be inlined)
-  private final ShootFar mShootFar = new ShootFar(mShooter, mIndexer);
-  private final ShootClose mShootClose = new ShootClose(mShooter, mIndexer);
-  private final ShootLow mShootLow = new ShootLow(mShooter, mIndexer, Constants.DriveTrain.DriveState.TELE_DRIVE_INTAKE);
-  private final ShootLow mAutoLow = new ShootLow(mShooter, mIndexer, Constants.DriveTrain.DriveState.AUTO_DRIVE);
   private final IntakeCargo mIntakeCargo = new IntakeCargo(mIntake);
   private final ClimberControl mClimberControl = new ClimberControl(mClimber);
-  private final ShootCustom mCustomShooter = new ShootCustom(mShooter, mIndexer, mLimelightVision);
 
 
 
   //Auton Routines
-//  private final AutonRoutine mThreeBall = new AutonRoutine(mSubsystems, AutonRoutine.Routine.THREE_BALL_TEST);
-//  private final AutonRoutine mFiveBall = new AutonRoutine(mSubsystems, AutonRoutine.Routine.FIVE_BALL_TEST);
-//
-
   private final AutonRoutine ls2bd = new AutonRoutine(mSubsystems, AutonRoutine.Routine.LEFT_SIDE_TWO_BALL_DEFAULT);
   private final AutonRoutine ls2br = new AutonRoutine(mSubsystems, AutonRoutine.Routine.LEFT_SIDE_TWO_BALL_ROLL);
   private final AutonRoutine ls4bd = new AutonRoutine(mSubsystems, AutonRoutine.Routine.LEFT_SIDE_FOUR_BALL_DEFAULT);
@@ -70,18 +59,17 @@ public class RobotContainer {
   private final AutonRoutine rs4bf = new AutonRoutine(mSubsystems, AutonRoutine.Routine.RIGHT_SIDE_FOUR_BALL_FAR);
   private final AutonRoutine rs5bf = new AutonRoutine(mSubsystems, AutonRoutine.Routine.RIGHT_SIDE_FIVE_BALL_FAR);
 
+  //Sendable Chooser object for sending options to Smart Dashboard
   private final SendableChooser<AutonRoutine> mAutons = new SendableChooser<>();
 
 
-  //Hardcode
+  //Hardcode Autons
   private final HardCodeAuton mAuton = new HardCodeAuton(mDrivetrain, mIntake, mIndexer, mShooter);
   private final TaxiOneBallHardCode mOneBallAuton = new TaxiOneBallHardCode(mDrivetrain, mIntake, mIndexer, mShooter);
 
   public RobotContainer() {
 
-//    mAutons.setDefaultOption(mThreeBall.getName(), mThreeBall);
-//    mAutons.addOption(mFiveBall.getName(), mFiveBall);
-//
+    //Adding autons to SendableChooser with default option
     mAutons.setDefaultOption(ls2bd.getName(), ls2bd);
     mAutons.addOption(ls2br.getName(), ls2br);
     mAutons.addOption(ls4bd.getName(), ls4bd);
@@ -95,7 +83,10 @@ public class RobotContainer {
     SmartDashboard.putData(mAutons);
 
     configureButtonBindings();
+    //Sets the state of the MasterDrive method in the Drivetrain class so it can be driven by default
     mDrivetrain.mState = Constants.DriveTrain.DriveState.TELE_DRIVE_INTAKE;
+
+    //Commands that always run unless interrupted by other commands utilizing the subsystem
     mDrivetrain.setDefaultCommand(new RunCommand(mDrivetrain::masterDrive, mDrivetrain));
     mIntake.setDefaultCommand(new RunCommand(mIntake::triggerRollerIntake, mIntake));
 
@@ -116,37 +107,30 @@ public class RobotContainer {
      * Right Bumper - Extends + Intakes (Hold)
      * Right Trigger - Intake
      * Left Trigger - Outtake
-     * X - Shooter Arcade Drive Toggle
-     * B - Intake Arcade Drive Toggle
+     * X - Align Left
+     * B - Align Right
      * A - Toggle Four-Bar
      *
      * Operator Controller
-     * Left Bumper - Shoot Far
-     * Right Bumper - Shoot Close
-     * Y - Shoot Low (In Theory)
-     * A - Disengages brake + enables winch (Hold)
-     *
-     * B - Toggle Brake
-     * Left Y - Raw Winch Control (Requires A to be held)
-     *
-     * Auton
-     *
-     *     (Disabled)
-     * X - Align Target Angle + Default Turn Left
-     * B - Align Target Angle + Default Turn Right
+     * Left Bumper - Shoot Close
+     * Right Bumper - Shoot Far
+     * Y - Feed Indexer
+     * X - Shoot Low
      * B - Change Climber Angle
+     * A - Enables winch (Hold)
+     * Left Y - Raw Winch Control (Requires A to be held)
      *
      */
 
     //Limelight
 
-    new JoystickButton(driverController, Button.ButtonID.X.getID())
+    new JoystickButton(driverController, Button.X.getID())
             .whenHeld(mLeftAlign);
 
-    new JoystickButton(driverController, Button.ButtonID.B.getID())
+    new JoystickButton(driverController, Button.B.getID())
             .whenHeld(mRightAlign);
 
-    new JoystickButton(driverController, Button.ButtonID.Y.getID())
+    new JoystickButton(driverController, Button.Y.getID())
             .whenHeld(mDistanceTarget);
 
     //Drivetrain
@@ -154,83 +138,58 @@ public class RobotContainer {
     //If the left bumper is pressed and the drivetrain is in low gear perform the first command
     //If the left bumper is pressed and the drivetrain is in high gear perform the second command
 
-    new JoystickButton(driverController, Button.ButtonID.LEFT_BUMPER.getID())
+    new JoystickButton(driverController, Button.LEFT_BUMPER.getID())
             .whenPressed(new ConditionalCommand(
                     new InstantCommand(mDrivetrain::highGear),
                     new InstantCommand(mDrivetrain::lowGear),
                     mDrivetrain::getLowGear));
 
-    new JoystickButton(driverController, Button.ButtonID.START.getID())
+    new JoystickButton(driverController, Button.START.getID())
             .whenPressed(new InstantCommand(mDrivetrain::resetEncoders));
-
-//    new JoystickButton(driverController, Button.ButtonID.SELECT.getID())
-//            .whenHeld(new StartEndCommand(mLimelightVision::steadyArray, mLimelightVision::offArray));
-
-
-//    new JoystickButton(driverController, Button.ButtonID.LEFT_BUMPER.getID())
-//            .whenHeld(new StartEndCommand(mDrivetrain::lowGear, mDrivetrain::highGear));
-
-//    new JoystickButton(driverController, Button.ButtonID.START.getID())
-//            .whenPressed(new InstantCommand(mDrivetrain::lowGear));
 
 //    Intake
 
-    new JoystickButton(driverController, Button.ButtonID.A.getID())
-            .whenPressed(new ConditionalCommand(
-                    new InstantCommand(mIntake::retractIntake),
-                    new InstantCommand(mIntake::extendIntake),
-                    mIntake::getFourBarState));
+    new JoystickButton(driverController, Button.A.getID())
+            .whenPressed(new InstantCommand(mIntake::toggleFourBar));
 
-    new JoystickButton(driverController, Button.ButtonID.RIGHT_BUMPER.getID())
+    new JoystickButton(driverController, Button.RIGHT_BUMPER.getID())
             .whenHeld(mIntakeCargo);
 
-    //  Another option for intake control to add more buttons hopefully
-    //  Leaving this here for now. Using default command
-
-    if (new Joystick(Axis.AxisID.LEFT_TRIGGER.getID()).getTriggerPressed())
+    if (new Joystick(Axis.LEFT_TRIGGER.getID()).getTriggerPressed())
             new StartEndCommand(mIntake::rollerIntake, mIntake::rollerStop);
 
-    if (new Joystick(Axis.AxisID.RIGHT_TRIGGER.getID()).getTriggerPressed())
+    if (new Joystick(Axis.RIGHT_TRIGGER.getID()).getTriggerPressed())
             new StartEndCommand(mIntake::rollerOuttake, mIntake::rollerStop);
 
 //    Shooter
 
-    new JoystickButton(operatorController, Button.ButtonID.Y.getID())
+    new JoystickButton(operatorController, Button.Y.getID())
             .whenHeld(new StartEndCommand(mIndexer::feedIndexer, mIndexer::setIndexerIdle));
 
-    new JoystickButton(operatorController, Button.ButtonID.RIGHT_BUMPER.getID())
+    new JoystickButton(operatorController, Button.RIGHT_BUMPER.getID())
             .whenHeld(new RunCommand(mShooter::shootFar));
 
-    new JoystickButton(operatorController, Button.ButtonID.RIGHT_BUMPER.getID())
+    new JoystickButton(operatorController, Button.RIGHT_BUMPER.getID())
             .whenReleased(new RunCommand(mShooter::setShooterIdle));
 
-    new JoystickButton(operatorController, Button.ButtonID.LEFT_BUMPER.getID())
+    new JoystickButton(operatorController, Button.LEFT_BUMPER.getID())
             .whenHeld(new RunCommand(mShooter::shootClose));
 
-    new JoystickButton(operatorController, Button.ButtonID.LEFT_BUMPER.getID())
+    new JoystickButton(operatorController, Button.LEFT_BUMPER.getID())
             .whenReleased(new RunCommand(mShooter::setShooterIdle));
 
-    new JoystickButton(operatorController, Button.ButtonID.X.getID())
-            .whenHeld(new RunCommand(mShooter::shootLow));
+    new JoystickButton(operatorController, Button.X.getID())
+            .whenHeld(new RunCommand(mShooter::rpmShootClose));
 
-    new JoystickButton(operatorController, Button.ButtonID.X.getID())
+    new JoystickButton(operatorController, Button.X.getID())
             .whenReleased(new RunCommand(mShooter::setShooterIdle));
-
-//    new JoystickButton(operatorController, Button.ButtonID.X.getID())
-//            .whenHeld(mShootLow);
-
-//    new POVButton(operatorController, 90)
-//            .whenPressed(new InstantCommand(mShooter::setAngle));
-
-//    new JoystickButton(operatorController, Button.ButtonID.START.getID())
-//            .whenHeld(mCustomShooter);
 
 //    Climber
 
-    new JoystickButton(operatorController, Button.ButtonID.A.getID())
+    new JoystickButton(operatorController, Button.A.getID())
             .whenHeld(mClimberControl);
 
-    new JoystickButton(operatorController, Button.ButtonID.B.getID())
+    new JoystickButton(operatorController, Button.B.getID())
             .whenPressed(mClimber::angleClimber);
 
   }
@@ -238,15 +197,21 @@ public class RobotContainer {
   //Global auton execution called here
   public Command getAutonomousCommand() {
 
+    //Gets the selected auton from the SendableChooser
     AutonRoutine selectedRoutine = mAutons.getSelected();
     selectedRoutine.routineInitialize();
 
+    //Sets the drivetrain up to run the tankDriveVolts method used during auton
     mDrivetrain.mState = Constants.DriveTrain.DriveState.AUTO_DRIVE;
+
+    //Ensures the drivetrain is in high gear to start auton
     mDrivetrain.highGear();
 
+    //The Command object returned is the auton that runs during code execution
     return selectedRoutine.getRoutine();
   }
 
+  //Used in the Robot.java class to ensure the Drivetrain class is running the teleop arcade drive method once the auton ends
   public void activateTeleop() {
     mDrivetrain.mState = Constants.DriveTrain.DriveState.TELE_DRIVE_INTAKE;
   }

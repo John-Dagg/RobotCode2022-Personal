@@ -25,7 +25,7 @@ public class ShootLow extends CommandBase {
 
     @Override
     public void initialize(){
-        mShooter.setAnglerLow();
+//        mShooter.setAnglerLow();
         mShooter.setShooterVel(speed);
         start = System.currentTimeMillis();
     }

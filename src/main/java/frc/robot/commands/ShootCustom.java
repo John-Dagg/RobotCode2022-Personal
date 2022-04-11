@@ -57,9 +57,9 @@ public class ShootCustom extends CommandBase {
     @Override
     public void initialize(){
         if (mVision.calcDistance() < 120){
-            mShooter.setAnglerLow();
+//            mShooter.setAnglerLow();
         } else {
-            mShooter.setAnglerHigh();
+//            mShooter.setAnglerHigh();
         }
         setShooterCustom();
     }

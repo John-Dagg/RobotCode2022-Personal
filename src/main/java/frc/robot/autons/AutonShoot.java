@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.autons;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
@@ -26,7 +26,7 @@ public class AutonShoot extends CommandBase {
     private HoodState mHoodState;
     private IntakeState mIntakeState;
 
-    private double speed, time, elapsedTime, start, startTime, turnDir, shootTime;
+    private double speed, time, elapsedTime, start, startTime, turnDir, shootTime, actualRPM;
     private boolean robotAligned, customShootTime;
 
     public AutonShoot(Drivetrain subsystemA, Intake subsystemB, Indexer subsystemC, Shooter subsystemD, VPLimelight subsystemE,
@@ -62,7 +62,7 @@ public class AutonShoot extends CommandBase {
         start = System.currentTimeMillis();
 
         turnDir = mTurnDirection == TurnDirection.LEFT ? 1.0 : -1.0;
-        if (mHoodState == HoodState.HIGH) mShooter.setAnglerHigh(); else mShooter.setAnglerLow();
+//        if (mHoodState == HoodState.HIGH) mShooter.setAnglerHigh(); else mShooter.setAnglerLow();
         if (mIntakeState == IntakeState.IN) mIntake.retractIntake(); else mIntake.extendIntake();
 
         mShooter.setShooterGain(speed);
@@ -89,13 +89,16 @@ public class AutonShoot extends CommandBase {
             mLimelight.findTarget(mDrivetrain, turnDir);
         }
 
-        mShooter.setShooterGain(speed);
-        System.out.println("SHOOTER VEL: " + mShooter.getShooterVel());
+        mShooter.PIDshooter(speed);
+
+        actualRPM = mShooter.getShooterRPM();
+//        System.out.println("SHOOTER VEL: " + actualRPM);
+//        System.out.println(mShooter.checkRPM(speed, actualRPM, 150));
         if (customShootTime) {
-            if (elapsedTime > shootTime && Math.abs(mShooter.getShooterVel()) > Math.abs(speed) - 0.1)
+            if (elapsedTime > shootTime && mShooter.checkRPM(speed, actualRPM, 150))
                 mIndexer.feedIndexer();
         } else {
-            if (elapsedTime > 1 && Math.abs(mShooter.getShooterVel()) > Math.abs(speed) - 0.1) mIndexer.feedIndexer();
+            if (elapsedTime > 1 && mShooter.checkRPM(speed, actualRPM, 150)) mIndexer.feedIndexer();
         }
 
     }

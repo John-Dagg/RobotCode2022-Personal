@@ -3,37 +3,37 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.io.Axis;
-import frc.robot.utility.MotorControllerFactory;
+import frc.robot.utility.ControllerFactory;
 
 import static frc.robot.Constants.Intake.fourBarPorts;
+import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.*;
 
 public class Intake extends SubsystemBase {
 
     private CANSparkMax rollerBar, staticRoller;
     private DoubleSolenoid fourBar;
     private RelativeEncoder mEncoder;
-    private final double intakeSpeed = -1;
+    private final double intakeSpeed = 1;
 
     private double start, elapsedTime;
     private int x = 0;
 
     public Intake(){
 
-        rollerBar = MotorControllerFactory.makeSparkMax(Constants.Intake.intakeMotorPort);
-//        staticRoller = MotorControllerFactory.makeSparkMax(Constants.Intake.intakeStaticMotorPort);
-        fourBar = new DoubleSolenoid(fourBarPorts[0], PneumaticsModuleType.CTREPCM, fourBarPorts[1], fourBarPorts[2]);
-        rollerBar.getEncoder();
+        //Creates motor and solenoid objects
+        rollerBar = ControllerFactory.makeSparkMax(Constants.Intake.intakeMotorPort);
+        fourBar = ControllerFactory.makeDoubleSolenoid(fourBarPorts[1], fourBarPorts[2]);
     }
 
+    //Unused
     public void stallFailsafe(){
 
         if (rollerBar.getAppliedOutput() > 0.5 && mEncoder.getVelocity() > 0) x = 0;
 
-        //Current is an arbitrary value that just indicates if the motor is receiving current
+        //0.5 is an arbitrary value that just indicates if the motor is receiving current
         //If the motor is receiving current and the encoder isn't reading turns the motor must be stalling
 
         if (x < 1){
@@ -49,52 +49,39 @@ public class Intake extends SubsystemBase {
     }
 
     public void rollerIntake(){
-        rollerBar.set(intakeSpeed);
-//        stallFailsafe();
-//        staticRoller.set(1);
+        rollerBar.set(-intakeSpeed);
     }
 
     public void rollerOuttake(){
-        rollerBar.set(-intakeSpeed);
-//        stallFailsafe();
-//        staticRoller.set(-1);
-
+        rollerBar.set(intakeSpeed);
     }
 
+    //If a trigger is pressed enough then perform the desired action of intaking or outtaking depending on trigger
     public void triggerRollerIntake(){
-        if (Constants.driverController.getRawAxis(Axis.AxisID.RIGHT_TRIGGER.getID()) > 0.25){
-            rollerBar.set(intakeSpeed);
-//            System.out.println("intaking");
-        } else if (Constants.driverController.getRawAxis(Axis.AxisID.LEFT_TRIGGER.getID()) > 0.25){
-            rollerBar.set(-intakeSpeed);
-//            System.out.println("outtaking");
-        } else {
-            rollerStop();
-        }
+        if (Constants.driverController.getRawAxis(Axis.RIGHT_TRIGGER.getID()) > 0.25){
+            rollerIntake();
+        } else if (Constants.driverController.getRawAxis(Axis.LEFT_TRIGGER.getID()) > 0.25){
+            rollerOuttake();
+        } else rollerStop();
     }
 
 
     public void rollerStop(){
         rollerBar.set(0);
-//        staticRoller.set(0);
     }
 
     public void extendIntake(){
-        if (fourBar.get() != DoubleSolenoid.Value.kForward) fourBar.set(DoubleSolenoid.Value.kForward);
+        if (fourBar.get() != kReverse) fourBar.set(kReverse);
     }
 
     public void retractIntake(){
-        if (fourBar.get() != DoubleSolenoid.Value.kReverse) fourBar.set(DoubleSolenoid.Value.kReverse);
+        if (fourBar.get() != kForward) fourBar.set(kForward);
     }
 
-    public boolean getFourBarState(){
-        boolean state = true;
-        if(fourBar.get() == DoubleSolenoid.Value.kForward){
-            state = true;
-        } else if (fourBar.get() == DoubleSolenoid.Value.kReverse){
-            state = false;
-        }
-        return state;
+    public void toggleFourBar(){
+        if (fourBar.get() == kOff) fourBar.set(kForward);
+        if (fourBar.get() != kForward) fourBar.set(kForward);
+        if (fourBar.get() != kReverse) fourBar.set(kReverse);
     }
 
 

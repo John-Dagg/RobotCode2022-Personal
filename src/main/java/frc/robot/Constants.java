@@ -8,12 +8,7 @@ import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.Joystick;
 
 /**
- * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
- * constants. This class should not be used for any other purpose. All constants should be declared
- * globally (i.e. public static). Do not put anything functional in this class.
- *
- * <p>It is advised to statically import this class (or one of its inner classes) wherever the
- * constants are needed, to reduce verbosity.
+ * Holds all constants for motor ports, solenoid ports, enumeration states, limelight constants, and auton constants
  */
 public final class Constants {
 
@@ -78,7 +73,7 @@ public final class Constants {
 
         public static final int intakeMotorPort = 4;
 
-        public static final int[] fourBarPorts = {0, 6, 7};
+        public static final int[] fourBarPorts = {13, 6, 7};
     }
 
     public static final class Indexer {
@@ -91,15 +86,16 @@ public final class Constants {
         public static final int shooterAPort = 9;
         public static final int shooterBPort = 10;
 
-        public static final int[] anglerPorts = {13, 6, 7};
+//        public static final int[] anglerPorts = {13, 6, 7};
     }
 
     public static final class Climber{
 
         public static final int climberPortA = 11;
         public static final int climberPortB = 12;
+
         public static final int[] solenoidPorts = {13, 0, 1};
-        public static final int[] brakePorts = {13, 2, 3};
+//        public static final int[] brakePorts = {13, 2, 3};
 
         public static final double deadband = 0.1;
     }
