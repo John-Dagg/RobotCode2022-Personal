@@ -19,6 +19,13 @@ import static frc.robot.Constants.Auton.LowGear.*;
 import static frc.robot.Constants.Auton.driveKinematics;
 import static frc.robot.Constants.DriveTrain.*;
 
+/***
+ * Generates an array list of Ramsete Commands for use in AutonRoutine. The first method, getTrajectory, creates a path based on a file
+ * created by Pathweaver and then creates a trajectory based on the path. The second method, getAutonCommands, creates an
+ * arraylist of RamseteCommands based on the each trajectory and PID constants. See the WPI First page for more information
+ * about RamseteCommands
+ */
+
 public class AutonGenerator {
 
     ShiftState mShiftState;
@@ -40,8 +47,6 @@ public class AutonGenerator {
             e.printStackTrace();
             return null;
         }
-
-//        trajectory = trajectories.get(0);
         if (trajectory != null){
             System.out.println("Retrieved trajectory");
         }

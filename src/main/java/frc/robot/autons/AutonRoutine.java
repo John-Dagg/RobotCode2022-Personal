@@ -12,14 +12,12 @@ import frc.robot.subsystems.*;
 
 import java.util.ArrayList;
 
+/***
+ * This class houses enumerations that contain all relevant information related to each auton path including
+ * index, name, and pathname from Pathweaver. The enumeration has methods to set and get commands
+ */
+
 public class AutonRoutine {
-
-    //Auton
-
-//    private String[] mFiveBallAuton = {"FiveBall1", "FiveBall2", "FiveBall3"};
-//    private String[] mTest = {"test"};
-//    private String[] mThreeBall = {"ThreeBall1", "ThreeBall2"};
-
 
     public enum Routine {
 //        FIVE_BALL_TEST(0, "[TEST] Five Ball", new String[]{"FiveBall1", "FiveBall2", "FiveBall3"}),

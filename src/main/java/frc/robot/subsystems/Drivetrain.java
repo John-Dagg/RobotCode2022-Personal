@@ -12,7 +12,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -30,18 +29,16 @@ import static frc.robot.Constants.DriveTrain.DriveState.*;
 import static frc.robot.Constants.DriveTrain.ShiftState.*;
 import static frc.robot.Constants.DriveTrain.defaultState;
 import static frc.robot.Constants.DriveTrain.shifterPorts;
+import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.*;
 import java.util.Arrays;
 
 
 public class Drivetrain extends SubsystemBase {
 
-  //Tested and Functional
-
   private CANSparkMax mLeftLeader, mLeftFollowerA, mLeftFollowerB,
           mRightLeader, mRightFollowerA, mRightFollowerB;
   private RelativeEncoder mLeftEncoder, mRightEncoder;
   private DoubleSolenoid mShifter;
-  private Compressor mComp;
   private Pigeon2 mPigeon;
 
   private MotorControllerGroup mLeftMotors, mRightMotors;
@@ -53,22 +50,26 @@ public class Drivetrain extends SubsystemBase {
 
   private double mYaw, mLeftVolts, mRightVolts;
 
-  private double lastThrottle, lastTurn, limelightThrottle, limelightTurn, limelightRawTurn;
-  private double yaw;
-  private double limelightGain;
+  private double lastThrottle, lastTurn;
 
   public DriveState mState;
   public ShiftState mShiftState;
 
   private VPLimelight mLimelight;
 
-  private final double distanceClose = 62; //inches
-  private final double distanceFar = 178; //inches
-  private final double band = 10;
+  /***
+   * This class is responsible for handling everything relating to the drivetrain including limelight commands and auton commands.
+   * While Limelight and Auton both have their own classes responsible for the logic of vision processing and the creation
+   * of trajectories/enumerations the drivetrain takes their inputs and supplies them to the motors. This avoids returning motor and
+   * encoder objects to the other subsystems.
+   *
+   * The class is excessively large and could be simplified but I believe it is useful to show some of the initial ideas implemented.
+   * However, I did remove much of the pointless code. Strive for your code to be simple, efficient, and effective. Don't be afraid
+   * to remove unnecessary code as it can be accessed on GitHub as long as you are commiting your code.
+   */
 
-  private double initOffset = 0;
-
-
+  //Passing the Limelight into the Drivetrain subsystem is called dependency injection
+  //Allows use of VPLimelight's methods
   public Drivetrain(VPLimelight subsystemA) {
     SmartDashboard.putNumber("Distance", 0);
 
@@ -81,12 +82,7 @@ public class Drivetrain extends SubsystemBase {
     mRightFollowerA = ControllerFactory.makeSparkMax(DriveTrain.rightFollowerAPort);
     mRightFollowerB = ControllerFactory.makeSparkMax(DriveTrain.rightFollowerBPort);
 
-    mRightLeader.setIdleMode(CANSparkMax.IdleMode.kCoast);
-    mRightFollowerA.setIdleMode(CANSparkMax.IdleMode.kCoast);
-    mRightFollowerB.setIdleMode(CANSparkMax.IdleMode.kCoast);
-    mLeftLeader.setIdleMode(CANSparkMax.IdleMode.kCoast);
-    mLeftFollowerA.setIdleMode(CANSparkMax.IdleMode.kCoast);
-    mLeftFollowerB.setIdleMode(CANSparkMax.IdleMode.kCoast);
+    setIdleState(CANSparkMax.IdleMode.kCoast);
 
     mLeftMotors = new MotorControllerGroup(mLeftLeader, mLeftFollowerA, mLeftFollowerB);
     mRightMotors = new MotorControllerGroup(mRightLeader, mRightFollowerA, mRightFollowerB);
@@ -101,17 +97,17 @@ public class Drivetrain extends SubsystemBase {
     //Creates two encoder objects for their respective motors
 //    mLeftEncoder = mLeftLeader.getAlternateEncoder(SparkMaxAlternateEncoder.Type.kQuadrature, 4096);
 //    mRightEncoder = mRightLeader.getAlternateEncoder(SparkMaxAlternateEncoder.Type.kQuadrature, 4096);
+    //Returns objects for the integrated encoders
     mLeftEncoder = mLeftLeader.getEncoder();
     mRightEncoder = mRightLeader.getEncoder();
 
-//    mLeftEncoder.setInverted(false);
-//    mRightEncoder.setInverted(true);
     resetEncoders();
 
     mDrive = new DifferentialDrive(mLeftMotors, mRightMotors);
     mOdometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(mPigeon.getYaw()));
 
     mShifter = new DoubleSolenoid(shifterPorts[0], PneumaticsModuleType.CTREPCM, shifterPorts[1], shifterPorts[2]);
+
 
     lastThrottle = lastTurn = 0.;
 
@@ -121,11 +117,10 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public void masterDrive() {
+    //Tele Drive Intake and Tele Drive Shooter change which side of the robot is the front and was used when testing new drivers
     switch (mState) {
       case TELE_DRIVE_INTAKE:
         arcadeDriveIntake();
-//        mLimelight.steadyArray();
-//        System.out.println("Distance (in) " + mLimelight.calcDistance());
         break;
       case TELE_DRIVE_SHOOTER:
         arcadeDriveShooter();
@@ -136,13 +131,10 @@ public class Drivetrain extends SubsystemBase {
       case LIMELIGHT_DRIVE:
         limelightDrive();
       case AUTO_DRIVE:
-//        System.out.println("Left Volts: " + mLeftVolts);
-//        System.out.println("Right Volts: " + mRightVolts);
+
         break;
       case AUTO_LIMELIGHT:
         limelightDrive();
-//        System.out.println("Left Volts: " + mLeftVolts);
-//        System.out.println("Right Volts: " + mRightVolts);
         break;
       default:
         break;
@@ -150,25 +142,24 @@ public class Drivetrain extends SubsystemBase {
     double dist = mLimelight.calcDistance();
     SmartDashboard.putNumber("Distance", dist);
 
+
     if ((Arrays.asList(new DriveState[] {TELE_LIMELIGHT, LIMELIGHT_DRIVE, AUTO_LIMELIGHT, AUTO_DRIVE}).contains(mState))) {
       mLimelight.steadyArray();
-//      System.out.println("Distance (in) " + mLimelight.calcDistance());
     }
     else mLimelight.offArray();
-
-//    System.out.println("Re (m): "+leftWheelsPosition()+" Le (m): "+rightWheelsPosition());
-
-//    System.out.println(mState);
   }
 
+  /***
+   * Periodic is very useful for printing out and updating information constantly. It can be used in any class in the
+   * project and is great for testing
+  */
   @Override
   public void periodic(){
+    //Provides updates for the auton so the robot is aware of where it is
     mOdometry.update(Rotation2d.fromDegrees(mPigeon.getYaw()), -mLeftEncoder.getPosition() * positionConversion, mRightEncoder.getPosition() * positionConversion);
     var translation = mOdometry.getPoseMeters().getTranslation();
     SmartDashboard.putNumber("X", translation.getX());
     SmartDashboard.putNumber("Y", translation.getY());
-
-
 
     if ((Arrays.asList(new DriveState[] {AUTO_DRIVE, AUTO_LIMELIGHT}).contains(mState))) {
       masterDrive();
@@ -177,12 +168,18 @@ public class Drivetrain extends SubsystemBase {
 //    System.out.println("RIGHT POSITION: " + rightWheelsPosition() + " | LEFT POSITION: " + leftWheelsPosition());
   }
 
+  /***
+   * The next four methods are for using conditional commands but creating on method that toggles the state and using
+   * an instant command is much more effective.
+   */
 
+  //Changes the robot to low gear
   public void lowGear(){
     if (mShifter.get() != DoubleSolenoid.Value.kReverse) mShifter.set(DoubleSolenoid.Value.kReverse);
     mShiftState = LOW_GEAR;
   }
 
+  //Changes the robot to high gear
   public void highGear(){
     if (mShifter.get() != DoubleSolenoid.Value.kForward) mShifter.set(DoubleSolenoid.Value.kForward);
     mShiftState = HIGH_GEAR;
@@ -194,6 +191,7 @@ public class Drivetrain extends SubsystemBase {
     return mShiftState;
   }
 
+  //Older logic when using conditional commands
   public boolean getLowGear(){
     boolean gear = true;
     if(mShifter.get() == DoubleSolenoid.Value.kReverse){
@@ -202,6 +200,17 @@ public class Drivetrain extends SubsystemBase {
       gear = false; //High Gear
     }
     return gear;
+  }
+
+  /***
+   * The next method is the updated shifting logic
+   */
+  public void toggleShifter(){
+    if (mShifter.get() != kReverse) {
+      mShifter.set(kReverse);
+    } else {
+      mShifter.set(kForward);
+    }
   }
 
   public void resetEncoders(){
@@ -213,6 +222,7 @@ public class Drivetrain extends SubsystemBase {
     mPigeon.setYaw(0);
   }
 
+  //Old logic for returning heading that never surpasses 360 degrees
   public double getHeading(){
     mYaw = mPigeon.getYaw();
     if(Math.abs(mYaw) > 360){
@@ -226,7 +236,11 @@ public class Drivetrain extends SubsystemBase {
     return Math.abs(percentOutput) > DriveTrain.deadband ? percentOutput : 0;
   }
 
-
+  /***
+   * Method used to set the state of the motors. In Idle the robot will continue to move if stopped but should be
+   * in this state normally. However, when testing autons for the first time it is not a bad idea to change the idle state to
+   * brake so the robot does not fly into a wall at high velocity
+   */
   public void setIdleState(CANSparkMax.IdleMode state) {
     if (!(mRightLeader.getIdleMode() == state)) {
       mRightLeader.setIdleMode(state);
@@ -243,6 +257,34 @@ public class Drivetrain extends SubsystemBase {
   public void setState(DriveState state){
     mState = state;
   }
+
+  public void arcadeDriveShooter(){
+    double throttle = deadband(Constants.driverController.getRawAxis(Axis.LEFT_Y.getID()));
+    double turn = deadband(Constants.driverController.getRawAxis(Axis.RIGHT_X.getID()));
+
+//    throttle = (throttle == 0) ? 0 : Math.abs(throttle)*throttle;
+//    turn = (turn == 0) ? 0 : turn/Math.abs(turn)*Math.sqrt(Math.abs(turn));
+//    turn = ((lastTurn == turn && Math.abs(turn) < 0.33) || turn == 0) ? 0 : turn;
+
+    mDrive.arcadeDrive(throttle, turn);
+    lastThrottle = (throttle == 0) ? lastThrottle : throttle;
+    lastTurn = (turn == 0) ? lastTurn : turn;
+    mDrive.feed();
+
+    double xOffset = mLimelight.getxOffset();
+    if (xOffset > 0){
+//      System.out.println(xOffset + " degrees to the RIGHT(?)");
+      SmartDashboard.putNumber("Degrees to the RIGHT", xOffset);
+    } else {
+//      System.out.println(xOffset + " degrees to the LEFT(?)");
+      SmartDashboard.putNumber("Degrees to the LEFT", xOffset);
+    }
+
+  }
+
+  /***
+   * The next five methods are old logic which used enumeration to flip the direction of the robot
+   */
 
   public void setShooterDrive(){
     setState(TELE_DRIVE_SHOOTER);
@@ -276,45 +318,17 @@ public class Drivetrain extends SubsystemBase {
     }
   }
 
-  public void arcadeDriveShooter(){
-    double throttle = deadband(Constants.driverController.getRawAxis(Axis.LEFT_Y.getID()));
-    double turn = deadband(Constants.driverController.getRawAxis(Axis.RIGHT_X.getID()));
-
-//    throttle = (throttle == 0) ? 0 : Math.abs(throttle)*throttle;
-//    turn = (turn == 0) ? 0 : turn/Math.abs(turn)*Math.sqrt(Math.abs(turn));
-//    turn = ((lastTurn == turn && Math.abs(turn) < 0.33) || turn == 0) ? 0 : turn;
-
-    mDrive.arcadeDrive(throttle, turn);
-    lastThrottle = (throttle == 0) ? lastThrottle : throttle;
-    lastTurn = (turn == 0) ? lastTurn : turn;
-    mDrive.feed();
-
-    double xOffset = mLimelight.getxOffset();
-    if (xOffset > 0){
-//      System.out.println(xOffset + " degrees to the RIGHT(?)");
-      SmartDashboard.putNumber("Degrees to the RIGHT", xOffset);
-    } else {
-//      System.out.println(xOffset + " degrees to the LEFT(?)");
-      SmartDashboard.putNumber("Degrees to the LEFT", xOffset);
-    }
-
-  }
-
 
   public void arcadeDriveIntake(){
     double throttle = deadband(Constants.driverController.getRawAxis(Axis.LEFT_Y.getID()));
     double turn = deadband(Constants.driverController.getRawAxis(Axis.RIGHT_X.getID()));
-
-//    System.out.println("Left Position (m) :" + mLeftEncoder.getPosition() * positionConversion);
-//    System.out.println("Right Position (m) :" + mRightEncoder.getPosition() * positionConversion);
-
-//    System.out.println("Yaw: " + mPigeon.getYaw());
 
     mDrive.arcadeDrive(-throttle, turn);
     lastThrottle = (throttle == 0) ? lastThrottle : throttle;
     lastTurn = (turn == 0) ? lastTurn : turn;
     mDrive.feed();
 
+    //For testing purposes
     double xOffset = mLimelight.getxOffset();
     if (xOffset > 0){
 //      System.out.println(xOffset + " degrees to the RIGHT(?)");
@@ -327,6 +341,7 @@ public class Drivetrain extends SubsystemBase {
 
   }
 
+  //Receives and sets values to drivetrain
   public void limelightDrive(){
     double[] values = mLimelight.getValues();
     mDrive.arcadeDrive(values[0], values[1]);
@@ -343,23 +358,6 @@ public class Drivetrain extends SubsystemBase {
     mRightLeader.set(0);
   }
 
-  public void tankDriveVolts(double leftVolts, double rightVolts){
-    mLeftVolts = leftVolts;
-    mRightVolts = rightVolts;
-
-//    System.out.println("Left Volts: " + mLeftVolts);
-//    System.out.println("Right Volts: " + mRightVolts);
-
-//    System.out.println("Le: " + leftWheelsPosition() + " Re: " + rightWheelsPosition());
-
-//    System.out.println("Yaw: " + mPigeon.getYaw());
-
-    mLeftMotors.setVoltage(mLeftVolts);
-    mRightMotors.setVoltage(mRightVolts);
-
-    mDrive.feed();
-  }
-
   public void printMotors() {
     System.out.println("L1: "+mLeftLeader.getAppliedOutput()
                       +" L2: "+mLeftFollowerA.getAppliedOutput()
@@ -368,6 +366,9 @@ public class Drivetrain extends SubsystemBase {
                       +" R2: "+mRightFollowerA.getAppliedOutput()
                       +" R3: "+mRightFollowerB.getAppliedOutput());
   }
+  /***
+   * The remainder of the methods are for the auton and are well explained on the WPI First site
+   */
 
   /***
    * Returns the position of the left wheels in meters
@@ -384,7 +385,6 @@ public class Drivetrain extends SubsystemBase {
    */
 
   public double rightWheelsPosition(){
-//    System.out.println("Right distance: "+mRightEncoder.getPosition() * positionConversion);
     return mRightEncoder.getPosition() * positionConversion;
   }
 
@@ -398,8 +398,18 @@ public class Drivetrain extends SubsystemBase {
 
   public void resetOdometry(Pose2d pose){
     resetEncoders();
-    initOffset = mPigeon.getYaw();
+//    double initOffset = mPigeon.getYaw();
     mOdometry.resetPosition(pose, Rotation2d.fromDegrees(mPigeon.getYaw()));
+  }
+
+  public void tankDriveVolts(double leftVolts, double rightVolts){
+    mLeftVolts = leftVolts;
+    mRightVolts = rightVolts;
+
+    mLeftMotors.setVoltage(mLeftVolts);
+    mRightMotors.setVoltage(mRightVolts);
+
+    mDrive.feed();
   }
 
 

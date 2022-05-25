@@ -10,7 +10,10 @@ import frc.robot.Constants;
 import frc.robot.io.Axis;
 import frc.robot.utility.ControllerFactory;
 
-//import static frc.robot.Constants.Shooter.anglerPorts;
+/***
+ * Similar to the drivetrain this class could be simplified but it shows some alternative logic to PID control
+ * and still has angler functionality. The Shooter is responsible for all functions relating to the shooter
+ */
 
 public class Shooter extends SubsystemBase {
 
@@ -67,6 +70,8 @@ public class Shooter extends SubsystemBase {
          * P (Proportional) - An increased value causes the motor controller to more aggressively approach the setpoint but too high will cause oscillations and overshooting
          * I (Integral) - Increases the affect of the motor controller overtime leading to more or less oscillations. Increases accuracy but can lead to more oscillations and integral windup
          * D (Derivative) - Provides a dampening affect to the motor controller to prevent oscillations but may lead to an inaccurate setpoint
+         *
+         * Adjust values to fine tune the shooter using printouts/Shuffleboard to view the status of the shooter
          */
 
         mShooterLeader.config_kF(0, 1023.0/20660.0, timeOut); //Specific Value provided by CTRE

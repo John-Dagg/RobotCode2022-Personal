@@ -6,6 +6,11 @@ import frc.robot.subsystems.Shooter;
 
 public class LimelightShooterCommand extends CommandBase {
 
+    /***
+     * Started as a joke but attempts to calculate the shooter speed using the distance but doesn't work effectively with
+     * too many unknowns and not nearly enough time
+     */
+
     private Shooter mShooter;
     private Indexer mIndexer;
     private VPLimelight mLimelight;

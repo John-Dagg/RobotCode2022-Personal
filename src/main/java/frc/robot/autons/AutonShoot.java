@@ -14,6 +14,10 @@ import static frc.robot.Constants.LimelightVision.TurnDirection;
 import static frc.robot.Constants.IntakeState;
 import static frc.robot.Constants.HoodState;
 
+/***
+ * Allows the creation of different shooting based routines based on an array of parameters
+ */
+
 public class AutonShoot extends CommandBase {
 
     private Drivetrain mDrivetrain;

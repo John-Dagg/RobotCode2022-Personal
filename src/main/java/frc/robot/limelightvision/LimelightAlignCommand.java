@@ -8,6 +8,11 @@ import static frc.robot.Constants.LimelightVision.*;
 
 public class LimelightAlignCommand extends CommandBase {
 
+    /***
+     * Command for alignment using the limelight. Main functionality is located in VPLimelight but this class
+     * allows different specifications based on parameters
+     */
+
     private final Drivetrain mDrivetrain;
     private final VPLimelight mVision;
 
@@ -54,7 +59,6 @@ public class LimelightAlignCommand extends CommandBase {
             stopFlag = mVision.aimTarget(mDrivetrain, limelightMode);
 //            System.out.println("Aiming at Targets");
         } else {
-//            mDrivetrain.printMotors();
             mVision.findTarget(mDrivetrain, searchDirection);
 //            System.out.println("Finding Targets");
         }

@@ -10,6 +10,7 @@ import frc.robot.utility.ControllerFactory;
 
 import static frc.robot.Constants.Intake.fourBarPorts;
 import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.*;
+import static frc.robot.Constants.Intake.intakeMotorPort;
 
 public class Intake extends SubsystemBase {
 
@@ -24,7 +25,7 @@ public class Intake extends SubsystemBase {
     public Intake(){
 
         //Creates motor and solenoid objects
-        rollerBar = ControllerFactory.makeSparkMax(Constants.Intake.intakeMotorPort);
+        rollerBar = ControllerFactory.makeSparkMax(intakeMotorPort);
         fourBar = ControllerFactory.makeDoubleSolenoid(fourBarPorts[1], fourBarPorts[2]);
     }
 

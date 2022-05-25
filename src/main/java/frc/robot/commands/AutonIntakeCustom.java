@@ -6,9 +6,11 @@ import frc.robot.subsystems.Intake;
 public class AutonIntakeCustom extends CommandBase {
 
     private Intake mIntake;
+    private boolean retractIntake;
 
-    public AutonIntakeCustom(Intake subsystem){
+    public AutonIntakeCustom(Intake subsystem, boolean retractIntake){
         mIntake = subsystem;
+        this.retractIntake = retractIntake;
 
         addRequirements(mIntake);
     }
@@ -26,6 +28,7 @@ public class AutonIntakeCustom extends CommandBase {
     @Override
     public void end(boolean isFinished){
         mIntake.rollerStop();
+        if (retractIntake) mIntake.retractIntake();
     }
 
 

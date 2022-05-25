@@ -13,6 +13,9 @@ import static frc.robot.Constants.operatorController;
 
 public class Climber extends SubsystemBase {
 
+    /***
+     * Angler functionality could be removed
+     */
 
     //Motors subject to change
     private TalonSRX climberLeader, climberFollower;

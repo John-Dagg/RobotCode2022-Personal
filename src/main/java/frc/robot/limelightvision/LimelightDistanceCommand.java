@@ -11,6 +11,10 @@ import frc.robot.utility.MathEqs;
 
 public class LimelightDistanceCommand extends CommandBase {
 
+    /***
+     * Work in Progress class for adjusting distance to the target
+     */
+
     private Drivetrain mDrivetrain;
     private VPLimelight mVision;
 

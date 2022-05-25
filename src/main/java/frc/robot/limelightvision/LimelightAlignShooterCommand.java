@@ -11,6 +11,10 @@ import static frc.robot.Constants.LimelightVision.*;
 
 public class LimelightAlignShooterCommand extends CommandBase {
 
+    /***
+     * Work in Progress class for adjusting distance and angle
+     */
+
     private Drivetrain mDrivetrain;
     private Indexer mIndexer;
     private Shooter mShooter;

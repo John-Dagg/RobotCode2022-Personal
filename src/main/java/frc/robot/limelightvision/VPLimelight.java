@@ -17,13 +17,16 @@ import static frc.robot.Constants.LimelightVision.LowGear.maxTurn_Low;
 
 public class VPLimelight extends SubsystemBase {
 
+    /***
+     * Class which is responsible for all things Limelight including logic for calculating distance, adjusting angle, setting values,
+     * and changing the array of the limelight
+     */
+
     private NetworkTable mNetworkTable;
 
     private NetworkTableEntry vpTargets, vpxOffset, vpyOffset, vpTargetArea, vpTargetSkew;
     private double targets, xOffset, yOffset, targetArea, targetSkew;
     private double bufferTime = 1.0;
-
-
 
     public double throttleValue, turnValue;
     double startTime;
