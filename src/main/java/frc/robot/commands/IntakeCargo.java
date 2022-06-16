@@ -25,8 +25,8 @@ public class IntakeCargo extends CommandBase {
 
     @Override
     public void end(boolean isFinished){
-        mIntake.rollerStop();
-        mIntake.retractIntake();
+//        mIntake.rollerStop();
+//        mIntake.retractIntake();
     }
 
 

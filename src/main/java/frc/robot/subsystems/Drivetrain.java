@@ -35,7 +35,7 @@ import java.util.Arrays;
 
 public class Drivetrain extends SubsystemBase {
 
-  private CANSparkMax mLeftLeader, mLeftFollowerA, mLeftFollowerB,
+  private CANSparkMax  mLeftLeader, mLeftFollowerA, mLeftFollowerB,
           mRightLeader, mRightFollowerA, mRightFollowerB;
   private RelativeEncoder mLeftEncoder, mRightEncoder;
   private DoubleSolenoid mShifter;

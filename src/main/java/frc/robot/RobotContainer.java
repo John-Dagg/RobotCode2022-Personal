@@ -16,20 +16,15 @@ import frc.robot.hardcodeAutons.HardCodeAuton;
 import frc.robot.hardcodeAutons.TaxiOneBallHardCode;
 import frc.robot.commands.*;
 import frc.robot.io.Axis;
+import frc.robot.io.Button;
 import frc.robot.limelightvision.*;
 import frc.robot.subsystems.*;
 import frc.robot.Constants.LimelightVision.*;
 
 import static frc.robot.Constants.driverController;
 import static frc.robot.Constants.operatorController;
-import static frc.robot.io.Button.*;
 
 public class RobotContainer {
-
-  /***
-   * This class is responsible for creating objects for each subsystem and then using method references to bind each function
-   * to a button. The auton routine is also established in this class.
-   */
 
   //Subsystems
   private final VPLimelight mLimelightVision = new VPLimelight();
@@ -46,6 +41,7 @@ public class RobotContainer {
   private final LimelightAlignCommand mRightAlign = new LimelightAlignCommand(mDrivetrain, mLimelightVision, TurnDirection.RIGHT, TurnMode.TELEOP);
 
   private final LimelightDistanceCommand mDistanceTarget = new LimelightDistanceCommand(mDrivetrain, mLimelightVision, true);
+  private final ShootCustom shootCustom = new ShootCustom(mShooter, mIndexer, mLimelightVision);
 
   //Complex Commands (that can't be inlined)
   private final IntakeCargo mIntakeCargo = new IntakeCargo(mIntake);
@@ -77,7 +73,7 @@ public class RobotContainer {
     //Adding autons to SendableChooser with default option
     mAutons.setDefaultOption(ls2bd.getName(), ls2bd);
     mAutons.addOption(ls2br.getName(), ls2br);
-    mAutons.addOption(ls4bd.getName(), ls4bd);
+    mAutons.addOption(ls4bd.getName(), ls4bd); //DO NOT USE
     mAutons.addOption(rs2bc.getName(), rs2bc);
     mAutons.addOption(rs4bc.getName(), rs4bc);
     mAutons.addOption(rs2bf.getName(), rs2bf);
@@ -112,7 +108,6 @@ public class RobotContainer {
      * Right Bumper - Extends + Intakes (Hold)
      * Right Trigger - Intake
      * Left Trigger - Outtake
-     * Y - Adjust Distance (WIP)
      * X - Align Left
      * B - Align Right
      * A - Toggle Four-Bar
@@ -130,13 +125,13 @@ public class RobotContainer {
 
     //Limelight
 
-    new JoystickButton(driverController, X.getID())
+    new JoystickButton(driverController, Button.X.getID())
             .whenHeld(mLeftAlign);
 
-    new JoystickButton(driverController, B.getID())
+    new JoystickButton(driverController, Button.B.getID())
             .whenHeld(mRightAlign);
 
-    new JoystickButton(driverController, Y.getID())
+    new JoystickButton(driverController, Button.Y.getID())
             .whenHeld(mDistanceTarget);
 
     //Drivetrain
@@ -144,26 +139,21 @@ public class RobotContainer {
     //If the left bumper is pressed and the drivetrain is in low gear perform the first command
     //If the left bumper is pressed and the drivetrain is in high gear perform the second command
 
-    /*
-    new JoystickButton(driverController, LEFT_BUMPER.getID())
+    new JoystickButton(driverController, Button.LEFT_BUMPER.getID())
             .whenPressed(new ConditionalCommand(
                     new InstantCommand(mDrivetrain::highGear),
                     new InstantCommand(mDrivetrain::lowGear),
                     mDrivetrain::getLowGear));
-     */
 
-    new JoystickButton(driverController, LEFT_BUMPER.getID())
-            .whenPressed(new InstantCommand(mDrivetrain::toggleShifter));
-
-    new JoystickButton(driverController, START.getID())
+    new JoystickButton(driverController, Button.START.getID())
             .whenPressed(new InstantCommand(mDrivetrain::resetEncoders));
 
 //    Intake
 
-    new JoystickButton(driverController, A.getID())
+    new JoystickButton(driverController, Button.A.getID())
             .whenPressed(new InstantCommand(mIntake::toggleFourBar));
 
-    new JoystickButton(driverController, RIGHT_BUMPER.getID())
+    new JoystickButton(driverController, Button.RIGHT_BUMPER.getID())
             .whenHeld(mIntakeCargo);
 
     if (new Joystick(Axis.LEFT_TRIGGER.getID()).getTriggerPressed())
@@ -174,33 +164,33 @@ public class RobotContainer {
 
 //    Shooter
 
-    new JoystickButton(operatorController, Y.getID())
+    new JoystickButton(operatorController, Button.Y.getID())
             .whenHeld(new StartEndCommand(mIndexer::feedIndexer, mIndexer::setIndexerIdle));
 
-    new JoystickButton(operatorController, RIGHT_BUMPER.getID())
-            .whenHeld(new RunCommand(mShooter::shootFar));
-
-    new JoystickButton(operatorController, RIGHT_BUMPER.getID())
-            .whenReleased(new RunCommand(mShooter::setShooterIdle));
-
-    new JoystickButton(operatorController, LEFT_BUMPER.getID())
+    new JoystickButton(operatorController, Button.RIGHT_BUMPER.getID())
             .whenHeld(new RunCommand(mShooter::shootClose));
 
-    new JoystickButton(operatorController, LEFT_BUMPER.getID())
+    new JoystickButton(operatorController, Button.RIGHT_BUMPER.getID())
             .whenReleased(new RunCommand(mShooter::setShooterIdle));
 
-    new JoystickButton(operatorController, X.getID())
+    new JoystickButton(operatorController, Button.LEFT_BUMPER.getID())
+            .whenHeld(new RunCommand(mShooter::shootFar));
+
+    new JoystickButton(operatorController, Button.LEFT_BUMPER.getID())
+            .whenReleased(new RunCommand(mShooter::setShooterIdle));
+
+    new JoystickButton(operatorController, Button.X.getID())
             .whenHeld(new RunCommand(mShooter::rpmShootClose));
 
-    new JoystickButton(operatorController, X.getID())
+    new JoystickButton(operatorController, Button.X.getID())
             .whenReleased(new RunCommand(mShooter::setShooterIdle));
 
 //    Climber
 
-    new JoystickButton(operatorController, A.getID())
+    new JoystickButton(operatorController, Button.A.getID())
             .whenHeld(mClimberControl);
 
-    new JoystickButton(operatorController, B.getID())
+    new JoystickButton(operatorController, Button.B.getID())
             .whenPressed(mClimber::angleClimber);
 
   }
