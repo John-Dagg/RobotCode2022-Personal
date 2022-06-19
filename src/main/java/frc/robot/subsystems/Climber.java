@@ -42,7 +42,7 @@ public class Climber extends SubsystemBase {
     public void winchRawControl(){
         winchVel = deadband(operatorController.getRawAxis(Axis.LEFT_Y.getID()));
 
-        climberLeader.set(TalonSRXControlMode.PercentOutput, -winchVel);
+        climberLeader.set(TalonSRXControlMode.PercentOutput, winchVel);
     }
 
     //

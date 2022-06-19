@@ -111,7 +111,7 @@ public class Shooter extends SubsystemBase {
     }
 
     public void rpmShootClose(){
-        PIDshooter(3750);
+        PIDshooter(3800);
     }
 
     public void rpmShootFar() {
