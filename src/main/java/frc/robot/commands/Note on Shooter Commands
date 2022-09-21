@@ -1,0 +1,2 @@
+Shooter commands are no longer used in favor of creating methods within the Shooter Class.
+These have been left here to show the ideas initially used for the Shooter despite the heavy iteration the class underwent.
